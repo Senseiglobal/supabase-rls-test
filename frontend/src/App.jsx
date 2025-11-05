@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { supabase } from './supabaseClient'
 import SignIn from './components/SignIn'
 import Artists from './components/Artists'
+import { EnvCheck } from './components/EnvCheck'
 
 export default function App() {
   const [session, setSession] = useState(null)
@@ -17,6 +18,7 @@ export default function App() {
   return (
     <div style={{ fontFamily: 'system-ui, sans-serif', padding: 24 }}>
       <h1>Supabase RLS demo (frontend)</h1>
+      <EnvCheck />
       {!session ? (
         <SignIn />
       ) : (
