@@ -1,5 +1,5 @@
 {
-  "name": "supabase-rls-frontend",
+  "name": "supabase_rls_frontend",
   "version": "0.1.0",
   "private": true,
   "scripts": {
