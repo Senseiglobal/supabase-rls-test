@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "strict": true
+  },
+  "imports": {
+    "@supabase/supabase-js": "npm:@supabase/supabase-js@2.35.0",
+    "dotenv": "npm:dotenv@16.1.4"
+  },
+  "tasks": {
+    "test": "deno run --allow-net --allow-env --allow-read rls_test_suite.ts"
+  }
+}

@@ -4,12 +4,12 @@ import dotenv from 'npm:dotenv@16.1.4';
 
 dotenv.config();
 
-const SUPABASE_URL = process.env.SUPABASE_URL!;
-const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY!;
+const SUPABASE_URL = Deno.env.get('SUPABASE_URL')!;
+const SUPABASE_ANON_KEY = Deno.env.get('SUPABASE_ANON_KEY')!;
 
 if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
   console.error('Set SUPABASE_URL and SUPABASE_ANON_KEY in env');
-  process.exit(1);
+  Deno.exit(1);
 }
 
 const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
