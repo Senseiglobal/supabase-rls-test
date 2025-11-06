@@ -29,21 +29,21 @@ export default function UpdatePassword() {
 
     if (error) {
       setMessage({ type: 'error', text: error.message })
+      setLoading(false)
     } else {
       setMessage({ 
         type: 'success',
-        text: '✅ Password updated successfully! You can now use your new password to sign in.'
+        text: '✅ Password updated successfully! Redirecting to sign in...'
       })
       setPassword('')
       setConfirmPassword('')
       
-      // Sign out after a short delay so they can see the success message
-      setTimeout(() => {
-        supabase.auth.signOut()
+      // Sign out and redirect after showing success message
+      setTimeout(async () => {
+        await supabase.auth.signOut()
+        window.location.href = '/'
       }, 2000)
     }
-
-    setLoading(false)
   }
 
   return (
