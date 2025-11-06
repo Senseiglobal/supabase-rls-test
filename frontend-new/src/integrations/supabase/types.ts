@@ -14,7 +14,77 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      spotify_profiles: {
+        Row: {
+          user_id: string
+          display_name: string | null
+          spotify_id: string | null
+          followers: number | null
+          image_url: string | null
+          country: string | null
+          product: string | null
+          last_refreshed: string | null
+          created_at: string | null
+        }
+        Insert: {
+          user_id: string
+          display_name?: string | null
+          spotify_id?: string | null
+          followers?: number | null
+          image_url?: string | null
+          country?: string | null
+          product?: string | null
+          last_refreshed?: string | null
+          created_at?: string | null
+        }
+        Update: {
+          user_id?: string
+          display_name?: string | null
+          spotify_id?: string | null
+          followers?: number | null
+          image_url?: string | null
+          country?: string | null
+          product?: string | null
+          last_refreshed?: string | null
+          created_at?: string | null
+        }
+      }
+      spotify_recent_plays: {
+        Row: {
+          id: number
+          user_id: string
+          track_id: string
+          track_name: string | null
+          artist_name: string | null
+          album_name: string | null
+          played_at: string
+          duration_ms: number | null
+          preview_url: string | null
+          inserted_at: string | null
+        }
+        Insert: {
+          user_id: string
+          track_id: string
+          track_name?: string | null
+          artist_name?: string | null
+          album_name?: string | null
+          played_at: string
+          duration_ms?: number | null
+          preview_url?: string | null
+          inserted_at?: string | null
+        }
+        Update: {
+          user_id?: string
+          track_id?: string
+          track_name?: string | null
+          artist_name?: string | null
+          album_name?: string | null
+          played_at?: string
+          duration_ms?: number | null
+          preview_url?: string | null
+          inserted_at?: string | null
+        }
+      }
     }
     Views: {
       [_ in never]: never
