@@ -7,6 +7,8 @@ export default function SignIn() {
   const [loading, setLoading] = useState(false)
   const [message, setMessage] = useState({ type: '', text: '' })
   const [showSignUp, setShowSignUp] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
+  const [showForgotPassword, setShowForgotPassword] = useState(false)
 
   async function handleSignIn(e) {
     e.preventDefault()
@@ -34,6 +36,8 @@ export default function SignIn() {
     setLoading(true)
     setMessage({ type: '', text: '' })
 
+    console.log('Starting sign up process...')
+
     const { data, error } = await supabase.auth.signUp({ 
       email, 
       password,
@@ -42,24 +46,128 @@ export default function SignIn() {
       }
     })
 
+    console.log('Sign up response:', { data, error })
+
     if (error) {
+      console.error('Sign up error:', error)
       setMessage({ type: 'error', text: error.message })
-    } else if (data.user && data.user.identities && data.user.identities.length === 0) {
+    } else if (data?.user?.identities?.length === 0) {
+      console.log('Email already registered')
       setMessage({ 
         type: 'warning',
         text: 'This email is already registered. Please sign in instead.'
       })
       setShowSignUp(false)
-    } else {
+    } else if (data?.user) {
+      console.log('Sign up successful, email confirmation required')
       setMessage({ 
         type: 'success',
-        text: 'Success! Please check your email for the confirmation link.'
+        text: '✅ Sign up successful! Please check your email for the confirmation link. Check your spam folder if you don\'t see it.'
       })
+      setShowSignUp(false)
       setEmail('')
       setPassword('')
+    } else {
+      console.error('Unexpected response:', data)
+      setMessage({
+        type: 'error',
+        text: 'An unexpected error occurred. Please try again.'
+      })
     }
     
     setLoading(false)
+  }
+
+  async function handleForgotPassword(e) {
+    e.preventDefault()
+    setLoading(true)
+    setMessage({ type: '', text: '' })
+
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: 'https://supabasetest-six.vercel.app'
+    })
+
+    if (error) {
+      setMessage({ type: 'error', text: error.message })
+    } else {
+      setMessage({ 
+        type: 'success',
+        text: '✅ Password reset email sent! Please check your email for the reset link.'
+      })
+      setShowForgotPassword(false)
+    }
+
+    setLoading(false)
+  }
+
+  if (showForgotPassword) {
+    return (
+      <div style={{ maxWidth: 420 }}>
+        <h2>Reset Password</h2>
+        <form onSubmit={handleForgotPassword}>
+          <div style={{ marginBottom: 16 }}>
+            <label style={{ display: 'block', marginBottom: 4 }}>Email</label>
+            <input 
+              type="email"
+              required
+              value={email} 
+              onChange={(e) => setEmail(e.target.value)}
+              style={{ width: '100%', padding: '8px' }}
+              placeholder="Enter your email address"
+            />
+          </div>
+          <div style={{ marginTop: 20 }}>
+            <button 
+              type="submit" 
+              disabled={loading}
+              style={{ 
+                padding: '8px 16px',
+                backgroundColor: '#3b82f6',
+                color: 'white',
+                border: 'none',
+                borderRadius: '4px',
+                cursor: loading ? 'wait' : 'pointer'
+              }}
+            >
+              {loading ? 'Sending...' : 'Send Reset Link'}
+            </button>
+            <button 
+              type="button"
+              onClick={() => {
+                setShowForgotPassword(false)
+                setMessage({ type: '', text: '' })
+              }}
+              style={{ 
+                marginLeft: 8,
+                padding: '8px 16px',
+                backgroundColor: 'transparent',
+                border: '1px solid #3b82f6',
+                color: '#3b82f6',
+                borderRadius: '4px',
+                cursor: 'pointer'
+              }}
+            >
+              Back to Sign In
+            </button>
+          </div>
+          {message.text && (
+            <div 
+              style={{ 
+                marginTop: 16,
+                padding: 12,
+                borderRadius: 4,
+                backgroundColor: message.type === 'error' ? '#fee2e2' : 
+                              message.type === 'success' ? '#dcfce7' : 'transparent',
+                color: message.type === 'error' ? '#dc2626' :
+                       message.type === 'success' ? '#16a34a' : 'inherit'
+              }}
+            >
+              {message.text}
+            </div>
+          )}
+        </form>
+      </div>
+    )
   }
 
   return (
@@ -78,14 +186,34 @@ export default function SignIn() {
         </div>
         <div style={{ marginBottom: 16 }}>
           <label style={{ display: 'block', marginBottom: 4 }}>Password</label>
-          <input 
-            type="password"
-            required
-            minLength={6}
-            value={password} 
-            onChange={(e) => setPassword(e.target.value)}
-            style={{ width: '100%', padding: '8px' }}
-          />
+          <div style={{ position: 'relative' }}>
+            <input 
+              type={showPassword ? "text" : "password"}
+              required
+              minLength={6}
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)}
+              style={{ width: '100%', padding: '8px', paddingRight: '40px' }}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              style={{
+                position: 'absolute',
+                right: '8px',
+                top: '50%',
+                transform: 'translateY(-50%)',
+                background: 'none',
+                border: 'none',
+                cursor: 'pointer',
+                fontSize: '14px',
+                color: '#6b7280'
+              }}
+              title={showPassword ? "Hide password" : "Show password"}
+            >
+              {showPassword ? '👁️' : '👁️‍🗨️'}
+            </button>
+          </div>
         </div>
         <div style={{ marginTop: 20 }}>
           <button 
@@ -121,6 +249,27 @@ export default function SignIn() {
             {showSignUp ? 'Already have an account? Sign In' : 'Need an account? Sign Up'}
           </button>
         </div>
+        {!showSignUp && (
+          <div style={{ marginTop: 12, textAlign: 'center' }}>
+            <button
+              type="button"
+              onClick={() => {
+                setShowForgotPassword(true)
+                setMessage({ type: '', text: '' })
+              }}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: '#3b82f6',
+                textDecoration: 'underline',
+                cursor: 'pointer',
+                fontSize: '14px'
+              }}
+            >
+              Forgot password?
+            </button>
+          </div>
+        )}
         {message.text && (
           <div 
             style={{ 
