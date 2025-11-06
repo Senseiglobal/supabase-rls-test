@@ -71,39 +71,73 @@ export default function Artists({ session }) {
   }
 
   return (
-    <div style={{ marginTop: 16 }}>
-      <h2>Your artists</h2>
-      <form onSubmit={createArtist} style={{ marginBottom: 12 }}>
-        <input 
-          placeholder="Name" 
-          value={name} 
-          onChange={(e) => setName(e.target.value)}
-          required
-          style={{ padding: '8px', marginRight: 8 }}
-        />
-        <select 
-          value={country} 
-          onChange={(e) => setCountry(e.target.value)}
-          required
-          style={{ padding: '8px', marginRight: 8, minWidth: '150px' }}
+    <div style={{ marginTop: 30 }}>
+      <h2 className="govuk-heading-l">Your Artists</h2>
+      <form onSubmit={createArtist} style={{ marginBottom: 30 }}>
+        <div className="govuk-form-group">
+          <label className="govuk-label" htmlFor="artist-name">Artist Name</label>
+          <input 
+            id="artist-name"
+            placeholder="Enter artist name" 
+            value={name} 
+            onChange={(e) => setName(e.target.value)}
+            required
+            className="govuk-input"
+          />
+        </div>
+        <div className="govuk-form-group">
+          <label className="govuk-label" htmlFor="artist-country">Country</label>
+          <select 
+            id="artist-country"
+            value={country} 
+            onChange={(e) => setCountry(e.target.value)}
+            required
+            className="govuk-select"
+          >
+            <option value="">Select a country</option>
+            {countries.map((c) => (
+              <option key={c} value={c}>{c}</option>
+            ))}
+          </select>
+        </div>
+        <button type="submit" className="govuk-button" style={{ marginRight: 10 }}>
+          Create Artist
+        </button>
+        <button 
+          type="button" 
+          onClick={accessControlTest}
+          className="govuk-button govuk-button--secondary"
         >
-          <option value="">Select Country</option>
-          {countries.map((c) => (
-            <option key={c} value={c}>{c}</option>
-          ))}
-        </select>
-        <button type="submit" style={{ padding: '8px 16px' }}>Create</button>
+          Test Access Control
+        </button>
       </form>
-      <button type="button" onClick={accessControlTest} style={{ padding: '8px 16px' }}>
-        Run access control test (blocked UX)
-      </button>
-      {msg && <div style={{ marginTop: 8 }}>{msg}</div>}
+      
+      {msg && (
+        <div 
+          className={`govuk-notification-banner ${
+            msg.includes('Error') ? 'govuk-notification-banner--error' : 
+            msg.includes('good') ? 'govuk-notification-banner--success' : 
+            'govuk-notification-banner--warning'
+          }`}
+          style={{ marginBottom: 20 }}
+        >
+          {msg}
+        </div>
+      )}
 
-      <ul style={{ marginTop: 12 }}>
-        {artists.map((a) => (
-          <li key={a.id}>{a.name} — {a.country}</li>
-        ))}
-      </ul>
+      {artists.length > 0 ? (
+        <ul className="govuk-list">
+          {artists.map((a) => (
+            <li key={a.id}>
+              <strong>{a.name}</strong> — {a.country}
+            </li>
+          ))}
+        </ul>
+      ) : (
+        <p className="govuk-body" style={{ color: '#505a5f' }}>
+          No artists yet. Create your first artist above.
+        </p>
+      )}
     </div>
   )
 }

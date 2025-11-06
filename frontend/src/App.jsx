@@ -31,8 +31,8 @@ export default function App() {
   }, [])
 
   return (
-    <div style={{ fontFamily: 'system-ui, sans-serif', padding: 24 }}>
-      <h1>Supabase RLS demo (frontend)</h1>
+    <div className="govuk-container" style={{ paddingTop: 40, paddingBottom: 40 }}>
+      <h1 className="govuk-heading-xl">Supabase RLS Demo</h1>
       <EnvCheck />
       {!session ? (
         <SignIn />
@@ -40,7 +40,13 @@ export default function App() {
         <UpdatePassword />
       ) : (
         <div>
-          <button type="button" onClick={() => supabase.auth.signOut()}>Sign out</button>
+          <button 
+            type="button" 
+            onClick={() => supabase.auth.signOut()}
+            className="govuk-button govuk-button--warning"
+          >
+            Sign out
+          </button>
           <Artists session={session} />
         </div>
       )}

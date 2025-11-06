@@ -1,3 +1,266 @@
-body { font-family: system-ui, sans-serif; }
-input { padding: 6px 8px; }
-button { padding: 6px 10px; }
+/* UK Government Design System inspired styles */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "GDS Transport", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0;
+  padding: 0;
+  background-color: #f3f2f1;
+  color: #0b0c0c;
+}
+
+.govuk-container {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+/* Typography */
+h1, h2, h3, h4, h5, h6 {
+  font-weight: 700;
+  line-height: 1.25;
+  margin-top: 0;
+}
+
+h1 {
+  font-size: 48px;
+  margin-bottom: 30px;
+}
+
+h2 {
+  font-size: 36px;
+  margin-bottom: 20px;
+}
+
+h3 {
+  font-size: 24px;
+  margin-bottom: 15px;
+}
+
+p {
+  font-size: 19px;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+/* Form elements */
+.govuk-form-group {
+  margin-bottom: 20px;
+}
+
+.govuk-label {
+  display: block;
+  font-weight: 700;
+  font-size: 19px;
+  margin-bottom: 5px;
+  color: #0b0c0c;
+}
+
+.govuk-input,
+.govuk-select {
+  font-family: "GDS Transport", Arial, sans-serif;
+  font-size: 19px;
+  line-height: 1.25;
+  padding: 5px;
+  border: 2px solid #0b0c0c;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+.govuk-input:focus,
+.govuk-select:focus {
+  outline: 3px solid #ffdd00;
+  outline-offset: 0;
+  box-shadow: inset 0 0 0 2px;
+}
+
+.govuk-input {
+  width: 100%;
+}
+
+.govuk-select {
+  width: 100%;
+  background-color: #fff;
+}
+
+/* Password input wrapper */
+.govuk-password-input {
+  position: relative;
+}
+
+.govuk-password-input__input {
+  padding-right: 50px;
+}
+
+.govuk-password-input__toggle {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px 10px;
+  font-size: 18px;
+  color: #505a5f;
+  display: flex;
+  align-items: center;
+}
+
+.govuk-password-input__toggle:hover {
+  background-color: #f3f2f1;
+}
+
+.govuk-password-input__toggle:focus {
+  outline: 3px solid #ffdd00;
+  outline-offset: 0;
+}
+
+/* Buttons */
+.govuk-button {
+  font-family: "GDS Transport", Arial, sans-serif;
+  font-size: 19px;
+  font-weight: 700;
+  line-height: 1;
+  padding: 8px 10px 7px;
+  border: 2px solid transparent;
+  border-radius: 0;
+  background-color: #00703c;
+  color: #fff;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-block;
+  margin-bottom: 22px;
+}
+
+.govuk-button:hover {
+  background-color: #005a30;
+}
+
+.govuk-button:focus {
+  outline: 3px solid #ffdd00;
+  outline-offset: 0;
+  background-color: #00703c;
+}
+
+.govuk-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.govuk-button--secondary {
+  background-color: #f3f2f1;
+  color: #0b0c0c;
+}
+
+.govuk-button--secondary:hover {
+  background-color: #dbdad9;
+}
+
+.govuk-button--warning {
+  background-color: #d4351c;
+  color: #fff;
+}
+
+.govuk-button--warning:hover {
+  background-color: #aa2a16;
+}
+
+/* Notification banners */
+.govuk-notification-banner {
+  padding: 15px 20px;
+  margin-bottom: 30px;
+  border: 5px solid;
+  border-radius: 0;
+}
+
+.govuk-notification-banner--success {
+  border-color: #00703c;
+  background-color: #e8f5e9;
+  color: #00703c;
+}
+
+.govuk-notification-banner--error {
+  border-color: #d4351c;
+  background-color: #fef7f7;
+  color: #d4351c;
+}
+
+.govuk-notification-banner--warning {
+  border-color: #f47738;
+  background-color: #fff7ed;
+  color: #b54708;
+}
+
+/* Lists */
+ul {
+  list-style-type: disc;
+  padding-left: 20px;
+}
+
+li {
+  margin-bottom: 10px;
+  font-size: 19px;
+}
+
+/* Links */
+a {
+  color: #1d70b8;
+  text-decoration: underline;
+}
+
+a:hover {
+  color: #003078;
+}
+
+a:focus {
+  outline: 3px solid #ffdd00;
+  outline-offset: 0;
+  background-color: #ffdd00;
+  color: #0b0c0c;
+}
+
+/* Divider */
+.govuk-section-break {
+  margin: 0;
+  border: 0;
+}
+
+.govuk-section-break--visible {
+  border-bottom: 1px solid #b1b4b6;
+}
+
+.govuk-section-break--m {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+/* Status indicator */
+.govuk-tag {
+  display: inline-block;
+  padding: 5px 8px;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-decoration: none;
+  background-color: #1d70b8;
+  color: #fff;
+}
+
+.govuk-tag--green {
+  background-color: #00703c;
+}
+
+.govuk-tag--red {
+  background-color: #d4351c;
+}
+

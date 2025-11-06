@@ -47,84 +47,63 @@ export default function UpdatePassword() {
   }
 
   return (
-    <div style={{ maxWidth: 420, margin: '0 auto', padding: 24 }}>
-      <h2>Set New Password</h2>
-      <p style={{ color: '#6b7280', marginBottom: 20 }}>
-        Please enter your new password below.
-      </p>
+    <div style={{ maxWidth: 600 }}>
+      <h2 className="govuk-heading-l">Set New Password</h2>
+      <p className="govuk-body">Please enter your new password below.</p>
       <form onSubmit={handleUpdatePassword}>
-        <div style={{ marginBottom: 16 }}>
-          <label style={{ display: 'block', marginBottom: 4 }}>New Password</label>
-          <div style={{ position: 'relative' }}>
+        <div className="govuk-form-group">
+          <label className="govuk-label" htmlFor="new-password">New Password</label>
+          <div className="govuk-password-input">
             <input 
+              id="new-password"
               type={showPassword ? "text" : "password"}
               required
               minLength={6}
               value={password} 
               onChange={(e) => setPassword(e.target.value)}
-              style={{ width: '100%', padding: '8px', paddingRight: '40px' }}
+              className="govuk-input govuk-password-input__input"
               placeholder="Enter new password"
             />
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              style={{
-                position: 'absolute',
-                right: '8px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                background: 'none',
-                border: 'none',
-                cursor: 'pointer',
-                fontSize: '14px',
-                color: '#6b7280'
-              }}
-              title={showPassword ? "Hide password" : "Show password"}
+              className="govuk-password-input__toggle"
+              aria-label={showPassword ? "Hide password" : "Show password"}
             >
               {showPassword ? '👁️' : '👁️‍🗨️'}
             </button>
           </div>
         </div>
-        <div style={{ marginBottom: 16 }}>
-          <label style={{ display: 'block', marginBottom: 4 }}>Confirm New Password</label>
+        <div className="govuk-form-group">
+          <label className="govuk-label" htmlFor="confirm-password">Confirm New Password</label>
           <input 
+            id="confirm-password"
             type={showPassword ? "text" : "password"}
             required
             minLength={6}
             value={confirmPassword} 
             onChange={(e) => setConfirmPassword(e.target.value)}
-            style={{ width: '100%', padding: '8px' }}
+            className="govuk-input"
             placeholder="Confirm new password"
           />
         </div>
-        <div style={{ marginTop: 20 }}>
+        <div>
           <button 
             type="submit" 
             disabled={loading}
-            style={{ 
-              padding: '8px 16px',
-              backgroundColor: '#3b82f6',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: loading ? 'wait' : 'pointer',
-              width: '100%'
-            }}
+            className="govuk-button"
+            style={{ width: '100%' }}
           >
             {loading ? 'Updating...' : 'Update Password'}
           </button>
         </div>
         {message.text && (
           <div 
-            style={{ 
-              marginTop: 16,
-              padding: 12,
-              borderRadius: 4,
-              backgroundColor: message.type === 'error' ? '#fee2e2' : 
-                            message.type === 'success' ? '#dcfce7' : 'transparent',
-              color: message.type === 'error' ? '#dc2626' :
-                     message.type === 'success' ? '#16a34a' : 'inherit'
-            }}
+            className={`govuk-notification-banner ${
+              message.type === 'error' ? 'govuk-notification-banner--error' : 
+              'govuk-notification-banner--success'
+            }`}
+            style={{ marginTop: 20 }}
           >
             {message.text}
           </div>
