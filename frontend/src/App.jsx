@@ -3,11 +3,13 @@ import { supabase } from './supabaseClient'
 import SignIn from './components/SignIn'
 import Artists from './components/Artists'
 import UpdatePassword from './components/UpdatePassword'
+import Profile from './components/Profile'
 import { EnvCheck } from './components/EnvCheck'
 
 export default function App() {
   const [session, setSession] = useState(null)
   const [isPasswordRecovery, setIsPasswordRecovery] = useState(false)
+  const [currentView, setCurrentView] = useState('artists') // 'artists' or 'profile'
 
   useEffect(() => {
     // Check if this is a password recovery link
@@ -40,14 +42,42 @@ export default function App() {
         <UpdatePassword />
       ) : (
         <div>
-          <button 
-            type="button" 
-            onClick={() => supabase.auth.signOut()}
-            className="govuk-button govuk-button--warning"
-          >
-            Sign out
-          </button>
-          <Artists session={session} />
+          <nav style={{ 
+            marginBottom: 30, 
+            paddingBottom: 15, 
+            borderBottom: '2px solid #1d70b8' 
+          }}>
+            <button 
+              type="button" 
+              onClick={() => setCurrentView('artists')}
+              className={currentView === 'artists' ? 'govuk-button' : 'govuk-button govuk-button--secondary'}
+              style={{ marginRight: 10, marginBottom: 0 }}
+            >
+              Artists
+            </button>
+            <button 
+              type="button" 
+              onClick={() => setCurrentView('profile')}
+              className={currentView === 'profile' ? 'govuk-button' : 'govuk-button govuk-button--secondary'}
+              style={{ marginRight: 10, marginBottom: 0 }}
+            >
+              Profile
+            </button>
+            <button 
+              type="button" 
+              onClick={() => supabase.auth.signOut()}
+              className="govuk-button govuk-button--warning"
+              style={{ marginBottom: 0 }}
+            >
+              Sign Out
+            </button>
+          </nav>
+          
+          {currentView === 'artists' ? (
+            <Artists session={session} />
+          ) : (
+            <Profile session={session} />
+          )}
         </div>
       )}
     </div>
