@@ -16,18 +16,26 @@ export function DebugEnv() {
       top: '1rem',
       right: '1rem',
       padding: '1rem',
-      background: '#f0f0f0',
-      borderRadius: '4px',
-      boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+      background: '#000000',
+      color: '#00ff00',
+      borderRadius: '8px',
+      boxShadow: '0 4px 8px rgba(0,0,0,0.2)',
       maxWidth: '400px',
-      zIndex: 1000
+      zIndex: 1000,
+      border: '2px solid #00ff00'
     }}>
-      <h3 style={{ margin: '0 0 0.5rem' }}>Environment Debug</h3>
+      <h3 style={{ 
+        margin: '0 0 0.5rem',
+        color: '#ffffff',
+        borderBottom: '1px solid #00ff00',
+        paddingBottom: '0.5rem'
+      }}>🔍 Environment Debug Panel</h3>
       <pre style={{ 
         margin: 0,
         whiteSpace: 'pre-wrap',
         wordBreak: 'break-all',
-        fontSize: '12px'
+        fontSize: '14px',
+        lineHeight: '1.4'
       }}>
         {JSON.stringify(envVars, null, 2)}
       </pre>

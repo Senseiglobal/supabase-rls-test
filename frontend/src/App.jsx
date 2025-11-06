@@ -18,9 +18,9 @@ export default function App() {
 
   return (
     <div style={{ fontFamily: 'system-ui, sans-serif', padding: 24 }}>
+      <DebugEnv />
       <h1>Supabase RLS demo (frontend)</h1>
       <EnvCheck />
-      <DebugEnv />
       {!session ? (
         <SignIn />
       ) : (
