@@ -83,18 +83,24 @@ export default function SignIn() {
     setLoading(true)
     setMessage({ type: '', text: '' })
 
-    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+    console.log('Requesting password reset for:', email)
+
+    const { data, error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: 'https://supabasetest-six.vercel.app'
     })
 
+    console.log('Password reset response:', { data, error })
+
     if (error) {
+      console.error('Password reset error:', error)
       setMessage({ type: 'error', text: error.message })
     } else {
+      console.log('Password reset email sent successfully')
       setMessage({ 
         type: 'success',
-        text: '✅ Password reset email sent! Please check your email for the reset link.'
+        text: '✅ Password reset email sent! Please check your email (including spam folder) for the reset link.'
       })
-      setShowForgotPassword(false)
+      setEmail('')
     }
 
     setLoading(false)
