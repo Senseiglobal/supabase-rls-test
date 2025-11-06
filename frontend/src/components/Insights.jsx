@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { supabase } from '../supabaseClient'
 
-export default function Insights({ session, songId, songTitle }) {
+export default function Insights({ session, songId, songTitle, artistId }) {
   const [insights, setInsights] = useState([])
   const [content, setContent] = useState('')
   const [loading, setLoading] = useState(false)
@@ -37,7 +37,7 @@ export default function Insights({ session, songId, songTitle }) {
       setSubmitting(true)
       const { data, error } = await supabase
         .from('insights')
-        .insert([{ song_id: songId, content }])
+        .insert([{ song_id: songId, artist_id: artistId, content }])
         .select()
         .single()
       if (error) throw error

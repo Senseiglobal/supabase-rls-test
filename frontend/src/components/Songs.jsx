@@ -185,7 +185,7 @@ export default function Songs({ session, artistId, artistName }) {
                     </div>
                   </div>
                   {selectedSong === song.id && (
-                    <Insights session={session} songId={song.id} songTitle={song.title} />
+                    <Insights session={session} songId={song.id} songTitle={song.title} artistId={artistId} />
                   )}
                 </>
               )}
