@@ -22,3 +22,8 @@ yarn-error.log
 **/npm-debug.log
 **/yarn-debug.log
 **/yarn-error.log
+
+# Avoid accidentally committing large exports/archives
+/artistbuddy-ai-main/
+/artistbuddy-ai-main.zip
+/lovable-export/
