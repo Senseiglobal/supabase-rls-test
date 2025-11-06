@@ -2,18 +2,19 @@ import { useEffect, useState } from 'react'
 import toast from 'react-hot-toast'
 import { supabase } from '../supabaseClient'
 
-export default function Insights({ session, songId, songTitle, artistId }) {
+export default function Insights({ session, songId, songTitle }) {
   const [insights, setInsights] = useState([])
   const [content, setContent] = useState('')
   const [loading, setLoading] = useState(false)
   const [submitting, setSubmitting] = useState(false)
+  const [generating, setGenerating] = useState(false)
   const [editingId, setEditingId] = useState(null)
   const [editContent, setEditContent] = useState('')
 
   async function load() {
     try {
       setLoading(true)
-      const { data, error} = await supabase
+      const { data, error } = await supabase
         .from('insights')
         .select('*')
         .eq('song_id', songId)
@@ -37,7 +38,7 @@ export default function Insights({ session, songId, songTitle, artistId }) {
       setSubmitting(true)
       const { data, error } = await supabase
         .from('insights')
-        .insert([{ song_id: songId, artist_id: artistId, content }])
+        .insert([{ song_id: songId, user_id: session?.user?.id, advice: content }])
         .select()
         .single()
       if (error) throw error
@@ -67,20 +68,63 @@ export default function Insights({ session, songId, songTitle, artistId }) {
     try {
       const { error } = await supabase
         .from('insights')
-        .update({ content: updatedContent })
+        .update({ advice: updatedContent })
         .eq('id', id)
       if (error) throw error
-      setInsights((s) => s.map(insight => insight.id === id ? { ...insight, content: updatedContent } : insight))
+      setInsights((s) => s.map(insight => insight.id === id ? { ...insight, advice: updatedContent } : insight))
       toast.success('Insight updated successfully!')
     } catch (error) {
       toast.error(error.message || 'Failed to update insight')
     }
   }
 
+  // Minimal AI Generate stub: inserts a placeholder insight row
+  async function generateInsightStub() {
+    try {
+      setGenerating(true)
+      const advice = `AI stub suggestion for "${songTitle}" — replace with Gemini-generated content.`
+      const payload = {
+        song_id: songId,
+        user_id: session?.user?.id,
+        advice,
+        advice_type: 'creative_direction',
+        priority: 'medium',
+        category: 'advice',
+        title: 'AI suggestion',
+        data_source: 'ai_stub',
+        ai_confidence: 0.5,
+        action_items: ['Replace with real AI output']
+      }
+      const { data, error } = await supabase
+        .from('insights')
+        .insert([payload])
+        .select()
+        .single()
+      if (error) throw error
+      setInsights((s) => [data, ...s])
+      toast.success('Generated insight (stub)')
+    } catch (error) {
+      toast.error(error.message || 'Failed to generate insight')
+    } finally {
+      setGenerating(false)
+    }
+  }
+
   return (
     <div style={{ marginTop: 20, paddingLeft: 20, borderLeft: '3px solid #1d70b8' }}>
       <h4 className="govuk-heading-s">Insights for "{songTitle}"</h4>
-      
+      <div style={{ display: 'flex', gap: 8, alignItems: 'center', marginBottom: 12 }}>
+        <button
+          type="button"
+          className="govuk-button govuk-button--secondary"
+          onClick={generateInsightStub}
+          disabled={generating}
+          style={{ marginBottom: 0, padding: '5px 10px', fontSize: '14px' }}
+        >
+          {generating ? 'Generating…' : 'Generate Insight'}
+        </button>
+      </div>
+
       <form onSubmit={createInsight} style={{ marginBottom: 15 }}>
         <div className="govuk-form-group">
           <textarea 
@@ -152,13 +196,13 @@ export default function Insights({ session, songId, songTitle, artistId }) {
                 </form>
               ) : (
                 <div>
-                  <p style={{ margin: '0 0 8px 0', fontSize: '14px', lineHeight: '1.4' }}>{insight.content}</p>
+                  <p style={{ margin: '0 0 8px 0', fontSize: '14px', lineHeight: '1.4' }}>{insight.advice}</p>
                   <div>
                     <button 
                       type="button"
                       onClick={() => {
                         setEditingId(insight.id)
-                        setEditContent(insight.content)
+                        setEditContent(insight.advice)
                       }}
                       className="govuk-button govuk-button--secondary"
                       style={{ marginRight: 8, marginBottom: 0, padding: '2px 6px', fontSize: '12px' }}
