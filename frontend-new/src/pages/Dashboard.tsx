@@ -8,7 +8,6 @@ import {
   Users,
   TrendingUp,
   Target,
-  Music,
   Instagram,
   MessageSquare,
   ChevronRight,
@@ -17,6 +16,7 @@ import {
   CheckCircle,
   Trophy,
 } from "lucide-react";
+import ConnectSpotify from "@/components/ConnectSpotify";
 
 const Dashboard = () => {
   const [filter, setFilter] = useState<"all" | "unread" | "urgent">("all");
@@ -175,6 +175,12 @@ const Dashboard = () => {
             <MessageSquare className="mr-2 h-4 w-4" />
             Ask AI Manager
           </Button>
+        </div>
+
+        {/* Integrations */}
+        <div>
+          <h2 className="text-2xl font-bold mb-4">Integrations</h2>
+          <ConnectSpotify />
         </div>
 
         {/* Stats Cards */}
