@@ -3,7 +3,6 @@ import { supabase } from './supabaseClient'
 import SignIn from './components/SignIn'
 import Artists from './components/Artists'
 import { EnvCheck } from './components/EnvCheck'
-import { DebugEnv } from './components/DebugEnv'
 
 export default function App() {
   const [session, setSession] = useState(null)
@@ -18,14 +17,13 @@ export default function App() {
 
   return (
     <div style={{ fontFamily: 'system-ui, sans-serif', padding: 24 }}>
-      <DebugEnv />
       <h1>Supabase RLS demo (frontend)</h1>
       <EnvCheck />
       {!session ? (
         <SignIn />
       ) : (
         <div>
-          <button onClick={() => supabase.auth.signOut()}>Sign out</button>
+          <button type="button" onClick={() => supabase.auth.signOut()}>Sign out</button>
           <Artists session={session} />
         </div>
       )}
