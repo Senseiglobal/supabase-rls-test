@@ -32,7 +32,7 @@ USING (
   song_id IN (
     SELECT s.id FROM songs s
     INNER JOIN artists a ON s.artist_id = a.id
-    WHERE a.auth_uid = auth.uid()
+    WHERE a.auth_uid::uuid = auth.uid()
   )
 );
 
@@ -43,7 +43,7 @@ WITH CHECK (
   song_id IN (
     SELECT s.id FROM songs s
     INNER JOIN artists a ON s.artist_id = a.id
-    WHERE a.auth_uid = auth.uid()
+    WHERE a.auth_uid::uuid = auth.uid()
   )
 );
 
@@ -54,14 +54,14 @@ USING (
   song_id IN (
     SELECT s.id FROM songs s
     INNER JOIN artists a ON s.artist_id = a.id
-    WHERE a.auth_uid = auth.uid()
+    WHERE a.auth_uid::uuid = auth.uid()
   )
 )
 WITH CHECK (
   song_id IN (
     SELECT s.id FROM songs s
     INNER JOIN artists a ON s.artist_id = a.id
-    WHERE a.auth_uid = auth.uid()
+    WHERE a.auth_uid::uuid = auth.uid()
   )
 );
 
@@ -72,7 +72,7 @@ USING (
   song_id IN (
     SELECT s.id FROM songs s
     INNER JOIN artists a ON s.artist_id = a.id
-    WHERE a.auth_uid = auth.uid()
+    WHERE a.auth_uid::uuid = auth.uid()
   )
 );
 
