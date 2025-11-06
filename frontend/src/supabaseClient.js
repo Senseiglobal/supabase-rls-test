@@ -7,4 +7,10 @@ if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
   console.error('VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY must be set')
 }
 
-export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+  auth: {
+    autoRefreshToken: true,
+    persistSession: true,
+    detectSessionInUrl: true
+  }
+})
