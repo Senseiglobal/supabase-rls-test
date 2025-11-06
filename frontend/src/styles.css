@@ -278,3 +278,116 @@ a:focus {
   height: 40px;
   animation: spin 1s linear infinite;
 }
+
+/* Micro-animations */
+@keyframes buttonPress {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.95); }
+  100% { transform: scale(1); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.7; }
+}
+
+/* Button animations */
+.govuk-button {
+  transition: all 0.2s ease-in-out;
+  position: relative;
+  overflow: hidden;
+}
+
+.govuk-button:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.govuk-button:active:not(:disabled) {
+  animation: buttonPress 0.2s ease-in-out;
+  transform: translateY(0);
+}
+
+.govuk-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Ripple effect */
+.govuk-button::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.govuk-button:active::after {
+  width: 300px;
+  height: 300px;
+}
+
+/* Input focus animations */
+.govuk-input:focus,
+.govuk-select:focus,
+.govuk-textarea:focus {
+  transition: all 0.2s ease-in-out;
+  transform: scale(1.01);
+}
+
+/* Card/box animations */
+.artist-card,
+.song-card,
+.insight-card {
+  animation: slideIn 0.3s ease-out;
+  transition: all 0.2s ease-in-out;
+}
+
+.artist-card:hover,
+.song-card:hover {
+  transform: translateX(5px);
+  box-shadow: -3px 0 0 0 #1d70b8;
+}
+
+/* Icon animations */
+.icon-button {
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.icon-button:hover {
+  transform: scale(1.1) rotate(5deg);
+}
+
+.icon-button:active {
+  transform: scale(0.95);
+}
+
+/* Loading state pulse */
+.loading-pulse {
+  animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Notification fade in */
+.notification-enter {
+  animation: fadeIn 0.3s ease-out;
+}
+

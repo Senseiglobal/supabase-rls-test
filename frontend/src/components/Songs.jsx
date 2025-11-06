@@ -116,6 +116,7 @@ export default function Songs({ session, artistId, artistName }) {
           {songs.map((song) => (
             <div 
               key={song.id}
+              className="song-card"
               style={{ 
                 border: '1px solid #b1b4b6',
                 padding: '10px 15px',

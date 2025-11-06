@@ -204,6 +204,7 @@ export default function Artists({ session }) {
           {artists.map((a) => (
             <div 
               key={a.id}
+              className="artist-card"
               style={{ 
                 border: '2px solid #b1b4b6',
                 padding: '15px',

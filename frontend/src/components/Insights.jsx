@@ -114,6 +114,7 @@ export default function Insights({ session, songId, songTitle }) {
           {insights.map((insight) => (
             <div 
               key={insight.id}
+              className="insight-card"
               style={{ 
                 border: '1px solid #d4d4d4',
                 padding: '8px 12px',

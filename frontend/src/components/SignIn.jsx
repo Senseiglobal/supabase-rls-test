@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Visibility, VisibilityOff } from '@mui/icons-material'
 import { supabase } from '../supabaseClient'
 
 export default function SignIn() {
@@ -236,10 +237,22 @@ export default function SignIn() {
             <button
               type="button"
               onClick={() => setShowPassword(!showPassword)}
-              className="govuk-password-input__toggle"
+              className="govuk-password-input__toggle icon-button"
               aria-label={showPassword ? "Hide password" : "Show password"}
+              style={{ 
+                background: 'none',
+                border: 'none',
+                padding: '8px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
             >
-              {showPassword ? '👁️' : '👁️‍🗨️'}
+              {showPassword ? (
+                <VisibilityOff style={{ fontSize: 20, color: '#505a5f' }} />
+              ) : (
+                <Visibility style={{ fontSize: 20, color: '#505a5f' }} />
+              )}
             </button>
           </div>
         </div>
