@@ -9,6 +9,9 @@
 **App Description:**  
 Build a complete AI-powered artist management platform for solo musicians and creators. The app provides data-driven creative direction, release strategy, audience insights, and 24/7 AI manager chat - solving trust and affordability issues with traditional human managers.
 
+**IMPORTANT: Backend Setup**
+I already have a Supabase backend fully configured with tables, RLS policies, and data. Just generate the frontend UI and components. I will connect it to my existing Supabase project after export.
+
 ---
 
 ## Core Features Required
