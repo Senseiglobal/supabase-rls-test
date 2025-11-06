@@ -3,7 +3,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Music, CheckCircle2, Link2 } from "lucide-react";
+import { Music, CheckCircle2, Link2, Unlink } from "lucide-react";
 
 export const ConnectSpotify = () => {
   const [connected, setConnected] = useState<boolean>(false);
@@ -43,6 +43,34 @@ export const ConnectSpotify = () => {
     }
   };
 
+  const disconnect = async () => {
+    setLoading(true);
+    try {
+      const { data: userData, error: getUserError } = await supabase.auth.getUser();
+      if (getUserError) throw getUserError;
+      const identities = (userData.user?.identities || []) as Array<{ id?: string; provider?: string }>;
+      const spotifyIdentity = identities.find((i) => i.provider === "spotify");
+      if (!spotifyIdentity?.id) throw new Error("Spotify identity not found");
+
+      // supabase-js expects the full identity payload; construct minimal object with required fields
+      const { error: unlinkError } = await supabase.auth.unlinkIdentity({
+        id: spotifyIdentity.id,
+        user_id: userData.user!.id,
+        identity_data: {},
+        provider: "spotify",
+        last_sign_in_at: null,
+        created_at: null,
+        updated_at: null,
+      } as unknown as Parameters<typeof supabase.auth.unlinkIdentity>[0]);
+      if (unlinkError) throw unlinkError;
+      setConnected(false);
+    } catch (e) {
+      console.error("Spotify disconnect error", e);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <Card className="p-4 md:p-6 flex items-center justify-between">
       <div className="flex items-center gap-3">
@@ -56,16 +84,21 @@ export const ConnectSpotify = () => {
       </div>
       <div className="flex items-center gap-3">
         {connected ? (
-          <Badge className="bg-success/10 text-success flex items-center gap-1">
-            <CheckCircle2 className="w-4 h-4" /> Connected
-          </Badge>
+          <>
+            <Badge className="bg-success/10 text-success flex items-center gap-1">
+              <CheckCircle2 className="w-4 h-4" /> Connected
+            </Badge>
+            <Button variant="outline" onClick={disconnect} disabled={loading}>
+              <Unlink className="w-4 h-4 mr-2" /> {loading ? "Disconnecting…" : "Disconnect"}
+            </Button>
+          </>
         ) : (
-          <Badge variant="outline" className="text-muted-foreground">Not connected</Badge>
-        )}
-        {!connected && (
-          <Button onClick={connect} disabled={loading} className="bg-gradient-to-r from-primary to-success">
-            <Link2 className="w-4 h-4 mr-2" /> {loading ? "Connecting…" : "Connect Spotify"}
-          </Button>
+          <>
+            <Badge variant="outline" className="text-muted-foreground">Not connected</Badge>
+            <Button onClick={connect} disabled={loading} className="bg-gradient-to-r from-primary to-success">
+              <Link2 className="w-4 h-4 mr-2" /> {loading ? "Connecting…" : "Connect Spotify"}
+            </Button>
+          </>
         )}
       </div>
     </Card>
