@@ -38,7 +38,7 @@ export default function SignIn() {
       email, 
       password,
       options: {
-        emailRedirectTo: window.location.origin
+        emailRedirectTo: 'https://supabasetest-six.vercel.app'
       }
     })
 
