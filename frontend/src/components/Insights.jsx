@@ -1,21 +1,30 @@
 import { useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 import { supabase } from '../supabaseClient'
 
 export default function Insights({ session, songId, songTitle }) {
   const [insights, setInsights] = useState([])
   const [content, setContent] = useState('')
-  const [msg, setMsg] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
   const [editingId, setEditingId] = useState(null)
   const [editContent, setEditContent] = useState('')
 
   async function load() {
-    const { data, error} = await supabase
-      .from('insights')
-      .select('*')
-      .eq('song_id', songId)
-      .order('created_at', { ascending: false })
-    if (error) setMsg(error.message)
-    else setInsights(data || [])
+    try {
+      setLoading(true)
+      const { data, error} = await supabase
+        .from('insights')
+        .select('*')
+        .eq('song_id', songId)
+        .order('created_at', { ascending: false })
+      if (error) throw error
+      setInsights(data || [])
+    } catch (error) {
+      toast.error(error.message || 'Failed to load insights')
+    } finally {
+      setLoading(false)
+    }
   }
 
   useEffect(() => {
@@ -24,41 +33,47 @@ export default function Insights({ session, songId, songTitle }) {
 
   async function createInsight(e) {
     e.preventDefault()
-    setMsg(null)
-    const { data, error } = await supabase
-      .from('insights')
-      .insert([{ song_id: songId, content }])
-      .select()
-      .single()
-    if (error) setMsg(error.message)
-    else {
+    try {
+      setSubmitting(true)
+      const { data, error } = await supabase
+        .from('insights')
+        .insert([{ song_id: songId, content }])
+        .select()
+        .single()
+      if (error) throw error
       setInsights((s) => [data, ...s])
       setContent('')
-      setMsg('Insight added successfully!')
+      toast.success('Insight added successfully!')
+    } catch (error) {
+      toast.error(error.message || 'Failed to add insight')
+    } finally {
+      setSubmitting(false)
     }
   }
 
   async function deleteInsight(id) {
     if (!confirm('Are you sure you want to delete this insight?')) return
-    setMsg(null)
-    const { error } = await supabase.from('insights').delete().eq('id', id)
-    if (error) setMsg(error.message)
-    else {
+    try {
+      const { error } = await supabase.from('insights').delete().eq('id', id)
+      if (error) throw error
       setInsights((s) => s.filter(insight => insight.id !== id))
-      setMsg('Insight deleted successfully!')
+      toast.success('Insight deleted successfully!')
+    } catch (error) {
+      toast.error(error.message || 'Failed to delete insight')
     }
   }
 
   async function updateInsight(id, updatedContent) {
-    setMsg(null)
-    const { error } = await supabase
-      .from('insights')
-      .update({ content: updatedContent })
-      .eq('id', id)
-    if (error) setMsg(error.message)
-    else {
+    try {
+      const { error } = await supabase
+        .from('insights')
+        .update({ content: updatedContent })
+        .eq('id', id)
+      if (error) throw error
       setInsights((s) => s.map(insight => insight.id === id ? { ...insight, content: updatedContent } : insight))
-      setMsg('Insight updated successfully!')
+      toast.success('Insight updated successfully!')
+    } catch (error) {
+      toast.error(error.message || 'Failed to update insight')
     }
   }
 
@@ -73,29 +88,28 @@ export default function Insights({ session, songId, songTitle }) {
             value={content} 
             onChange={(e) => setContent(e.target.value)}
             required
+            disabled={submitting}
             className="govuk-input"
             rows="3"
             style={{ resize: 'vertical' }}
           />
         </div>
-        <button type="submit" className="govuk-button" style={{ marginBottom: 0, padding: '5px 10px', fontSize: '14px' }}>
-          Add Insight
+        <button 
+          type="submit" 
+          className="govuk-button" 
+          style={{ marginBottom: 0, padding: '5px 10px', fontSize: '14px' }}
+          disabled={submitting}
+        >
+          {submitting ? 'Adding...' : 'Add Insight'}
         </button>
       </form>
 
-      {msg && (
-        <div 
-          className={`govuk-notification-banner ${
-            msg.includes('Error') ? 'govuk-notification-banner--error' : 
-            'govuk-notification-banner--success'
-          }`}
-          style={{ marginBottom: 15, padding: '10px' }}
-        >
-          <p style={{ margin: 0, fontSize: '14px' }}>{msg}</p>
+      {loading ? (
+        <div style={{ textAlign: 'center', padding: '15px' }}>
+          <div className="govuk-spinner" style={{ width: '30px', height: '30px' }}></div>
+          <p className="govuk-body" style={{ marginTop: 10, fontSize: '12px' }}>Loading insights...</p>
         </div>
-      )}
-
-      {insights.length > 0 ? (
+      ) : insights.length > 0 ? (
         <div>
           {insights.map((insight) => (
             <div 

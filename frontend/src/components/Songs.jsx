@@ -1,23 +1,32 @@
 import { useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 import { supabase } from '../supabaseClient'
 import Insights from './Insights'
 
 export default function Songs({ session, artistId, artistName }) {
   const [songs, setSongs] = useState([])
   const [title, setTitle] = useState('')
-  const [msg, setMsg] = useState(null)
+  const [loading, setLoading] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
   const [editingId, setEditingId] = useState(null)
   const [editTitle, setEditTitle] = useState('')
   const [selectedSong, setSelectedSong] = useState(null)
 
   async function load() {
-    const { data, error } = await supabase
-      .from('songs')
-      .select('*')
-      .eq('artist_id', artistId)
-      .order('created_at', { ascending: false })
-    if (error) setMsg(error.message)
-    else setSongs(data || [])
+    try {
+      setLoading(true)
+      const { data, error } = await supabase
+        .from('songs')
+        .select('*')
+        .eq('artist_id', artistId)
+        .order('created_at', { ascending: false })
+      if (error) throw error
+      setSongs(data || [])
+    } catch (error) {
+      toast.error(error.message || 'Failed to load songs')
+    } finally {
+      setLoading(false)
+    }
   }
 
   useEffect(() => {
@@ -26,41 +35,47 @@ export default function Songs({ session, artistId, artistName }) {
 
   async function createSong(e) {
     e.preventDefault()
-    setMsg(null)
-    const { data, error } = await supabase
-      .from('songs')
-      .insert([{ artist_id: artistId, title }])
-      .select()
-      .single()
-    if (error) setMsg(error.message)
-    else {
+    try {
+      setSubmitting(true)
+      const { data, error } = await supabase
+        .from('songs')
+        .insert([{ artist_id: artistId, title }])
+        .select()
+        .single()
+      if (error) throw error
       setSongs((s) => [data, ...s])
       setTitle('')
-      setMsg('Song added successfully!')
+      toast.success('Song added successfully!')
+    } catch (error) {
+      toast.error(error.message || 'Failed to add song')
+    } finally {
+      setSubmitting(false)
     }
   }
 
   async function deleteSong(id) {
     if (!confirm('Are you sure you want to delete this song?')) return
-    setMsg(null)
-    const { error } = await supabase.from('songs').delete().eq('id', id)
-    if (error) setMsg(error.message)
-    else {
+    try {
+      const { error } = await supabase.from('songs').delete().eq('id', id)
+      if (error) throw error
       setSongs((s) => s.filter(song => song.id !== id))
-      setMsg('Song deleted successfully!')
+      toast.success('Song deleted successfully!')
+    } catch (error) {
+      toast.error(error.message || 'Failed to delete song')
     }
   }
 
   async function updateSong(id, updatedTitle) {
-    setMsg(null)
-    const { error } = await supabase
-      .from('songs')
-      .update({ title: updatedTitle })
-      .eq('id', id)
-    if (error) setMsg(error.message)
-    else {
+    try {
+      const { error } = await supabase
+        .from('songs')
+        .update({ title: updatedTitle })
+        .eq('id', id)
+      if (error) throw error
       setSongs((s) => s.map(song => song.id === id ? { ...song, title: updatedTitle } : song))
-      setMsg('Song updated successfully!')
+      toast.success('Song updated successfully!')
+    } catch (error) {
+      toast.error(error.message || 'Failed to update song')
     }
   }
 
@@ -77,27 +92,26 @@ export default function Songs({ session, artistId, artistName }) {
             value={title} 
             onChange={(e) => setTitle(e.target.value)}
             required
+            disabled={submitting}
             className="govuk-input"
           />
         </div>
-        <button type="submit" className="govuk-button" style={{ marginBottom: 0 }}>
-          Add Song
+        <button 
+          type="submit" 
+          className="govuk-button" 
+          style={{ marginBottom: 0 }}
+          disabled={submitting}
+        >
+          {submitting ? 'Adding...' : 'Add Song'}
         </button>
       </form>
 
-      {msg && (
-        <div 
-          className={`govuk-notification-banner ${
-            msg.includes('Error') ? 'govuk-notification-banner--error' : 
-            'govuk-notification-banner--success'
-          }`}
-          style={{ marginBottom: 20 }}
-        >
-          {msg}
+      {loading ? (
+        <div style={{ textAlign: 'center', padding: '20px' }}>
+          <div className="govuk-spinner"></div>
+          <p className="govuk-body" style={{ marginTop: 10, fontSize: '14px' }}>Loading songs...</p>
         </div>
-      )}
-
-      {songs.length > 0 ? (
+      ) : songs.length > 0 ? (
         <div>
           {songs.map((song) => (
             <div 
