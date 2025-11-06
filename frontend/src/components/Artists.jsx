@@ -1,11 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { supabase } from '../supabaseClient'
+import Songs from './Songs'
 
 export default function Artists({ session }) {
   const [artists, setArtists] = useState([])
   const [name, setName] = useState('')
   const [country, setCountry] = useState('')
   const [msg, setMsg] = useState(null)
+  const [editingId, setEditingId] = useState(null)
+  const [editName, setEditName] = useState('')
+  const [editCountry, setEditCountry] = useState('')
+  const [selectedArtist, setSelectedArtist] = useState(null)
 
   const countries = [
     'Afghanistan', 'Albania', 'Algeria', 'Andorra', 'Angola', 'Argentina', 'Armenia', 'Australia',
@@ -38,7 +43,7 @@ export default function Artists({ session }) {
   ]
 
   async function load() {
-    const { data, error } = await supabase.from('artists').select('*').eq('auth_uid', session.user.id)
+    const { data, error } = await supabase.from('artists').select('*').eq('auth_uid', session.user.id).order('created_at', { ascending: false })
     if (error) setMsg(error.message)
     else setArtists(data || [])
   }
@@ -56,6 +61,28 @@ export default function Artists({ session }) {
       setArtists((s) => [data, ...s])
       setName('')
       setCountry('')
+      setMsg('Artist created successfully!')
+    }
+  }
+
+  async function deleteArtist(id) {
+    if (!confirm('Are you sure you want to delete this artist?')) return
+    setMsg(null)
+    const { error } = await supabase.from('artists').delete().eq('id', id)
+    if (error) setMsg(error.message)
+    else {
+      setArtists((s) => s.filter(a => a.id !== id))
+      setMsg('Artist deleted successfully!')
+    }
+  }
+
+  async function updateArtist(id, updatedName, updatedCountry) {
+    setMsg(null)
+    const { error } = await supabase.from('artists').update({ name: updatedName, country: updatedCountry }).eq('id', id)
+    if (error) setMsg(error.message)
+    else {
+      setArtists((s) => s.map(a => a.id === id ? { ...a, name: updatedName, country: updatedCountry } : a))
+      setMsg('Artist updated successfully!')
     }
   }
 
@@ -126,13 +153,101 @@ export default function Artists({ session }) {
       )}
 
       {artists.length > 0 ? (
-        <ul className="govuk-list">
+        <div>
           {artists.map((a) => (
-            <li key={a.id}>
-              <strong>{a.name}</strong> — {a.country}
-            </li>
+            <div 
+              key={a.id}
+              style={{ 
+                border: '2px solid #b1b4b6',
+                padding: '15px',
+                marginBottom: '15px',
+                backgroundColor: 'white'
+              }}
+            >
+              {editingId === a.id ? (
+                <form onSubmit={(e) => {
+                  e.preventDefault()
+                  updateArtist(a.id, editName, editCountry)
+                  setEditingId(null)
+                }}>
+                  <div className="govuk-form-group" style={{ marginBottom: 10 }}>
+                    <input 
+                      value={editName} 
+                      onChange={(e) => setEditName(e.target.value)}
+                      required
+                      className="govuk-input"
+                      placeholder="Artist name"
+                    />
+                  </div>
+                  <div className="govuk-form-group" style={{ marginBottom: 10 }}>
+                    <select 
+                      value={editCountry} 
+                      onChange={(e) => setEditCountry(e.target.value)}
+                      required
+                      className="govuk-select"
+                    >
+                      <option value="">Select a country</option>
+                      {countries.map((c) => (
+                        <option key={c} value={c}>{c}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <button type="submit" className="govuk-button" style={{ marginRight: 10, marginBottom: 0 }}>
+                    Save
+                  </button>
+                  <button 
+                    type="button" 
+                    onClick={() => setEditingId(null)}
+                    className="govuk-button govuk-button--secondary"
+                    style={{ marginBottom: 0 }}
+                  >
+                    Cancel
+                  </button>
+                </form>
+              ) : (
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                  <div>
+                    <strong style={{ fontSize: '19px' }}>{a.name}</strong>
+                    <span style={{ color: '#505a5f', marginLeft: 10 }}>— {a.country}</span>
+                  </div>
+                  <div>
+                    <button 
+                      type="button"
+                      onClick={() => setSelectedArtist(selectedArtist === a.id ? null : a.id)}
+                      className="govuk-button"
+                      style={{ marginRight: 10, marginBottom: 0, padding: '5px 10px', fontSize: '16px' }}
+                    >
+                      {selectedArtist === a.id ? 'Hide Songs' : 'Manage Songs'}
+                    </button>
+                    <button 
+                      type="button"
+                      onClick={() => {
+                        setEditingId(a.id)
+                        setEditName(a.name)
+                        setEditCountry(a.country)
+                      }}
+                      className="govuk-button govuk-button--secondary"
+                      style={{ marginRight: 10, marginBottom: 0, padding: '5px 10px', fontSize: '16px' }}
+                    >
+                      Edit
+                    </button>
+                    <button 
+                      type="button"
+                      onClick={() => deleteArtist(a.id)}
+                      className="govuk-button govuk-button--warning"
+                      style={{ marginBottom: 0, padding: '5px 10px', fontSize: '16px' }}
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              )}
+              {selectedArtist === a.id && (
+                <Songs session={session} artistId={a.id} artistName={a.name} />
+              )}
+            </div>
           ))}
-        </ul>
+        </div>
       ) : (
         <p className="govuk-body" style={{ color: '#505a5f' }}>
           No artists yet. Create your first artist above.
