@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        working-directory: frontend-new
+        run: npm ci
+      - name: Lint
+        working-directory: frontend-new
+        run: npm run lint
+      - name: Typecheck
+        working-directory: frontend-new
+        run: npm run typecheck
+      - name: Build
+        working-directory: frontend-new
+        run: npm run build

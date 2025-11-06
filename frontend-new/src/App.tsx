@@ -3,6 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import ProtectedRoute from "@/components/ProtectedRoute";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { Session } from "@supabase/supabase-js";
@@ -56,15 +57,15 @@ const App = () => {
             />
             <Route
               path="/onboarding"
-              element={session ? <Onboarding /> : <Navigate to="/auth" />}
+              element={<ProtectedRoute><Onboarding /></ProtectedRoute>}
             />
             <Route
               path="/dashboard"
-              element={session ? <Dashboard /> : <Navigate to="/auth" />}
+              element={<ProtectedRoute><Dashboard /></ProtectedRoute>}
             />
             <Route
               path="/chat"
-              element={session ? <Chat /> : <Navigate to="/auth" />}
+              element={<ProtectedRoute><Chat /></ProtectedRoute>}
             />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
