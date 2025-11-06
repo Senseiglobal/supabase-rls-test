@@ -44,8 +44,9 @@ const Auth = () => {
         toast.success("Account created! Redirecting to onboarding...");
         navigate("/onboarding");
       }
-    } catch (error: any) {
-      toast.error(error.message || "Authentication failed");
+    } catch (error: unknown) {
+      const message = error instanceof Error ? error.message : "Authentication failed";
+      toast.error(message);
     } finally {
       setLoading(false);
     }
