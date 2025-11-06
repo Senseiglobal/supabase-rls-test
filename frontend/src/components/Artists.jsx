@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import toast from 'react-hot-toast'
 import { supabase } from '../supabaseClient'
 import Songs from './Songs'
 
@@ -6,7 +7,8 @@ export default function Artists({ session }) {
   const [artists, setArtists] = useState([])
   const [name, setName] = useState('')
   const [country, setCountry] = useState('')
-  const [msg, setMsg] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [submitting, setSubmitting] = useState(false)
   const [editingId, setEditingId] = useState(null)
   const [editName, setEditName] = useState('')
   const [editCountry, setEditCountry] = useState('')
@@ -43,9 +45,21 @@ export default function Artists({ session }) {
   ]
 
   async function load() {
-    const { data, error } = await supabase.from('artists').select('*').eq('auth_uid', session.user.id).order('created_at', { ascending: false })
-    if (error) setMsg(error.message)
-    else setArtists(data || [])
+    try {
+      setLoading(true)
+      const { data, error } = await supabase
+        .from('artists')
+        .select('*')
+        .eq('auth_uid', session.user.id)
+        .order('created_at', { ascending: false })
+      
+      if (error) throw error
+      setArtists(data || [])
+    } catch (error) {
+      toast.error(error.message || 'Failed to load artists')
+    } finally {
+      setLoading(false)
+    }
   }
 
   useEffect(() => {
@@ -54,47 +68,73 @@ export default function Artists({ session }) {
 
   async function createArtist(e) {
     e.preventDefault()
-    setMsg(null)
-    const { data, error } = await supabase.from('artists').insert([{ auth_uid: session.user.id, name, country }]).select().single()
-    if (error) setMsg(error.message)
-    else {
+    try {
+      setSubmitting(true)
+      const { data, error } = await supabase
+        .from('artists')
+        .insert([{ auth_uid: session.user.id, name, country }])
+        .select()
+        .single()
+      
+      if (error) throw error
+      
       setArtists((s) => [data, ...s])
       setName('')
       setCountry('')
-      setMsg('Artist created successfully!')
+      toast.success('Artist created successfully!')
+    } catch (error) {
+      toast.error(error.message || 'Failed to create artist')
+    } finally {
+      setSubmitting(false)
     }
   }
 
   async function deleteArtist(id) {
     if (!confirm('Are you sure you want to delete this artist?')) return
-    setMsg(null)
-    const { error } = await supabase.from('artists').delete().eq('id', id)
-    if (error) setMsg(error.message)
-    else {
+    
+    try {
+      const { error } = await supabase.from('artists').delete().eq('id', id)
+      if (error) throw error
+      
       setArtists((s) => s.filter(a => a.id !== id))
-      setMsg('Artist deleted successfully!')
+      toast.success('Artist deleted successfully!')
+    } catch (error) {
+      toast.error(error.message || 'Failed to delete artist')
     }
   }
 
   async function updateArtist(id, updatedName, updatedCountry) {
-    setMsg(null)
-    const { error } = await supabase.from('artists').update({ name: updatedName, country: updatedCountry }).eq('id', id)
-    if (error) setMsg(error.message)
-    else {
+    try {
+      const { error } = await supabase
+        .from('artists')
+        .update({ name: updatedName, country: updatedCountry })
+        .eq('id', id)
+      
+      if (error) throw error
+      
       setArtists((s) => s.map(a => a.id === id ? { ...a, name: updatedName, country: updatedCountry } : a))
-      setMsg('Artist updated successfully!')
+      toast.success('Artist updated successfully!')
+    } catch (error) {
+      toast.error(error.message || 'Failed to update artist')
     }
   }
 
   // Access control test: try to read a non-owned artist id (hard-coded bogus id)
   async function accessControlTest() {
-    setMsg(null)
     const bogusId = '00000000-0000-0000-0000-000000000999'
-    const { data, error } = await supabase.from('artists').select('*').eq('id', bogusId)
-    // If backend returns data (bad), show an alert; otherwise show blocked message
-    if (error) setMsg('Error: ' + error.message)
-    else if (Array.isArray(data) && data.length === 0) setMsg('Access control test: blocked (good)')
-    else setMsg('Access control test: returned data (RLS not enforced)')
+    try {
+      const { data, error } = await supabase.from('artists').select('*').eq('id', bogusId)
+      // If backend returns data (bad), show an alert; otherwise show blocked message
+      if (error) {
+        toast.error('Error: ' + error.message)
+      } else if (Array.isArray(data) && data.length === 0) {
+        toast.success('Access control test: blocked (good)')
+      } else {
+        toast.error('Access control test: returned data (RLS not enforced)')
+      }
+    } catch (error) {
+      toast.error(error.message || 'Access control test failed')
+    }
   }
 
   return (
@@ -109,6 +149,7 @@ export default function Artists({ session }) {
             value={name} 
             onChange={(e) => setName(e.target.value)}
             required
+            disabled={submitting}
             className="govuk-input"
           />
         </div>
@@ -119,6 +160,7 @@ export default function Artists({ session }) {
             value={country} 
             onChange={(e) => setCountry(e.target.value)}
             required
+            disabled={submitting}
             className="govuk-select"
           >
             <option value="">Select a country</option>
@@ -127,8 +169,13 @@ export default function Artists({ session }) {
             ))}
           </select>
         </div>
-        <button type="submit" className="govuk-button" style={{ marginRight: 10 }}>
-          Create Artist
+        <button 
+          type="submit" 
+          className="govuk-button" 
+          style={{ marginRight: 10 }}
+          disabled={submitting}
+        >
+          {submitting ? 'Creating...' : 'Create Artist'}
         </button>
         <button 
           type="button" 
@@ -138,21 +185,21 @@ export default function Artists({ session }) {
           Test Access Control
         </button>
       </form>
-      
-      {msg && (
-        <div 
-          className={`govuk-notification-banner ${
-            msg.includes('Error') ? 'govuk-notification-banner--error' : 
-            msg.includes('good') ? 'govuk-notification-banner--success' : 
-            'govuk-notification-banner--warning'
-          }`}
-          style={{ marginBottom: 20 }}
-        >
-          {msg}
-        </div>
-      )}
 
-      {artists.length > 0 ? (
+      {loading ? (
+        <div style={{ textAlign: 'center', padding: '40px' }}>
+          <div className="govuk-spinner" style={{ 
+            border: '4px solid #f3f3f3',
+            borderTop: '4px solid #1d70b8',
+            borderRadius: '50%',
+            width: '40px',
+            height: '40px',
+            animation: 'spin 1s linear infinite',
+            margin: '0 auto'
+          }}></div>
+          <p className="govuk-body" style={{ marginTop: 15 }}>Loading artists...</p>
+        </div>
+      ) : artists.length > 0 ? (
         <div>
           {artists.map((a) => (
             <div 
