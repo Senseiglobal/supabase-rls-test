@@ -1,7 +1,6 @@
 import { Music2, LogOut, Menu, Sparkles } from "lucide-react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { ThemeToggle } from "@/components/ThemeToggle";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -149,7 +148,6 @@ export function Header({ showAuth = false }: HeaderProps) {
         </nav>
       )}
       
-      <ThemeToggle />
       
       {!isAuthenticated && showAuth && location.pathname !== "/auth" && (
         <>
@@ -240,7 +238,6 @@ export function Header({ showAuth = false }: HeaderProps) {
 
           {/* Mobile Navigation */}
           <div className="lg:hidden flex items-center gap-2">
-                      <ThemeToggle />
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon" className="hover-scale">
