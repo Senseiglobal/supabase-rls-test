@@ -58,9 +58,9 @@ function NotificationCard({ status, color, title, description, time }: Notificat
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'high': return { 
-        bg: theme.colors.accent.red, 
-        hover: theme.colors.accent.redHover,
-        text: '#FFFFFF' // White text for high contrast on red
+        bg: '#dc2626', // Darker red for better contrast
+        hover: '#b91c1c', // Even darker red on hover
+        text: '#FFFFFF' // Pure white text for maximum contrast
       };
       case 'medium': return { 
         bg: theme.colors.accent.yellow, 
@@ -126,21 +126,32 @@ function NotificationCard({ status, color, title, description, time }: Notificat
           </h3>
           
           <span
-            className={`${theme.typography.tag} px-3 py-1.5 rounded-full transition-all duration-200 cursor-default flex-shrink-0 font-semibold`}
+            className={`${theme.typography.tag} px-3 py-1.5 rounded-full transition-all duration-200 cursor-default flex-shrink-0`}
             style={{
               backgroundColor: statusColors.bg,
               color: statusColors.text,
               borderRadius: theme.borderRadius.tag,
               minWidth: 'fit-content',
-              textShadow: status === 'high' ? '0 0 1px rgba(0,0,0,0.5)' : 'none', // Better readability for white text
+              fontWeight: status === 'high' ? '700' : '600', // Extra bold for high priority
+              textShadow: status === 'high' ? '0 1px 2px rgba(0,0,0,0.7), 0 0 1px rgba(0,0,0,0.5)' : 'none',
+              border: status === 'high' ? '1px solid rgba(255,255,255,0.2)' : 'none', // Subtle white border for high priority
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.backgroundColor = statusColors.hover;
               e.currentTarget.style.transform = 'scale(1.05)';
+              // Enhanced text shadow for better readability on hover
+              if (status === 'high') {
+                e.currentTarget.style.textShadow = '0 1px 3px rgba(0,0,0,0.8), 0 0 2px rgba(0,0,0,0.6)';
+                e.currentTarget.style.color = '#FFFFFF';
+                e.currentTarget.style.fontWeight = '700'; // Extra bold on hover
+              }
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.backgroundColor = statusColors.bg;
               e.currentTarget.style.transform = 'scale(1)';
+              e.currentTarget.style.textShadow = status === 'high' ? '0 0 1px rgba(0,0,0,0.5)' : 'none';
+              e.currentTarget.style.color = statusColors.text;
+              e.currentTarget.style.fontWeight = '600'; // Reset to semibold
             }}
           >
             {status}
