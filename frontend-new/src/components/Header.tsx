@@ -240,6 +240,7 @@ export function Header({ showAuth = false }: HeaderProps) {
 
           {/* Mobile Navigation */}
           <div className="lg:hidden flex items-center gap-2">
+                      <ThemeToggle />
             <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
               <SheetTrigger asChild>
                 <Button variant="ghost" size="icon" className="hover-scale">
