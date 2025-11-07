@@ -38,32 +38,27 @@ export const ConnectSpotify = () => {
     setLoading(true);
     try {
       const redirectTo = `${globalThis.location.origin}/dashboard`;
-      console.log("Attempting to connect Spotify, redirectTo:", redirectTo);
+      console.log("Attempting to link Spotify identity, redirectTo:", redirectTo);
       
-      // Since manual linking is disabled, we need to enable it first
-      // Or use a different approach - sign in with Spotify and handle merging
-      const { data, error } = await supabase.auth.signInWithOAuth({
+      // Use linkIdentity now that manual linking is enabled
+      const { data, error } = await supabase.auth.linkIdentity({
         provider: "spotify",
         options: {
           scopes: "user-read-email user-read-private user-read-recently-played playlist-read-private",
           redirectTo,
-          queryParams: {
-            // Add a parameter to indicate this is for linking, not new signup
-            link: "true"
-          }
         },
       });
       
-      console.log("signInWithOAuth response:", { data, error });
+      console.log("linkIdentity response:", { data, error });
       
       if (error) {
-        console.error("Spotify OAuth error:", error);
+        console.error("Spotify linkIdentity error:", error);
         toast.error(`Failed to connect Spotify: ${error.message}`);
         throw error;
       }
       
-      // If successful, user will be redirected to Spotify
-      console.log("Redirecting to Spotify for authentication...");
+      // If successful, linkIdentity should redirect to Spotify
+      console.log("Redirecting to Spotify for linking...");
       toast.success("Redirecting to Spotify...");
       
     } catch (e) {
