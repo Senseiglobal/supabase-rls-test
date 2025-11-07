@@ -145,7 +145,7 @@ const Account = () => {
       
       // Platform-specific OAuth URLs
       const oauthUrls: Record<string, string> = {
-        spotify: `https://accounts.spotify.com/authorize?client_id=YOUR_SPOTIFY_CLIENT_ID&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&scope=user-read-email user-read-private user-top-read&state=${user.id}`,
+        spotify: `https://accounts.spotify.com/authorize?client_id=${import.meta.env.VITE_SPOTIFY_CLIENT_ID || 'YOUR_SPOTIFY_CLIENT_ID'}&response_type=code&redirect_uri=${encodeURIComponent(redirectUri)}&scope=user-read-email user-read-private user-top-read&state=${user.id}`,
         instagram: `https://api.instagram.com/oauth/authorize?client_id=YOUR_INSTAGRAM_CLIENT_ID&redirect_uri=${encodeURIComponent(redirectUri)}&scope=user_profile,user_media&response_type=code&state=${user.id}`,
         tiktok: `https://www.tiktok.com/v2/auth/authorize?client_key=YOUR_TIKTOK_CLIENT_KEY&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=user.info.basic,video.list&state=${user.id}`,
         twitter: `https://twitter.com/i/oauth2/authorize?response_type=code&client_id=YOUR_TWITTER_CLIENT_ID&redirect_uri=${encodeURIComponent(redirectUri)}&scope=tweet.read users.read&state=${user.id}`,
