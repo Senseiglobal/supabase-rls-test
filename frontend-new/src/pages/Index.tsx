@@ -6,6 +6,7 @@ import { Footer } from "@/components/Footer";
 
 const Index = () => {
   const navigate = useNavigate();
+
   const features = [{
     icon: Brain,
     title: "AI-Powered Strategy",
@@ -31,6 +32,7 @@ const Index = () => {
     title: "Audience Insights",
     description: "Understand listener demographics, behavior patterns, and preferences to create music that resonates and grows your fanbase"
   }];
+
   return <div className="min-h-screen">
       <Header showAuth={true} />
       {/* Hero Section */}
@@ -65,11 +67,11 @@ const Index = () => {
 
           <div className="flex items-center justify-center gap-8 pt-8 text-sm text-foreground/70">
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-success rounded-full animate-pulse" />
+              <div className="w-2 h-2 bg-success rounded-full animate-pulse"></div>
               No credit card required
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-2 h-2 bg-success rounded-full animate-pulse" />
+              <div className="w-2 h-2 bg-success rounded-full animate-pulse"></div>
               Free forever plan
             </div>
           </div>
@@ -91,17 +93,25 @@ const Index = () => {
               From strategy to analytics, AURA gives you the tools professional artists use to build their careers
             </p>
           </div>
+
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {features.map((feature, idx) => <div key={idx} className="card-urban p-8 card-hover animate-slide-up group" style={{
-            animationDelay: `${idx * 0.1}s`
-          }}>
-                <div className="w-14 h-14 bg-accent/10 border border-accent/30 rounded-xl flex items-center justify-center mb-6 group-hover:bg-accent/20 mx-auto group-hover:scale-110 transition-all duration-300">                  <feature.icon className="h-7 w-7 text-accent" />
+            {features.map((feature, idx) => (
+              <div
+                key={idx}
+                className="card-urban p-8 card-hover animate-slide-up group"
+                style={{
+                  animationDelay: `${idx * 0.1}s`
+                }}
+              >
+                <div className="w-14 h-14 bg-accent/10 border border-accent/30 rounded-xl flex items-center justify-center mb-6 group-hover:bg-accent/20 mx-auto group-hover:scale-110 transition-all duration-300">
+                  <feature.icon className="h-7 w-7 text-accent" />
                 </div>
-                <h3 className="text-xl font-bold mb-text-center 3 text-foreground">{feature.title}</h3>
-                <p className="text-foreground/7text-center 0 leading-relaxed">
+                <h3 className="text-xl font-bold mb-3 text-center text-foreground">{feature.title}</h3>
+                <p className="text-foreground/70 text-center leading-relaxed">
                   {feature.description}
                 </p>
-              </div>)}
+              </div>
+            ))}
           </div>
         </div>
 
@@ -113,13 +123,15 @@ const Index = () => {
           <p className="text-lg text-foreground/70">
             Join thousands of artists using AI to make smarter decisions and grow faster.
           </p>
-          <Button size="lg" className="mt-6 text-base" onClick={() => navigate("/auth")}>
+          <Button size="lg" onClick={() => navigate("/auth")} className="mt-6 text-base">
             Start Your Journey
             <ArrowRight className="ml-2 h-5 w-5" />
           </Button>
         </div>
       </div>
+      
       <Footer />
     </div>;
 };
+
 export default Index;
