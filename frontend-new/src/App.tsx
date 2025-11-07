@@ -32,8 +32,8 @@ import NotFound from "./pages/NotFound";
 const queryClient = new QueryClient();
 
 const App = () => {
-  // Set to true to bypass authentication during UI development
-  const DEV_MODE = true;
+  // SECURITY: Set to false for production. Only use true for UI testing without backend.
+  const DEV_MODE = false;
   
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
