@@ -57,10 +57,26 @@ function NotificationCard({ status, color, title, description, time }: Notificat
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'high': return { bg: theme.colors.accent.red, hover: theme.colors.accent.redHover };
-      case 'medium': return { bg: theme.colors.accent.yellow, hover: theme.colors.accent.yellowHover };
-      case 'low': return { bg: theme.colors.accent.green, hover: theme.colors.accent.greenHover };
-      default: return { bg: theme.colors.accent.orange, hover: theme.colors.accent.orangeHover };
+      case 'high': return { 
+        bg: theme.colors.accent.red, 
+        hover: theme.colors.accent.redHover,
+        text: '#FFFFFF' // White text for high contrast on red
+      };
+      case 'medium': return { 
+        bg: theme.colors.accent.yellow, 
+        hover: theme.colors.accent.yellowHover,
+        text: '#000000' // Black text for contrast on yellow
+      };
+      case 'low': return { 
+        bg: theme.colors.accent.green, 
+        hover: theme.colors.accent.greenHover,
+        text: '#000000' // Black text for contrast on green
+      };
+      default: return { 
+        bg: theme.colors.accent.orange, 
+        hover: theme.colors.accent.orangeHover,
+        text: '#000000' // Black text for contrast on orange
+      };
     }
   };
 
@@ -68,18 +84,21 @@ function NotificationCard({ status, color, title, description, time }: Notificat
 
   return (
     <div 
-      className="relative group transition-all duration-200 hover:shadow-lg"
+      className="relative group transition-all duration-200 hover:shadow-lg overflow-hidden"
       style={{
         backgroundColor: theme.colors.surface,
         borderRadius: theme.borderRadius.card,
         border: `1px solid ${theme.colors.border}`,
-        padding: theme.spacing.cardPadding,
+        padding: `${theme.spacing.cardPadding}`,
+        minHeight: '120px',
       }}
       onMouseEnter={(e) => {
         e.currentTarget.style.backgroundColor = theme.colors.surfaceHover;
+        e.currentTarget.style.borderColor = theme.colors.accent.orange + '40';
       }}
       onMouseLeave={(e) => {
         e.currentTarget.style.backgroundColor = theme.colors.surface;
+        e.currentTarget.style.borderColor = theme.colors.border;
       }}
     >
       {/* Accent Line */}
@@ -93,32 +112,35 @@ function NotificationCard({ status, color, title, description, time }: Notificat
       />
 
       {/* Card Content Container - Ensures proper spacing */}
-      <div className="flex flex-col space-y-4 ml-2">
+      <div className="flex flex-col space-y-4 pl-4">
         {/* Header Row - Title and Status Tag */}
-        <div className="flex items-start justify-between gap-4">
+        <div className="flex items-center justify-between gap-4">
           <h3 
-            className={`${theme.typography.title} flex-1 pr-2`}
+            className={`${theme.typography.title} flex-1`}
             style={{ 
-              lineHeight: '1.4',
-              marginTop: '2px', // Align with status tag
+              lineHeight: '1.3',
+              margin: '0',
             }}
           >
             {title}
           </h3>
           
           <span
-            className={`${theme.typography.tag} px-3 py-1.5 rounded-full transition-all duration-200 cursor-default flex-shrink-0`}
+            className={`${theme.typography.tag} px-3 py-1.5 rounded-full transition-all duration-200 cursor-default flex-shrink-0 font-semibold`}
             style={{
               backgroundColor: statusColors.bg,
-              color: '#000000', // High contrast for accessibility
+              color: statusColors.text,
               borderRadius: theme.borderRadius.tag,
               minWidth: 'fit-content',
+              textShadow: status === 'high' ? '0 0 1px rgba(0,0,0,0.5)' : 'none', // Better readability for white text
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.backgroundColor = statusColors.hover;
+              e.currentTarget.style.transform = 'scale(1.05)';
             }}
             onMouseLeave={(e) => {
               e.currentTarget.style.backgroundColor = statusColors.bg;
+              e.currentTarget.style.transform = 'scale(1)';
             }}
           >
             {status}
@@ -127,26 +149,25 @@ function NotificationCard({ status, color, title, description, time }: Notificat
 
         {/* Body Text */}
         <p 
-          className={theme.typography.body}
+          className={`${theme.typography.body} -mt-1`}
           style={{ 
-            lineHeight: '1.5',
-            marginTop: '0',
-            marginBottom: '0',
+            lineHeight: '1.6',
+            margin: '0',
           }}
         >
           {description}
         </p>
 
         {/* Footer Row - Time and Actions */}
-        <div className="flex items-center justify-between pt-2 border-t border-gray-700/50">
+        <div className="flex items-center justify-between pt-3 mt-2 border-t border-gray-700/50">
           <span className={theme.typography.small}>
             {time}
           </span>
           
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-3">
             <button 
               type="button"
-              className="flex items-center space-x-2 text-gray-400 hover:text-gray-200 transition-colors duration-200 px-2 py-1 rounded group"
+              className="flex items-center space-x-1.5 text-gray-400 hover:text-green-400 transition-all duration-200 px-3 py-1.5 rounded-lg hover:bg-gray-800/50 group"
               style={{ borderRadius: theme.borderRadius.button }}
             >
               <Check className="w-3.5 h-3.5" />
@@ -155,17 +176,8 @@ function NotificationCard({ status, color, title, description, time }: Notificat
             
             <button 
               type="button"
-              className="flex items-center space-x-2 text-gray-400 transition-colors duration-200 px-2 py-1 rounded group"
-              style={{ 
-                borderRadius: theme.borderRadius.button,
-                color: theme.colors.textSecondary,
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.color = theme.colors.accent.orange;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.color = theme.colors.textSecondary;
-              }}
+              className="flex items-center space-x-1.5 text-gray-400 hover:text-orange-400 transition-all duration-200 px-3 py-1.5 rounded-lg hover:bg-gray-800/50 group"
+              style={{ borderRadius: theme.borderRadius.button }}
             >
               <span className="text-xs font-medium">Tell me more</span>
               <ExternalLink className="w-3.5 h-3.5" />
@@ -242,29 +254,37 @@ export default function NotificationDashboard() {
         className="flex-1 overflow-y-auto"
         style={{ padding: theme.spacing.containerPadding }}
       >
-        <div className="space-y-4 max-w-4xl mx-auto">
+        <div className="space-y-5 max-w-4xl mx-auto">
           <NotificationCard
             status="high"
             color="red"
-            title="Peak posting time detected"
-            description="Your audience is most active between 7–9 PM. Consider posting your next single announcement during this window to maximize engagement."
+            title="Critical: Account Security Alert"
+            description="Unusual login activity detected from a new device. Please review your account security settings and enable two-factor authentication if you haven't already."
             time="2 hours ago"
           />
 
           <NotificationCard
             status="medium"
             color="yellow"
-            title="Milestone reached!"
-            description="Your latest single 'Midnight Dreams' just hit 10,000 streams. This is 40% faster than your previous release."
+            title="Streaming Milestone Reached"
+            description="Your latest single 'Midnight Dreams' just hit 10,000 streams. This is 40% faster than your previous release. Great momentum!"
             time="5 hours ago"
           />
 
           <NotificationCard
             status="low"
             color="green"
-            title="Weekly report ready"
-            description="Your performance analytics for this week are now available. Check out your streaming trends and audience insights."
+            title="Weekly Analytics Report Available"
+            description="Your performance analytics for this week are now available. Check out your streaming trends, audience insights, and engagement metrics."
             time="1 day ago"
+          />
+
+          <NotificationCard
+            status="high"
+            color="red"
+            title="Urgent: Payment Method Expires Soon"
+            description="Your premium subscription payment method expires in 2 days. Update your billing information to avoid service interruption."
+            time="3 hours ago"
           />
         </div>
       </main>
