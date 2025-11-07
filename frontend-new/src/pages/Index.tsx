@@ -97,8 +97,8 @@ const Index = () => {
           }}>
                 <div className="w-14 h-14 bg-accent/10 border border-accent/30 rounded-xl flex items-center justify-center mb-6 group-hover:bg-accent/20 mx-auto group-hover:scale-110 transition-all duration-300">                  <feature.icon className="h-7 w-7 text-accent" />
                 </div>
-                <h3 className="text-xl font-bold mb-3 text-foreground">{feature.title}</h3>
-                <p className="text-foreground/70 leading-relaxed">
+                <h3 className="text-xl font-bold mb-text-center 3 text-foreground">{feature.title}</h3>
+                <p className="text-foreground/7text-center 0 leading-relaxed">
                   {feature.description}
                 </p>
               </div>)}
