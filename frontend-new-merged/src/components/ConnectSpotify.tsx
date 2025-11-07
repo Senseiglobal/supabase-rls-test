@@ -4,7 +4,6 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Music, CheckCircle2, Link2, Unlink, RefreshCcw } from "lucide-react";
-import { toast } from "sonner";
 
 type UntypedSupabase = {
   from: (table: string) => {
@@ -23,7 +22,6 @@ export const ConnectSpotify = () => {
     let active = true;
     const check = async () => {
       const { data } = await supabase.auth.getUser();
-      console.log("Current user identities:", data.user?.identities);
       const identities = (data.user?.identities || []) as Array<{ provider?: string }>;
       const isConnected = identities.some((i) => i.provider === "spotify");
       if (active) setConnected(isConnected);
@@ -38,33 +36,17 @@ export const ConnectSpotify = () => {
     setLoading(true);
     try {
       const redirectTo = `${globalThis.location.origin}/dashboard`;
-      console.log("Attempting to connect Spotify, redirectTo:", redirectTo);
-      
-      // Use linkIdentity to connect Spotify to existing user account
-      const { data, error } = await supabase.auth.linkIdentity({
+      // Attempt to start OAuth with Spotify. Linking will be handled by Supabase on return.
+      const { error } = await supabase.auth.signInWithOAuth({
         provider: "spotify",
         options: {
           scopes: "user-read-email user-read-private user-read-recently-played playlist-read-private",
           redirectTo,
         },
       });
-      
-      console.log("linkIdentity response:", { data, error });
-      
-      if (error) {
-        console.error("Spotify linkIdentity error:", error);
-        toast.error(`Failed to connect Spotify: ${error.message}`);
-        throw error;
-      }
-      
-      // If successful, linkIdentity should redirect to Spotify
-      // If we reach here without redirect, log it
-      console.log("linkIdentity completed without redirect");
-      toast.success("Redirecting to Spotify...");
-      
+      if (error) throw error;
     } catch (e) {
       console.error("Spotify connect error", e);
-      toast.error("Failed to connect to Spotify. Check console for details.");
     } finally {
       setLoading(false);
     }
