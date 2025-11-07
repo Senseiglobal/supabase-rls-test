@@ -141,7 +141,7 @@ const Account = () => {
       }
 
       // Initiate OAuth flow
-      const redirectUri = `${window.location.origin}/functions/v1/oauth-callback?platform=${platformId}`;
+      const redirectUri = `${window.location.origin}/functions/v1/oauth-callback`;
       
       // Platform-specific OAuth URLs
       const oauthUrls: Record<string, string> = {
