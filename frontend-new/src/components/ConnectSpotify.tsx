@@ -36,8 +36,8 @@ export const ConnectSpotify = () => {
     setLoading(true);
     try {
       const redirectTo = `${globalThis.location.origin}/dashboard`;
-      // Attempt to start OAuth with Spotify. Linking will be handled by Supabase on return.
-      const { error } = await supabase.auth.signInWithOAuth({
+      // Use linkIdentity to connect Spotify to existing user account
+      const { error } = await supabase.auth.linkIdentity({
         provider: "spotify",
         options: {
           scopes: "user-read-email user-read-private user-read-recently-played playlist-read-private",

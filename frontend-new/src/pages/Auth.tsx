@@ -7,7 +7,6 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { toast } from "sonner";
 import { Header } from "@/components/Header";
-import { ThemeToggle } from "@/components/ThemeToggle";
 import { Sparkles, Eye, EyeOff, Music } from "lucide-react";
 import { z } from "zod";
 
@@ -115,12 +114,6 @@ const Auth = () => {
   return (
     <div className="min-h-screen">
       <Header showAuth={false} />
-      
-      {/* Theme Toggle - Fixed position */}
-      <div className="fixed top-4 right-4 z-50">
-        <ThemeToggle />
-      </div>
-      
       <div className="flex items-center justify-center p-4 pt-20">
         <Card className="w-full max-w-md card-urban border-accent/20 animate-scale-in">
           <CardHeader className="text-center space-y-4">

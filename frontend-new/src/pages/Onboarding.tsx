@@ -5,7 +5,6 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Progress } from "@/components/ui/progress";
-import { ThemeToggle } from "@/components/ThemeToggle";
 import { 
   Music2, Target, Sparkles, ArrowRight, ArrowLeft, Check, 
   TrendingUp, Calendar, MessageSquare, BarChart3, Brain, Zap 
@@ -106,11 +105,6 @@ const Onboarding = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4 bg-[var(--gradient-urban)] bg-fixed">
-      {/* Theme Toggle - Fixed position */}
-      <div className="fixed top-4 right-4 z-50">
-        <ThemeToggle />
-      </div>
-      
       <Card className="w-full max-w-2xl card-urban border-accent/20 animate-scale-in">
         {/* Header */}
         <div className="p-8 border-b border-border">
