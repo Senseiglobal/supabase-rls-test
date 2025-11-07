@@ -139,11 +139,11 @@ const Dashboard = () => {
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case "urgent":
-        return "bg-danger-light text-danger";
+        return "bg-danger-light text-danger hover:bg-danger hover:text-white transition-colors cursor-pointer";
       case "high":
-        return "bg-warning-light text-warning";
+        return "bg-warning-light text-warning hover:bg-warning hover:text-white transition-colors cursor-pointer";
       default:
-        return "bg-primary/10 text-primary";
+        return "bg-primary/10 text-primary hover:bg-primary hover:text-white transition-colors cursor-pointer";
     }
   };
 
