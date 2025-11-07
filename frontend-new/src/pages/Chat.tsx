@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { AppHeader } from "@/components/AppHeader";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -10,12 +9,14 @@ const Chat = () => {
   const [message, setMessage] = useState("");
   const [personality, setPersonality] = useState("friendly");
 
+  // DEMO DATA - Replace with Supabase conversation history later
   const conversations = [
     { id: 1, title: "Release strategy for new single", time: "Today" },
     { id: 2, title: "Instagram content ideas", time: "Yesterday" },
     { id: 3, title: "Goal planning session", time: "2 days ago" },
   ];
 
+  // DEMO DATA - Replace with real AI chat messages later
   const messages = [
     {
       id: 1,
@@ -45,9 +46,7 @@ const Chat = () => {
   ];
 
   return (
-    <>
-      <AppHeader />
-      <div className="h-screen flex bg-background">
+    <div className="h-screen flex bg-background">
       {/* Sidebar - Hidden on mobile */}
       <div className="hidden lg:flex w-80 border-r flex-col">
         <div className="p-4 border-b space-y-4">
@@ -104,7 +103,7 @@ const Chat = () => {
       </div>
 
       {/* Main Chat Area */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col min-w-0">
         {/* Header */}
         <div className="border-b p-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -192,7 +191,6 @@ const Chat = () => {
         </div>
       </div>
     </div>
-    </>
   );
 };
 

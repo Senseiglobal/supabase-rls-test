@@ -1,13 +1,16 @@
 import { useState } from "react";
-import { AppHeader } from "@/components/AppHeader";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
+import { ConnectSpotify } from "@/components/ConnectSpotify";
 import {
   Users,
   TrendingUp,
   Target,
+  Music,
   Instagram,
   MessageSquare,
   ChevronRight,
@@ -15,13 +18,16 @@ import {
   AlertCircle,
   CheckCircle,
   Trophy,
+  LayoutGrid,
+  LayoutList,
+  Layers,
 } from "lucide-react";
-import ConnectSpotify from "@/components/ConnectSpotify";
 
 const Dashboard = () => {
   const [filter, setFilter] = useState<"all" | "unread" | "urgent">("all");
+  const [viewMode, setViewMode] = useState<"easy" | "compact" | "professional">("easy");
 
-  // Sample data
+  // DEMO DATA - Replace with Supabase data later
   const stats = [
     {
       label: "Monthly Listeners",
@@ -161,45 +167,82 @@ const Dashboard = () => {
   });
 
   return (
-    <>
-      <AppHeader />
-      <div className="min-h-screen bg-background p-4 md:p-8">
-      <div className="max-w-7xl mx-auto space-y-8">
-        {/* Header */}
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl md:text-4xl font-bold mb-2">Welcome back, Alex!</h1>
-            <p className="text-muted-foreground">Here's what's happening with your music career</p>
+    <div className="min-h-screen w-full">
+      <div className="w-full px-4 py-6 sm:px-6 lg:px-8">
+        <div className="max-w-7xl mx-auto space-y-6 md:space-y-8">
+          {/* Header */}
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div>
+              <h1 className="text-3xl md:text-4xl font-bold mb-2 text-foreground">Welcome back, Alex!</h1>
+              <p className="text-foreground/70">Here's what's happening with your music career</p>
+            </div>
+            <div className="flex items-center gap-3">
+              {/* View Mode Toggle */}
+              <div className="flex items-center gap-1 p-1 bg-secondary/50 rounded-lg border border-border">
+                <Button
+                  variant={viewMode === "easy" ? "default" : "ghost"}
+                  size="sm"
+                  onClick={() => setViewMode("easy")}
+                  className="gap-2 transition-all duration-200"
+                  title="Easy Mode"
+                >
+                  <LayoutGrid className="h-4 w-4" />
+                  <span className="hidden lg:inline">Easy</span>
+                </Button>
+                <Button
+                  variant={viewMode === "compact" ? "default" : "ghost"}
+                  size="sm"
+                  onClick={() => setViewMode("compact")}
+                  className="gap-2 transition-all duration-200"
+                  title="Compact Mode"
+                >
+                  <LayoutList className="h-4 w-4" />
+                  <span className="hidden lg:inline">Compact</span>
+                </Button>
+                <Button
+                  variant={viewMode === "professional" ? "default" : "ghost"}
+                  size="sm"
+                  onClick={() => setViewMode("professional")}
+                  className="gap-2 transition-all duration-200"
+                  title="Professional Mode"
+                >
+                  <Layers className="h-4 w-4" />
+                  <span className="hidden lg:inline">Pro</span>
+                </Button>
+              </div>
+              <Button>
+                <MessageSquare className="mr-2 h-4 w-4" />
+                <span className="hidden md:inline">Ask AI Manager</span>
+              </Button>
+            </div>
           </div>
-          <Button className="bg-gradient-to-r from-primary to-success hover:opacity-90">
-            <MessageSquare className="mr-2 h-4 w-4" />
-            Ask AI Manager
-          </Button>
-        </div>
 
-        {/* Integrations */}
-        <div>
-          <h2 className="text-2xl font-bold mb-4">Integrations</h2>
-          <ConnectSpotify />
-        </div>
-
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-          {stats.map((stat) => (
+        {/* Stats Cards - Responsive to View Mode */}
+        <div className={`grid gap-4 transition-all duration-300 ${
+          viewMode === "easy" 
+            ? "grid-cols-1 md:grid-cols-2 lg:grid-cols-4" 
+            : viewMode === "compact"
+            ? "grid-cols-2 lg:grid-cols-4"
+            : "grid-cols-2 md:grid-cols-4"
+        }`}>
+          {stats.map((stat, idx) => (
             <Card
               key={stat.label}
-              className="card-stats card-hover cursor-pointer animate-fade-in"
+              className={`card-stats card-hover cursor-pointer animate-fade-in ${
+                viewMode === "compact" ? "p-4" : viewMode === "professional" ? "p-5" : ""
+              }`}
+              style={{ animationDelay: `${idx * 0.05}s` }}
             >
-              <div className="flex items-start justify-between mb-4">
+              <div className={`flex items-start justify-between ${viewMode === "compact" ? "mb-2" : "mb-4"}`}>
                 <div
-                  className={`w-12 h-12 rounded-xl flex items-center justify-center ${
+                  className={`${viewMode === "compact" ? "w-10 h-10" : "w-12 h-12"} rounded-xl flex items-center justify-center ${
                     stat.trend === "up"
                       ? "bg-success/10"
                       : "bg-primary/10"
                   }`}
                 >
                   <stat.icon
-                    className={`h-6 w-6 ${
+                    className={`${viewMode === "compact" ? "h-5 w-5" : "h-6 w-6"} ${
                       stat.trend === "up" ? "text-success" : "text-primary"
                     }`}
                   />
@@ -208,38 +251,59 @@ const Dashboard = () => {
                   {stat.change}
                 </Badge>
               </div>
-              <div className="text-2xl font-bold mb-1">{stat.value}</div>
-              <div className="text-sm text-muted-foreground">{stat.label}</div>
+              <div className={`${viewMode === "compact" ? "text-xl" : viewMode === "professional" ? "text-3xl" : "text-2xl"} font-bold mb-1 text-foreground`}>
+                {stat.value}
+              </div>
+              <div className={`${viewMode === "compact" ? "text-xs" : "text-sm"} text-foreground/70`}>
+                {stat.label}
+              </div>
             </Card>
           ))}
         </div>
 
-        {/* Active Goals Preview */}
-        <div>
+        {/* Active Goals Preview - Responsive to View Mode */}
+        <div className="animate-fade-in" style={{ animationDelay: "0.2s" }}>
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-bold">Active Goals</h2>
+            <h2 className={`${viewMode === "compact" ? "text-xl" : "text-2xl"} font-bold text-foreground`}>
+              Active Goals
+            </h2>
             <Button variant="ghost" size="sm">
               View All
               <ChevronRight className="ml-2 h-4 w-4" />
             </Button>
           </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {activeGoals.map((goal) => (
-              <Card key={goal.id} className="p-6 card-hover animate-slide-up">
-                <div className="space-y-4">
-                  <div className="flex items-start justify-between">
-                    <h3 className="font-semibold text-sm line-clamp-2">{goal.title}</h3>
-                    <Badge className={getStatusColor(goal.status)}>
-                      {goal.status.replace("-", " ")}
+          <div className={`grid gap-4 ${
+            viewMode === "easy" 
+              ? "grid-cols-1 md:grid-cols-3" 
+              : viewMode === "compact"
+              ? "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
+              : "grid-cols-1 md:grid-cols-2 lg:grid-cols-3"
+          }`}>
+            {activeGoals.map((goal, idx) => (
+              <Card 
+                key={goal.id} 
+                className={`${viewMode === "compact" ? "p-4" : viewMode === "professional" ? "p-5" : "p-6"} card-hover animate-slide-up bg-card border-border`}
+                style={{ animationDelay: `${0.3 + idx * 0.1}s` }}
+              >
+                <div className={`space-y-${viewMode === "compact" ? "3" : "4"}`}>
+                  <div className="flex items-start justify-between gap-2">
+                    <h3 className={`font-semibold ${viewMode === "compact" ? "text-sm" : "text-base"} line-clamp-2 text-foreground flex-1`}>
+                      {goal.title}
+                    </h3>
+                    <Badge 
+                      variant={goal.status === "on-track" ? "default" : goal.status === "ahead" ? "secondary" : "outline"}
+                      className={`${viewMode === "compact" ? "text-xs px-2 py-0.5" : "text-xs"} whitespace-nowrap flex-shrink-0`}
+                    >
+                      {viewMode === "compact" ? goal.status.charAt(0).toUpperCase() : goal.status.replace("-", " ")}
                     </Badge>
                   </div>
                   <div className="space-y-2">
-                    <Progress value={goal.progress} className="h-2" />
-                    <div className="flex justify-between text-xs text-muted-foreground">
-                      <span>
+                    <Progress value={goal.progress} className={viewMode === "compact" ? "h-2" : "h-2.5"} />
+                    <div className={`flex justify-between ${viewMode === "compact" ? "text-xs" : "text-sm"} font-medium`}>
+                      <span className="text-foreground">
                         {goal.current.toLocaleString()} / {goal.target.toLocaleString()}
                       </span>
-                      <span>{goal.daysLeft} days left</span>
+                      <span className="text-muted-foreground">{goal.daysLeft}d left</span>
                     </div>
                   </div>
                 </div>
@@ -248,11 +312,11 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* AI Insights Feed */}
-        <div>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-2xl font-bold flex items-center gap-2">
-              <Sparkles className="h-6 w-6 text-primary" />
+        {/* AI Insights Feed - Responsive to View Mode */}
+        <div className="animate-fade-in" style={{ animationDelay: "0.4s" }}>
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-3">
+            <h2 className={`${viewMode === "compact" ? "text-xl" : "text-2xl"} font-bold flex items-center gap-2 text-foreground`}>
+              <Sparkles className={`${viewMode === "compact" ? "h-5 w-5" : "h-6 w-6"} text-accent`} />
               AI Insights
             </h2>
             <div className="flex gap-2">
@@ -280,61 +344,85 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <div className="space-y-4">
-            {filteredInsights.map((insight) => (
+          <div className={`${viewMode === "compact" ? "space-y-2" : "space-y-4"}`}>
+            {filteredInsights.map((insight, idx) => (
               <Card
                 key={insight.id}
-                className={`p-6 card-hover cursor-pointer transition-all ${
+                className={`${viewMode === "compact" ? "p-4" : viewMode === "professional" ? "p-5" : "p-6"} card-hover cursor-pointer transition-all ${
                   !insight.read ? "border-l-4 border-l-primary" : ""
                 } animate-fade-in`}
+                style={{ animationDelay: `${0.5 + idx * 0.05}s` }}
               >
-                <div className="flex gap-4">
-                  <div
-                    className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${
-                      insight.type === "achievement"
-                        ? "bg-success/10"
-                        : insight.type === "warning"
-                        ? "bg-danger/10"
-                        : "bg-primary/10"
-                    }`}
-                  >
-                    <insight.icon
-                      className={`h-6 w-6 ${
+                <div className={`flex gap-${viewMode === "compact" ? "3" : "4"}`}>
+                  {viewMode !== "compact" && (
+                    <div
+                      className={`w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0 ${
                         insight.type === "achievement"
-                          ? "text-success"
+                          ? "bg-success/10"
                           : insight.type === "warning"
-                          ? "text-danger"
-                          : "text-primary"
+                          ? "bg-danger/10"
+                          : "bg-primary/10"
                       }`}
-                    />
-                  </div>
+                    >
+                      <insight.icon
+                        className={`h-6 w-6 ${
+                          insight.type === "achievement"
+                            ? "text-success"
+                            : insight.type === "warning"
+                            ? "text-danger"
+                            : "text-primary"
+                        }`}
+                      />
+                    </div>
+                  )}
                   <div className="flex-1 space-y-2">
                     <div className="flex items-start justify-between gap-4">
-                      <h3 className="font-semibold">{insight.title}</h3>
+                      <div className="flex items-center gap-2">
+                        {viewMode === "compact" && (
+                          <insight.icon
+                            className={`h-4 w-4 flex-shrink-0 ${
+                              insight.type === "achievement"
+                                ? "text-success"
+                                : insight.type === "warning"
+                                ? "text-danger"
+                                : "text-primary"
+                            }`}
+                          />
+                        )}
+                        <h3 className={`font-semibold text-foreground ${viewMode === "compact" ? "text-sm" : ""}`}>
+                          {insight.title}
+                        </h3>
+                      </div>
                       <div className="flex items-center gap-2 flex-shrink-0">
                         <Badge className={getPriorityColor(insight.priority)}>
-                          {insight.priority}
+                          {viewMode === "compact" ? insight.priority.charAt(0).toUpperCase() : insight.priority}
                         </Badge>
-                        <Badge variant="outline">{insight.category}</Badge>
+                        {viewMode !== "compact" && <Badge variant="outline">{insight.category}</Badge>}
                       </div>
                     </div>
-                    <p className="text-sm text-muted-foreground leading-relaxed">
-                      {insight.summary}
-                    </p>
+                    {viewMode !== "compact" && (
+                      <p className="text-sm text-foreground/70 leading-relaxed">
+                        {insight.summary}
+                      </p>
+                    )}
                     <div className="flex items-center justify-between pt-2">
-                      <span className="text-xs text-muted-foreground">{insight.timestamp}</span>
-                      <div className="flex gap-2">
-                        {!insight.read && (
-                          <Button size="sm" variant="ghost">
-                            <CheckCircle className="mr-2 h-4 w-4" />
-                            Mark as Read
+                      <span className={`${viewMode === "compact" ? "text-[10px]" : "text-xs"} text-foreground/60`}>
+                        {insight.timestamp}
+                      </span>
+                      {viewMode !== "compact" && (
+                        <div className="flex gap-2">
+                          {!insight.read && (
+                            <Button size="sm" variant="ghost">
+                              <CheckCircle className="mr-2 h-4 w-4" />
+                              Mark as Read
+                            </Button>
+                          )}
+                          <Button size="sm" variant="outline">
+                            Tell me more
+                            <ChevronRight className="ml-2 h-4 w-4" />
                           </Button>
-                        )}
-                        <Button size="sm" variant="outline">
-                          Tell me more
-                          <ChevronRight className="ml-2 h-4 w-4" />
-                        </Button>
-                      </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                 </div>
@@ -342,10 +430,21 @@ const Dashboard = () => {
             ))}
           </div>
         </div>
+
+        {/* Integrations Section */}
+        <div className="animate-fade-in" style={{ animationDelay: "0.5s" }}>
+          <div className="flex items-center justify-between mb-4">
+            <h2 className={`${viewMode === "compact" ? "text-xl" : "text-2xl"} font-bold text-foreground`}>
+              Integrations
+            </h2>
+          </div>
+          <ConnectSpotify />
+        </div>
       </div>
-      </div>
-    </>
+    </div>
+    </div>
   );
 };
 
 export default Dashboard;
+
