@@ -28,6 +28,7 @@ import Checkout from "./pages/Checkout";
 import Billing from "./pages/Billing";
 import Help from "./pages/Help";
 import NotFound from "./pages/NotFound";
+import Notifications from "./pages/Notifications";
 
 const queryClient = new QueryClient();
 
@@ -115,6 +116,7 @@ const App = () => {
                               <Route path="/billing" element={<Billing />} />
                               <Route path="/account" element={<Account />} />
                               <Route path="/chat" element={<Chat />} />
+                              <Route path="/notifications" element={<Notifications />} />
                             </Routes>
                           </main>
                           
