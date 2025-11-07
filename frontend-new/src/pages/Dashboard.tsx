@@ -212,7 +212,7 @@ const Dashboard = () => {
               </div>
               <Button>
                 <MessageSquare className="mr-2 h-4 w-4" />
-                <span className="hidden md:inline">Ask AI Manager</span>
+                <span className="hidden md:inline">Get Help</span>
               </Button>
             </div>
           </div>
@@ -312,12 +312,12 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* AI Insights Feed - Responsive to View Mode */}
+        {/* Insights Feed - Responsive to View Mode */}
         <div className="animate-fade-in" style={{ animationDelay: "0.4s" }}>
           <div className="flex flex-col sm:flex-row sm:items-center justify-between mb-4 gap-3">
             <h2 className={`${viewMode === "compact" ? "text-xl" : "text-2xl"} font-bold flex items-center gap-2 text-foreground`}>
               <Sparkles className={`${viewMode === "compact" ? "h-5 w-5" : "h-6 w-6"} text-accent`} />
-              AI Insights
+              Insights
             </h2>
             <div className="flex gap-2">
               <Button
