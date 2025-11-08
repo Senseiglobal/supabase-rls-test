@@ -1,6 +1,4 @@
-import { useState, useEffect, lazy, Suspense } from "react";
-import { Header } from "@/components/Header";
-import { Footer } from "@/components/Footer";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -13,25 +11,6 @@ import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useNotificationPreferences } from "@/hooks/use-notification-preferences";
-// Lazily load heavy diagnostic and setup tools to reduce initial bundle size
-const SpotifyDebugPanel = lazy(() =>
-  import("@/components/SpotifyDebugPanel").then((m) => ({ default: m.SpotifyDebugPanel }))
-);
-const SpotifyDiagnosticTool = lazy(() => import("@/components/SpotifyDiagnosticTool"));
-const CustomDomainNotification = lazy(() => import("@/components/CustomDomainNotification"));
-const SpotifySetupGuide = lazy(() => import("@/components/SpotifySetupGuide"));
-const ConnectionStatusChecker = lazy(() =>
-  import("@/components/ConnectionStatusChecker").then((m) => ({ default: m.ConnectionStatusChecker }))
-);
-const OAuthRedirectFixer = lazy(() =>
-  import("@/components/OAuthRedirectFixer").then((m) => ({ default: m.OAuthRedirectFixer }))
-);
-const OAuthDebugger = lazy(() =>
-  import("@/components/OAuthDebugger").then((m) => ({ default: m.OAuthDebugger }))
-);
-const SupabaseProjectMismatchFixer = lazy(() =>
-  import("@/components/SupabaseProjectMismatchFixer").then((m) => ({ default: m.SupabaseProjectMismatchFixer }))
-);
 import { notificationSound } from "@/lib/notification-sound";
 
 // Platform Icon Components
@@ -468,20 +447,7 @@ const Account = () => {
               </div>
             </Card>
 
-            {/* Tools: loaded lazily to improve initial load */}
-            <Suspense fallback={null}>
-              {/* Supabase Project Mismatch Critical Fix */}
-              <SupabaseProjectMismatchFixer />
-
-              {/* OAuth Debug & Test Tool */}
-              <OAuthDebugger />
-
-              {/* OAuth Redirect URI Fix */}
-              <OAuthRedirectFixer />
-
-              {/* Connection Status Checker */}
-              <ConnectionStatusChecker />
-            </Suspense>
+            {/* Debug / diagnostic tools removed for production cleanliness */}
 
             {/* Profile Information */}
             <Card className="p-6 card-urban">
@@ -695,12 +661,7 @@ const Account = () => {
             </Card>
           </div>
         </div>
-      <Suspense fallback={null}>
-        <SpotifySetupGuide />
-        <CustomDomainNotification />
-        <SpotifyDebugPanel />
-        <SpotifyDiagnosticTool />
-      </Suspense>
+      {/* Removed auxiliary debug panels (Spotify setup, domain notice, diagnostics) */}
     </>
   );
 };
