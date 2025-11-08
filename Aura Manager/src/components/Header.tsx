@@ -2,6 +2,7 @@ import { Music2, LogOut, Menu, Sparkles } from "lucide-react";
 import { useNavigate, useLocation, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/ThemeToggle";
+import BrandLogo from "@/components/BrandLogo";
 import { supabase } from "@/integrations/supabase/client";
 import { useToast } from "@/hooks/use-toast";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -220,16 +221,15 @@ export function Header({ showAuth = false }: HeaderProps) {
     <header className="sticky top-0 z-50 w-full border-b border-border bg-background backdrop-blur-none">
       <div className="container mx-auto">
         <div className="flex h-16 items-center justify-between px-4 max-w-screen-2xl mx-auto">
-          {/* Logo */}
+          {/* Logo + Wordmark (compact) */}
           <button
             onClick={() => handleNavigation("/")}
-            className="flex items-center gap-3 hover-scale group"
+            className="flex items-center gap-2 hover-scale group"
+            aria-label="Go to home"
           >
-            <div className="w-10 h-10 bg-gradient-to-br from-accent to-sedimentary-base rounded-lg flex items-center justify-center transition-all duration-300 group-hover:shadow-[0_0_20px_hsl(var(--accent)/0.4)]">
-              <Music2 className="h-6 w-6 text-foreground" />
-            </div>
-            <span className="text-2xl font-bold tracking-tight brand-text">
-              AURA
+            <BrandLogo size={36} showText={false} className="transition-all duration-300 group-hover:drop-shadow" aria-label="Aura Manager" />
+            <span className="text-2xl font-bold tracking-tight bg-gradient-to-r from-accent to-accent-hover bg-clip-text text-transparent">
+              Aura
             </span>
           </button>
 

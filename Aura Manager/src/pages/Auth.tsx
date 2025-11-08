@@ -30,13 +30,14 @@ const Auth = () => {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${globalThis.location.origin}/auth/callback`,
+          redirectTo: `${globalThis.location.origin}/dashboard`,
         },
       });
       
       if (error) throw error;
-    } catch (error: any) {
-      toast.error(error.message || "Failed to sign in with Google");
+    } catch (error) {
+      const message = error instanceof Error ? error.message : 'Failed to sign in with Google';
+      toast.error(message);
       setLoading(false);
     }
   };
@@ -96,11 +97,13 @@ const Auth = () => {
         toast.success("Account created! Please check your email to verify.");
         navigate("/onboarding");
       }
-    } catch (error: any) {
+    } catch (error) {
       if (error instanceof z.ZodError) {
         toast.error(error.errors[0].message);
-      } else {
+      } else if (error instanceof Error) {
         toast.error(error.message || "Authentication failed");
+      } else {
+        toast.error("Authentication failed");
       }
     } finally {
       setLoading(false);

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -24,6 +24,14 @@ export function UserMenu() {
   const [currentPlan, setCurrentPlan] = useState<string>("Free");
   const [isSleepMode, setIsSleepMode] = useState(false);
 
+  const fetchUserData = useCallback(async () => {
+    const { data: { user } } = await supabase.auth.getUser();
+    if (user) {
+      setUserEmail(user.email || "");
+      await fetchUserProfile(user.id);
+    }
+  }, []);
+
   useEffect(() => {
     fetchUserData();
     
@@ -35,15 +43,8 @@ export function UserMenu() {
     });
 
     return () => subscription.unsubscribe();
-  }, []);
+  }, [fetchUserData]);
 
-  const fetchUserData = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (user) {
-      setUserEmail(user.email || "");
-      await fetchUserProfile(user.id);
-    }
-  };
 
   const fetchUserProfile = async (userId: string) => {
     const { data: profile } = await supabase

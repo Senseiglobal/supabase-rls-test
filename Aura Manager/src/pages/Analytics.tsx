@@ -13,7 +13,7 @@ interface AIAnalysis {
   mood?: string;
   energy_level?: string;
   commercial_potential?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 interface Upload {

@@ -10,7 +10,8 @@ import {
   Crown,
   CreditCard,
   X,
-  Music
+  Music,
+  FileText
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -18,8 +19,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { triggerTermsForSpotifyConnect } from "@/components/TermsWrapper";
+import { useTerms } from "@/contexts/terms";
 import { useTermsAcceptance } from "@/hooks/use-terms-acceptance";
+import BrandLogo from "@/components/BrandLogo";
 
 import {
   Sidebar,
@@ -38,7 +40,7 @@ type TierName = "Free" | "Creator" | "Pro";
 interface NavItem {
   title: string;
   url: string;
-  icon: any;
+  icon: React.ComponentType<{ className?: string }>;
   requiredTier: TierName;
   description: string;
 }
@@ -109,10 +111,18 @@ const settingsItems: NavItem[] = [
     requiredTier: "Free",
     description: "Manage your profile & settings"
   },
+  { 
+    title: "Legal & Terms", 
+    url: "/terms", 
+    icon: FileText,
+    requiredTier: "Free",
+    description: "Read Terms & Privacy"
+  },
 ];
 
 export function AppSidebar() {
   const { open } = useSidebar();
+  const terms = useTerms();
   const location = useLocation();
   const currentPath = location.pathname;
   const [userTier, setUserTier] = useState<TierName>("Free");
@@ -171,7 +181,7 @@ export function AppSidebar() {
 
       // Check if user has accepted terms first
       if (!hasAcceptedTerms) {
-        triggerTermsForSpotifyConnect();
+        terms.open("platform_connect");
         return;
       }
 
@@ -302,7 +312,7 @@ export function AppSidebar() {
       <div className={`border-b-4 border-sidebar-border ${open ? "p-4" : "p-2"}`}>
         {open ? (
           <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold text-sidebar-foreground">Aura Manager</h2>
+            <BrandLogo size={28} showText={true} className="-ml-1" aria-label="Aura Manager" />
             <button
               type="button"
               onClick={() => document.querySelector<HTMLButtonElement>('[data-sidebar="trigger"]')?.click()}
@@ -314,9 +324,7 @@ export function AppSidebar() {
           </div>
         ) : (
           <div className="flex justify-center">
-            <div className="w-8 h-8 bg-accent flex items-center justify-center rounded font-bold text-accent-foreground text-sm">
-              AM
-            </div>
+            <BrandLogo size={32} showText={false} aria-label="Aura Manager" />
           </div>
         )}
       </div>

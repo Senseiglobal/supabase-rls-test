@@ -1,5 +1,6 @@
-import { Music2, Mail, Twitter, Instagram, Youtube, Github } from "lucide-react";
+import { Twitter, Instagram, Youtube, Github } from "lucide-react";
 import { Link } from "react-router-dom";
+import BrandLogo from "@/components/BrandLogo";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -8,6 +9,8 @@ export function Footer() {
     product: [
       { name: "Pricing", href: "/pricing" },
       { name: "Help", href: "/help" },
+      { name: "Privacy", href: "/privacy" },
+      { name: "Terms", href: "/terms" },
     ],
   };
 
@@ -25,11 +28,9 @@ export function Footer() {
         <div className="flex flex-col md:flex-row justify-between items-start gap-8 mb-8">
           {/* Brand Section */}
           <div className="max-w-sm">
-            <Link to="/" className="flex items-center gap-3 mb-4 hover-scale group">
-              <div className="w-10 h-10 bg-gradient-to-br from-accent to-sedimentary-base rounded-lg flex items-center justify-center transition-all duration-300 group-hover:shadow-[var(--shadow-accent)]">
-                <Music2 className="h-6 w-6 text-foreground" />
-              </div>
-              <span className="text-2xl font-bold brand-text">AURA</span>
+            <Link to="/" className="flex items-center gap-2 mb-4 hover-scale group">
+              <BrandLogo size={32} showText={false} aria-label="Aura Manager" />
+              <span className="text-2xl font-bold bg-gradient-to-r from-accent to-accent-hover bg-clip-text text-transparent">Aura</span>
             </Link>
             <p className="text-foreground/70 text-sm mb-4">
               Your AI-Powered Artist Manager. Get personalized creative direction, release strategies, and audience insights 24/7.

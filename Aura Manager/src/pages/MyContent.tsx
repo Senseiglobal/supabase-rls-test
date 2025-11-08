@@ -16,7 +16,7 @@ interface Upload {
   file_path: string;
   file_size: number;
   mime_type: string;
-  ai_analysis: any;
+  ai_analysis: Record<string, unknown> | null;
   analyzed_at: string | null;
   created_at: string;
 }

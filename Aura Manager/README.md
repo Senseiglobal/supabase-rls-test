@@ -1,3 +1,53 @@
+# Branding & Logo Integration
+
+The application now uses a unified `BrandLogo` React component for consistent branding across dark and light modes.
+
+## Component Usage
+
+`BrandLogo` lives at `src/components/BrandLogo.tsx` and supports props:
+
+- `size` (number): pixel height/width (square graphic)
+- `showText` (boolean): whether to render the wordmark lockup “Aura Manager”
+- `className` (string): tailwind utility classes
+- `aria-label` (string): accessibility label if needed
+
+Example:
+
+```tsx
+import BrandLogo from '@/components/BrandLogo';
+
+export const HeaderLogo = () => (
+	<BrandLogo size={40} showText aria-label="Aura Manager" />
+);
+```
+
+## Theming
+
+The logo gradient automatically adapts using Tailwind's `dark:` variants. No manual prop for theme is needed—ensure `<ThemeProvider>` wraps the app (already configured).
+
+## Replacement Coverage
+
+Replaced textual brand renderings in:
+- `Header.tsx`
+- `AppSidebar.tsx` (expanded + collapsed states)
+- `App.tsx` sticky top bar
+
+For mobile bottom navigation we retained functional section labels. Add `<BrandLogo />` to `BottomNav.tsx` if a brand anchor is desired there.
+
+## Future Enhancements
+
+- Provide multi-resolution favicon & PWA icons aligned to the glyph.
+- Add animated variant for loading states (e.g., subtle pulse of gradient).
+- Export a monochrome fallback for print/export contexts.
+
+## Connectivity Verification Summary
+
+- Supabase client points to env vars `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` (project: cpylmxhrobrhqettudjg).
+- `vercel.json` present with SPA rewrites.
+- GitHub Actions workflows (`vercel-production.yml`, `vercel-preview.yml`) ready—ensure repository secrets: `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` are configured.
+
+If any OAuth providers appear misconfigured, re-run the in-app diagnostic panels under `/account`.
+
 # Welcome to your Lovable project
 
 ## Project info

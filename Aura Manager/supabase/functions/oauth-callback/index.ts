@@ -182,10 +182,11 @@ serve(async (req) => {
       },
     });
 
-  } catch (error: any) {
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Unknown error';
     console.error("OAuth callback error:", error);
     return new Response(
-      JSON.stringify({ error: error.message }),
+      JSON.stringify({ error: message }),
       {
         status: 400,
         headers: { "Content-Type": "application/json", ...corsHeaders },

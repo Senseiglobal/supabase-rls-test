@@ -18,6 +18,9 @@ import SpotifyDiagnosticTool from "@/components/SpotifyDiagnosticTool";
 import CustomDomainNotification from "@/components/CustomDomainNotification";
 import SpotifySetupGuide from "@/components/SpotifySetupGuide";
 import { ConnectionStatusChecker } from "@/components/ConnectionStatusChecker";
+import { OAuthRedirectFixer } from "@/components/OAuthRedirectFixer";
+import { OAuthDebugger } from "@/components/OAuthDebugger";
+import { SupabaseProjectMismatchFixer } from "@/components/SupabaseProjectMismatchFixer";
 import { notificationSound } from "@/lib/notification-sound";
 
 // Platform Icon Components
@@ -453,6 +456,15 @@ const Account = () => {
                 </div>
               </div>
             </Card>
+
+            {/* Supabase Project Mismatch Critical Fix */}
+            <SupabaseProjectMismatchFixer />
+
+            {/* OAuth Debug & Test Tool */}
+            <OAuthDebugger />
+
+            {/* OAuth Redirect URI Fix */}
+            <OAuthRedirectFixer />
 
             {/* Connection Status Checker */}
             <ConnectionStatusChecker />

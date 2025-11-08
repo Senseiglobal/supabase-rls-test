@@ -1,14 +1,23 @@
 import React, { useEffect, useState } from 'react';
-import { supabase } from '@/lib/supabase';
+import { supabase } from '@/integrations/supabase/client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Copy, ExternalLink, AlertTriangle, CheckCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import type { User } from '@supabase/supabase-js';
+
+interface AuthInfo {
+  issuer?: string;
+  audience?: string;
+  projectRef?: string;
+  currentUrl: string;
+  supabaseUrl?: string;
+}
 
 export const AuthConfigDebugger: React.FC = () => {
-  const [authConfig, setAuthConfig] = useState<any>(null);
-  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [authConfig, setAuthConfig] = useState<AuthInfo | null>(null);
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const { toast } = useToast();
 
   useEffect(() => {

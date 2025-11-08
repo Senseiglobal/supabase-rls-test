@@ -11,7 +11,7 @@ import { cn } from "@/lib/utils";
 
 interface NavItem {
   title: string;
-  icon: any;
+  icon: React.ComponentType<{ className?: string }>;
   to: string;
   category?: 'chat' | 'analytics' | 'content' | 'dashboard';
 }
