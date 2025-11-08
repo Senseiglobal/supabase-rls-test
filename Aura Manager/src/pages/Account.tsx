@@ -4,7 +4,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { User, Mail, Key, Bell, Globe, Palette, Music2, Link as LinkIcon, Volume2, Play, Camera, Film, Users, Twitter } from "lucide-react";
+import { User, Key, Bell, Music2, Volume2 } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { Slider } from "@/components/ui/slider";
 import { Badge } from "@/components/ui/badge";
@@ -376,77 +376,6 @@ const Account = () => {
 
           {/* Main Content */}
           <div className="lg:col-span-2 space-y-6">
-            {/* Authentication Debug */}
-            <Card className="p-6 card-urban border-destructive">
-              <div className="flex items-center gap-2 mb-4">
-                <Mail className="h-5 w-5 text-destructive" />
-                <h3 className="text-xl font-semibold text-destructive">Mobile Auth Issue Detected</h3>
-              </div>
-              <div className="space-y-3">
-                <div className="p-3 bg-destructive/10 rounded-lg">
-                  <p className="text-sm font-medium text-destructive mb-2">
-                    🚨 Mobile Authentication Cache Issue Detected
-                  </p>
-                  <p className="text-xs text-destructive/80">
-                    Your mobile browser has cached old authentication data:<br />
-                    • Old URL: supabasetest-six.vercel.app<br />
-                    • Old Project: snbwmkrubosvpibamivu<br />
-                    • Current URL: auramanager.app<br />
-                    • Current Project: cpylmxhrobrhqettudjg
-                  </p>
-                </div>
-                <div className="p-3 bg-blue-50 border border-blue-200 rounded-lg">
-                  <p className="text-sm font-medium text-blue-800 mb-2">
-                    💡 Quick Fix Instructions:
-                  </p>
-                  <ol className="text-xs text-blue-700 space-y-1 list-decimal list-inside ml-2">
-                    <li>On mobile: Clear ALL browser data for both auramanager.app and vercel.app</li>
-                    <li>Sign out of Google account completely</li>
-                    <li>Go to <a href="https://myaccount.google.com/permissions" target="_blank" className="underline">Google Account Permissions</a></li>
-                    <li>Remove any "Aura Manager" apps</li>
-                    <li>Sign back into Google</li>
-                    <li>Try authentication at auramanager.app/auth</li>
-                  </ol>
-                </div>
-                <div className="text-sm space-y-3">
-                  <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-                    <p className="font-medium text-yellow-800 mb-2">⚠️ Alternative: Temporary Fix</p>
-                    <p className="text-xs text-yellow-700">
-                      If cache clearing doesn't work, we can temporarily add the old URL 
-                      (<code>supabasetest-six.vercel.app</code>) to your Supabase redirect URLs 
-                      as a workaround while we investigate further.
-                    </p>
-                  </div>
-                  <div>
-                    <p className="font-medium">Recommended Steps (in order):</p>
-                    <ol className="list-decimal list-inside text-xs space-y-1 ml-2">
-                      <li><strong>First:</strong> Clear mobile browser cache completely</li>
-                      <li><strong>Then:</strong> Revoke Google OAuth permissions at <a href="https://myaccount.google.com/permissions" target="_blank" className="text-blue-600 underline">Google Account</a></li>
-                      <li><strong>Finally:</strong> Try fresh login at <a href="https://auramanager.app/auth" target="_blank" className="text-blue-600 underline">auramanager.app/auth</a></li>
-                      <li><strong>If still broken:</strong> Contact support for temporary URL addition</li>
-                    </ol>
-                  </div>
-                </div>
-                <div className="flex gap-2">
-                  <Button 
-                    size="sm" 
-                    onClick={() => globalThis.open("https://myaccount.google.com/permissions", "_blank")}
-                    className="flex-1"
-                  >
-                    Clear Google Permissions
-                  </Button>
-                  <Button 
-                    size="sm" 
-                    variant="outline"
-                    onClick={() => globalThis.open("https://auramanager.app/auth", "_blank")}
-                    className="flex-1"
-                  >
-                    Test Fresh Login
-                  </Button>
-                </div>
-              </div>
-            </Card>
-
             {/* Debug / diagnostic tools removed for production cleanliness */}
 
             {/* Profile Information */}
