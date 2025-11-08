@@ -99,11 +99,9 @@ All colors MUST be HSL.
 
   /* Lovable update start - Bright Light Mode with Material Design Standards */
   .light {
-    --background: 0 0% 100%; /* Pure white #FFFFFF */
-    --foreground: 0 0% 9%; /* Near black #171717 for text */
+    --background: 210 20% 98%; /* Soft blue-gray background */    --foreground: 0 0% 9%; /* Near black #171717 for text */
 
-    --card: 0 0% 100%; /* Pure white cards */
-    --card-foreground: 0 0% 9%; /* Dark text on white cards */
+    --card: 0 0% 100%; /* Pure white cards with elevation */    --card-foreground: 0 0% 9%; /* Dark text on white cards */
 
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 9%;
