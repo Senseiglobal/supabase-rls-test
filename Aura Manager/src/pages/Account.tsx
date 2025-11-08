@@ -263,8 +263,8 @@ const Account = () => {
             description: "You'll be redirected to Spotify to authorize the connection."
           });
           
-          // Use stable custom domain for redirect (not changing Vercel URLs)
-          const stableDomain = "https://auramanager.app";
+          // Use stable custom domain for redirect (prefer env-provided)
+          const stableDomain = (import.meta as any).env.VITE_PUBLIC_BASE_URL || "https://auramanager.app";
           const redirectUrl = `${stableDomain}/account?connected=spotify`;
           
           console.log("Using stable redirect URL:", redirectUrl);
@@ -318,7 +318,8 @@ const Account = () => {
         }
       } else {
         // Use custom OAuth function for other platforms
-        const redirectUri = `https://snbwmkrubosvpibamivu.supabase.co/functions/v1/oauth-callback?platform=${platformId}`;
+  // If/when we re-enable other platforms via Edge Functions, prefer current project
+  const redirectUri = `https://cpylmxhrobrhqettudjg.supabase.co/functions/v1/oauth-callback?platform=${platformId}`;
         
         const oauthUrls: Record<string, string> = {
           instagram: `https://api.instagram.com/oauth/authorize?client_id=YOUR_INSTAGRAM_CLIENT_ID&redirect_uri=${encodeURIComponent(redirectUri)}&scope=user_profile,user_media&response_type=code&state=${user.id}`,

@@ -27,13 +27,24 @@ const Auth = () => {
   const handleGoogleAuth = async () => {
     setLoading(true);
     try {
+      // Use a stable production base URL if provided, fallback to current origin.
+      const baseUrl = import.meta.env.VITE_PUBLIC_BASE_URL || globalThis.location.origin;
+      // Post-auth landing path (keep simple to reduce mismatch risk)
+      const postAuthPath = '/dashboard';
+      const redirectTo = `${baseUrl}${postAuthPath}`;
+
+      // Guard against old preview domains causing redirect mismatch
+      if (/vercel\.app$/.test(new URL(baseUrl).hostname)) {
+        console.warn('[Auth] Using a Vercel preview domain for Google OAuth redirect. Consider setting VITE_PUBLIC_BASE_URL=https://auramanager.app in Vercel env vars.');
+      }
+
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo: `${globalThis.location.origin}/dashboard`,
+          redirectTo,
         },
       });
-      
+
       if (error) throw error;
     } catch (error) {
       const message = error instanceof Error ? error.message : 'Failed to sign in with Google';
