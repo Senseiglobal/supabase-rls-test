@@ -49,86 +49,50 @@ const Auth = () => {
 
   const handleGoogleAuth = async () => {
     setLoading(true);
+    
     try {
-      // Runtime diagnostics: verify required environment variables
+      // Check if Supabase is properly configured
       const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
       const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
       
       if (!supabaseUrl || !supabaseKey) {
-        console.error('[Auth] ❌ Missing critical Supabase environment variables:', { 
-          hasUrl: !!supabaseUrl, 
-          hasKey: !!supabaseKey 
-        });
-        toast.error('Configuration error: Missing Supabase credentials. Please contact support.');
+        toast.error('Authentication service not configured. Please contact support.');
         setLoading(false);
         return;
       }
 
-      // For local development, always use localhost
-      const isDevelopment = globalThis.location.hostname === 'localhost' || globalThis.location.hostname === '127.0.0.1';
-      const baseUrl = isDevelopment 
-        ? globalThis.location.origin 
-        : (import.meta.env.VITE_PUBLIC_BASE_URL || globalThis.location.origin).replace(/\/$/, '');
-      // Post-auth landing path (keep simple to reduce mismatch risk)
-      const postAuthPath = '/dashboard';
-      const redirectTo = `${baseUrl}${postAuthPath}`;
-
-      // Validate redirect URL format and warn about expected hosts
-      const expectedHosts = ['auramanager.app', 'localhost', '127.0.0.1'];
-      let redirectHost = '';
-      try {
-        redirectHost = new URL(redirectTo).hostname;
-        
-        // Guard against old preview domains causing redirect mismatch
-        if (/vercel\.app$/.test(redirectHost)) {
-          console.warn('[Auth] ⚠️ Using a Vercel preview domain for Google OAuth redirect:', redirectHost);
-          console.warn('[Auth] Consider setting VITE_PUBLIC_BASE_URL=https://auramanager.app in Vercel env vars.');
-          toast.warning('Using preview domain for OAuth - may fail if not whitelisted');
-        }
-        
-        if (!expectedHosts.includes(redirectHost) && !redirectHost.includes('vercel.app')) {
-          console.warn('[Auth] ⚠️ Unexpected redirect host:', redirectHost, 'Full redirectTo:', redirectTo);
-          console.warn('[Auth] Ensure this domain is whitelisted in Supabase Auth > URL Configuration');
-        }
-        
-        console.log('[Auth] 🔐 Google OAuth initiated with:', { 
-          redirectTo, 
-          redirectHost, 
-          supabaseUrl: supabaseUrl.substring(0, 30) + '...' 
-        });
-      } catch (e) {
-        console.error('[Auth] ❌ Failed to parse redirect URL:', redirectTo, e);
-        toast.error('Invalid redirect URL configuration');
-        setLoading(false);
-        return;
-      }
-
+      toast.info('Connecting to Google...');
+      
       const { error } = await supabase.auth.signInWithOAuth({
         provider: 'google',
         options: {
-          redirectTo,
+          redirectTo: `${globalThis.location.origin}/dashboard`,
         },
       });
 
       if (error) {
-        console.error('[Auth] ❌ Google OAuth error:', error);
+        console.error('Google OAuth Error:', error);
         
-        // Provide specific error messages
-        if (error.message.includes('redirect') || error.message.includes('uri')) {
-          toast.error(`Redirect URI not whitelisted. Check Supabase Auth settings for: ${redirectHost}`);
-        } else if (error.message.includes('client_id') || error.message.includes('invalid_request')) {
-          toast.error('Google OAuth configuration error. Please contact support.');
+        // Handle specific error types
+        if (error.message.toLowerCase().includes('not enabled')) {
+          toast.error('Google sign-in is not enabled. Please use email/password or contact support.');
+        } else if (error.message.toLowerCase().includes('client_id')) {
+          toast.error('Google authentication not configured. Please contact support.');
+        } else if (error.message.toLowerCase().includes('redirect')) {
+          toast.error('Authentication redirect issue. Please try again.');
         } else {
-          toast.error(error.message || 'Failed to sign in with Google');
+          toast.error('Google sign-in failed. Please try email/password instead.');
         }
         
-        throw error;
+        setLoading(false);
+      } else {
+        // Success - user will be redirected to Google
+        toast.success('Redirecting to Google...');
       }
       
-      console.log('[Auth] ✅ OAuth redirect initiated successfully');
     } catch (error) {
-      console.error('[Auth] Exception in handleGoogleAuth:', error);
-      // Error already toasted above with specific message
+      console.error('Authentication error:', error);
+      toast.error('Unable to connect to authentication service. Please try again.');
       setLoading(false);
     }
   };
@@ -147,7 +111,7 @@ const Auth = () => {
 
       if (isForgotPassword) {
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
-          redirectTo: `${window.location.origin}/auth?reset=true`,
+          redirectTo: `${globalThis.location.origin}/auth?reset=true`,
         });
         
         if (error) throw error;
@@ -174,7 +138,7 @@ const Auth = () => {
           email,
           password,
           options: {
-            emailRedirectTo: `${window.location.origin}/dashboard`,
+            emailRedirectTo: `${globalThis.location.origin}/dashboard`,
           },
         });
         

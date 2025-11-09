@@ -7,6 +7,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { BarChart, Bar, PieChart, Pie, Cell, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { PageHeader } from "@/components/PageHeader";
+import { PageContainer } from "@/components/PageContainer";
 
 interface AIAnalysis {
   genre?: string;
@@ -180,13 +182,13 @@ const Analytics = () => {
   ];
 
   return (
-    <div className="min-h-screen">
-      <Header />
-      <div className="container mx-auto px-4 py-8 max-w-screen-2xl">
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2 text-foreground">Upload Analytics</h1>
-          <p className="text-foreground/70">AI-powered insights from your music uploads</p>
-        </div>
+    <PageContainer>
+      <PageHeader 
+        title="Upload Analytics"
+        subtitle="AI-powered insights from your music uploads"
+        showBackButton
+        showHomeButton
+      />
 
         {loading ? (
           <div className="flex justify-center items-center h-64">
@@ -409,9 +411,7 @@ const Analytics = () => {
             </Card>
           </>
         )}
-      </div>
-      <Footer />
-    </div>
+    </PageContainer>
   );
 };
 

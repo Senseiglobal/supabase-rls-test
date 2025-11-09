@@ -12,6 +12,8 @@ import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { useNotificationPreferences } from "@/hooks/use-notification-preferences";
 import { notificationSound } from "@/lib/notification-sound";
+import { PageHeader } from "@/components/PageHeader";
+import { PageContainer } from "@/components/PageContainer";
 
 // Platform Icon Components
 const SpotifyIcon = () => (
@@ -61,7 +63,7 @@ const Account = () => {
     bio: "",
     avatar_url: "",
   });
-  const [loading, setLoading] = useState(true);
+  const [_loading, setLoading] = useState(true);
   // Clean UI: remove hint overlays/gestures for mobile
   
   const { soundEnabled, soundVolume, setSoundEnabled, setSoundVolume } = useNotificationPreferences();
@@ -355,13 +357,15 @@ const Account = () => {
   };
 
   return (
-    <div id="account-page-root">
-      <div className="mb-6 md:mb-8">
-        <h1 className="text-3xl md:text-4xl font-bold mb-2 text-foreground">Account Settings</h1>
-        <p className="text-sm md:text-base text-foreground/70">Manage your profile and preferences</p>
-      </div>
+    <PageContainer>
+      <PageHeader 
+        title="Account Settings"
+        subtitle="Manage your profile and preferences"
+        showBackButton
+        showHomeButton
+      />
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Sidebar */}
           <Card className="p-6 card-urban h-fit">
             <div className="text-center mb-6">
@@ -615,7 +619,7 @@ const Account = () => {
           </div>
         </div>
       {/* Removed auxiliary debug panels (Spotify setup, domain notice, diagnostics) */}
-    </div>
+    </PageContainer>
   );
 };
 

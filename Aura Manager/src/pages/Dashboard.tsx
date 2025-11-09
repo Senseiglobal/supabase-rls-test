@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
+import { PageContainer } from "@/components/PageContainer";
 import {
   Users,
   TrendingUp,
@@ -166,7 +167,7 @@ const Dashboard = () => {
   });
 
   return (
-    <div className="min-h-screen w-full">
+    <PageContainer>
       <div className="w-full space-y-6 md:space-y-8">
           {/* Header */}
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
@@ -436,7 +437,7 @@ const Dashboard = () => {
           </div>
         </div>
       </div>
-    </div>
+    </PageContainer>
   );
 };
 

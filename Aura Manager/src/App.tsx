@@ -36,7 +36,7 @@ const queryClient = new QueryClient();
 
 const App = () => {
   // Set to false for production - authenticated users go to dashboard
-  const DEV_MODE = true;
+  const DEV_MODE = false;
   
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);

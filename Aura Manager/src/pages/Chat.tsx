@@ -6,6 +6,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { MessageSquare, Send, Plus, Clock, Music, Loader2 } from "lucide-react";
 import { useChat } from "@/hooks/useChat";
 import { toast } from "sonner";
+import { PageHeader } from "@/components/PageHeader";
+import { PageContainer } from "@/components/PageContainer";
 
 const Chat = () => {
   const [message, setMessage] = useState("");
@@ -50,14 +52,15 @@ const Chat = () => {
   ];
 
   return (
-    <div className="h-screen flex bg-background">
-      {/* Sidebar - Hidden on mobile */}
-      <div className="hidden lg:flex w-80 border-r flex-col">
-        <div className="p-4 border-b space-y-4">
-          <Button className="w-full bg-gradient-to-r from-primary to-success hover:opacity-90">
-            <Plus className="mr-2 h-4 w-4" />
-            New Conversation
-          </Button>
+    <PageContainer className="h-screen" noPadding>
+      <div className="h-full flex bg-background">
+        {/* Sidebar - Hidden on mobile */}
+        <div className="hidden lg:flex w-80 border-r flex-col">
+          <div className="p-4 border-b space-y-4">
+            <Button className="w-full bg-gradient-to-r from-primary to-success hover:opacity-90">
+              <Plus className="mr-2 h-4 w-4" />
+              New Conversation
+            </Button>
           <Select value={personality} onValueChange={setPersonality}>
             <SelectTrigger>
               <SelectValue placeholder="AI Personality" />
@@ -234,7 +237,8 @@ const Chat = () => {
           </div>
         </div>
       </div>
-    </div>
+      </div>
+    </PageContainer>
   );
 };
 
