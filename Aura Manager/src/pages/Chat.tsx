@@ -3,18 +3,22 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { MessageSquare, Send, Plus, Clock, Music } from "lucide-react";
+import { MessageSquare, Send, Plus, Clock, Music, Loader2 } from "lucide-react";
+import { useChat } from "@/hooks/useChat";
+import { toast } from "sonner";
 
 const Chat = () => {
   const [message, setMessage] = useState("");
   const [personality, setPersonality] = useState("friendly");
-
-  // DEMO DATA - Replace with Supabase conversation history later
-  const conversations = [
-    { id: 1, title: "Release strategy for new single", time: "Today" },
-    { id: 2, title: "Instagram content ideas", time: "Yesterday" },
-    { id: 3, title: "Goal planning session", time: "2 days ago" },
-  ];
+  const {
+    conversations,
+    currentConversation,
+    isLoading,
+    sendMessage,
+    loadConversation,
+    deleteConversation,
+    startNewConversation,
+  } = useChat();
 
   // DEMO DATA - Replace with real AI chat messages later
   const messages = [
@@ -74,6 +78,7 @@ const Chat = () => {
               <Card
                 key={conv.id}
                 className="p-3 cursor-pointer hover:bg-accent transition-colors group"
+                onClick={() => loadConversation(conv.id)}
               >
                 <div className="flex items-start gap-3">
                   <MessageSquare className="h-5 w-5 text-muted-foreground group-hover:text-foreground group-hover:dark:text-black flex-shrink-0 mt-0.5 transition-colors" />
@@ -81,7 +86,7 @@ const Chat = () => {
                     <p className="text-sm font-medium truncate group-hover:text-foreground group-hover:dark:text-black transition-colors">{conv.title}</p>
                     <div className="flex items-center gap-1 text-xs text-muted-foreground group-hover:text-foreground/70 group-hover:dark:text-black/70 mt-1 transition-colors">
                       <Clock className="h-3 w-3" />
-                      {conv.time}
+                      {new Date(conv.updatedAt).toLocaleDateString()}
                     </div>
                   </div>
                 </div>
@@ -131,9 +136,9 @@ const Chat = () => {
 
         {/* Messages */}
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
-          {messages.map((msg) => (
+          {currentConversation ? currentConversation.messages.map((msg, index) => (
             <div
-              key={msg.id}
+              key={index}
               className={`flex gap-3 animate-fade-in ${
                 msg.role === "user" ? "flex-row-reverse" : ""
               }`}
@@ -160,7 +165,19 @@ const Chat = () => {
                 </div>
               </div>
             </div>
-          ))}
+          )) : (
+            <div className="flex-1 flex items-center justify-center">
+              <div className="text-center">
+                <MessageSquare className="h-12 w-12 mx-auto mb-4 text-muted-foreground" />
+                <h3 className="font-semibold text-lg mb-2">Welcome to Aura Manager!</h3>
+                <p className="text-muted-foreground mb-4">Start a conversation with your AI-powered artist manager.</p>
+                <Button onClick={startNewConversation} variant="outline">
+                  <Plus className="h-4 w-4 mr-2" />
+                  Start New Chat
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Quick Actions (Mobile) */}
@@ -182,19 +199,37 @@ const Chat = () => {
               value={message}
               onChange={(e) => setMessage(e.target.value)}
               className="flex-1"
-              onKeyPress={(e) => {
-                if (e.key === "Enter" && message.trim()) {
-                  // Handle send
+              onKeyPress={async (e) => {
+                if (e.key === "Enter" && message.trim() && !isLoading) {
+                  const messageToSend = message;
                   setMessage("");
+                  try {
+                    await sendMessage(messageToSend);
+                  } catch (_error) {
+                    toast.error("Failed to send message. Please try again.");
+                    setMessage(messageToSend);
+                  }
                 }
               }}
             />
             <Button
               size="icon"
               className="bg-gradient-to-r from-primary to-success hover:opacity-90 flex-shrink-0"
-              disabled={!message.trim()}
+              disabled={!message.trim() || isLoading}
+              onClick={async () => {
+                if (message.trim() && !isLoading) {
+                  const messageToSend = message;
+                  setMessage("");
+                  try {
+                    await sendMessage(messageToSend);
+                  } catch (_error) {
+                    toast.error("Failed to send message. Please try again.");
+                    setMessage(messageToSend);
+                  }
+                }
+              }}
             >
-              <Send className="h-4 w-4" />
+              {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
             </Button>
           </div>
         </div>
