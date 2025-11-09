@@ -73,13 +73,13 @@ const Chat = () => {
             {conversations.map((conv) => (
               <Card
                 key={conv.id}
-                className="p-3 cursor-pointer hover:bg-accent transition-colors"
+                className="p-3 cursor-pointer hover:bg-accent transition-colors group"
               >
                 <div className="flex items-start gap-3">
-                  <MessageSquare className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-0.5" />
+                  <MessageSquare className="h-5 w-5 text-muted-foreground group-hover:text-foreground group-hover:dark:text-black flex-shrink-0 mt-0.5 transition-colors" />
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-medium truncate">{conv.title}</p>
-                    <div className="flex items-center gap-1 text-xs text-muted-foreground mt-1">
+                    <p className="text-sm font-medium truncate group-hover:text-foreground group-hover:dark:text-black transition-colors">{conv.title}</p>
+                    <div className="flex items-center gap-1 text-xs text-muted-foreground group-hover:text-foreground/70 group-hover:dark:text-black/70 mt-1 transition-colors">
                       <Clock className="h-3 w-3" />
                       {conv.time}
                     </div>
@@ -107,11 +107,20 @@ const Chat = () => {
         {/* Header */}
         <div className="border-b p-4 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-success flex items-center justify-center">
-              <Music className="h-5 w-5 text-white" />
+            <div className="w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center">
+              <img 
+                src="/icons/dark_icon_32x32.png" 
+                alt="Aura Manager" 
+                className="w-8 h-8 dark:hidden" 
+              />
+              <img 
+                src="/icons/light_icon_32x32.png" 
+                alt="Aura Manager" 
+                className="w-8 h-8 hidden dark:block" 
+              />
             </div>
             <div>
-              <h2 className="font-semibold">AI Artist Manager</h2>
+              <h2 className="font-semibold">Aura Manager</h2>
               <p className="text-xs text-muted-foreground">Powered by Google Gemini • {personality} mode</p>
             </div>
           </div>

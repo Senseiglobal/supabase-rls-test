@@ -338,6 +338,11 @@ All colors MUST be HSL.
     animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
 
+  /* Gradient utilities */
+  .bg-gradient-radial {
+    background: radial-gradient(var(--tw-gradient-stops));
+  }
+
   /* Hover micro-animations */
   .hover-lift {
     @apply transition-all duration-200 hover:-translate-y-1 hover:shadow-[var(--shadow-md)];
@@ -405,6 +410,17 @@ All colors MUST be HSL.
     }
     50% {
       opacity: 0.5;
+    }
+  }
+
+  @keyframes fadeInOut {
+    0%, 100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.3;
+      transform: scale(1.05);
     }
   }
   /* Lovable update end */

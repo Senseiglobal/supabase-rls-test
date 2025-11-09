@@ -2,8 +2,8 @@
 const playNotificationSound = (volume: number = 0.5) => {
   // Create a simple notification sound using Web Audio API
   const AudioContextCtor =
-    (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext ||
-    window.AudioContext;
+    (globalThis as any).webkitAudioContext ||
+    (globalThis as any).AudioContext;
   const audioContext = new AudioContextCtor();
   
   const playTone = (frequency: number, duration: number, delay: number, gain: number) => {

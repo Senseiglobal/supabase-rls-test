@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
@@ -24,18 +24,83 @@ const Auth = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  // Startup environment validation
+  useEffect(() => {
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+    const publicBase = import.meta.env.VITE_PUBLIC_BASE_URL;
+    
+    console.log('[Auth] 🔍 Environment check:', {
+      hasSupabaseUrl: !!supabaseUrl,
+      hasSupabaseKey: !!supabaseKey,
+      hasPublicBase: !!publicBase,
+      supabaseUrlPrefix: supabaseUrl ? supabaseUrl.substring(0, 30) + '...' : 'MISSING',
+      publicBase: publicBase || 'Using location.origin fallback',
+      currentOrigin: globalThis.location.origin,
+    });
+
+    if (!supabaseUrl || !supabaseKey) {
+      console.error('[Auth] ❌ CRITICAL: Missing Supabase environment variables. Auth will fail.');
+      toast.error('Configuration error: Missing required environment variables', {
+        description: 'Please ensure VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY are set in Vercel.',
+      });
+    }
+  }, []);
+
   const handleGoogleAuth = async () => {
     setLoading(true);
     try {
-      // Use a stable production base URL if provided, fallback to current origin.
-      const baseUrl = import.meta.env.VITE_PUBLIC_BASE_URL || globalThis.location.origin;
+      // Runtime diagnostics: verify required environment variables
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+      
+      if (!supabaseUrl || !supabaseKey) {
+        console.error('[Auth] ❌ Missing critical Supabase environment variables:', { 
+          hasUrl: !!supabaseUrl, 
+          hasKey: !!supabaseKey 
+        });
+        toast.error('Configuration error: Missing Supabase credentials. Please contact support.');
+        setLoading(false);
+        return;
+      }
+
+      // For local development, always use localhost
+      const isDevelopment = globalThis.location.hostname === 'localhost' || globalThis.location.hostname === '127.0.0.1';
+      const baseUrl = isDevelopment 
+        ? globalThis.location.origin 
+        : (import.meta.env.VITE_PUBLIC_BASE_URL || globalThis.location.origin).replace(/\/$/, '');
       // Post-auth landing path (keep simple to reduce mismatch risk)
       const postAuthPath = '/dashboard';
       const redirectTo = `${baseUrl}${postAuthPath}`;
 
-      // Guard against old preview domains causing redirect mismatch
-      if (/vercel\.app$/.test(new URL(baseUrl).hostname)) {
-        console.warn('[Auth] Using a Vercel preview domain for Google OAuth redirect. Consider setting VITE_PUBLIC_BASE_URL=https://auramanager.app in Vercel env vars.');
+      // Validate redirect URL format and warn about expected hosts
+      const expectedHosts = ['auramanager.app', 'localhost', '127.0.0.1'];
+      let redirectHost = '';
+      try {
+        redirectHost = new URL(redirectTo).hostname;
+        
+        // Guard against old preview domains causing redirect mismatch
+        if (/vercel\.app$/.test(redirectHost)) {
+          console.warn('[Auth] ⚠️ Using a Vercel preview domain for Google OAuth redirect:', redirectHost);
+          console.warn('[Auth] Consider setting VITE_PUBLIC_BASE_URL=https://auramanager.app in Vercel env vars.');
+          toast.warning('Using preview domain for OAuth - may fail if not whitelisted');
+        }
+        
+        if (!expectedHosts.includes(redirectHost) && !redirectHost.includes('vercel.app')) {
+          console.warn('[Auth] ⚠️ Unexpected redirect host:', redirectHost, 'Full redirectTo:', redirectTo);
+          console.warn('[Auth] Ensure this domain is whitelisted in Supabase Auth > URL Configuration');
+        }
+        
+        console.log('[Auth] 🔐 Google OAuth initiated with:', { 
+          redirectTo, 
+          redirectHost, 
+          supabaseUrl: supabaseUrl.substring(0, 30) + '...' 
+        });
+      } catch (e) {
+        console.error('[Auth] ❌ Failed to parse redirect URL:', redirectTo, e);
+        toast.error('Invalid redirect URL configuration');
+        setLoading(false);
+        return;
       }
 
       const { error } = await supabase.auth.signInWithOAuth({
@@ -45,10 +110,25 @@ const Auth = () => {
         },
       });
 
-      if (error) throw error;
+      if (error) {
+        console.error('[Auth] ❌ Google OAuth error:', error);
+        
+        // Provide specific error messages
+        if (error.message.includes('redirect') || error.message.includes('uri')) {
+          toast.error(`Redirect URI not whitelisted. Check Supabase Auth settings for: ${redirectHost}`);
+        } else if (error.message.includes('client_id') || error.message.includes('invalid_request')) {
+          toast.error('Google OAuth configuration error. Please contact support.');
+        } else {
+          toast.error(error.message || 'Failed to sign in with Google');
+        }
+        
+        throw error;
+      }
+      
+      console.log('[Auth] ✅ OAuth redirect initiated successfully');
     } catch (error) {
-      const message = error instanceof Error ? error.message : 'Failed to sign in with Google';
-      toast.error(message);
+      console.error('[Auth] Exception in handleGoogleAuth:', error);
+      // Error already toasted above with specific message
       setLoading(false);
     }
   };

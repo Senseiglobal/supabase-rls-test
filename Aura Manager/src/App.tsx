@@ -13,6 +13,7 @@ import { AppSidebar } from "@/components/AppSidebar";
 import { BottomNav } from "@/components/BottomNav";
 import { NotificationCenter } from "@/components/NotificationCenter";
 import { UserMenu } from "@/components/UserMenu";
+import { Loading } from "@/components/Loading";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Onboarding from "./pages/Onboarding";
@@ -35,7 +36,7 @@ const queryClient = new QueryClient();
 
 const App = () => {
   // Set to false for production - authenticated users go to dashboard
-  const DEV_MODE = false;
+  const DEV_MODE = true;
   
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
@@ -74,7 +75,7 @@ const App = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="animate-pulse">Loading...</div>
+        <Loading size="lg" text="Loading Aura Manager..." />
       </div>
     );
   }
@@ -129,7 +130,19 @@ const App = () => {
                           <div className="sticky top-0 z-40 flex h-14 md:h-16 items-center gap-3 md:gap-4 border-b border-border bg-background px-4 md:px-6 lg:px-8">
                             <SidebarTrigger className="hover:bg-accent/10" />
                             <div className="flex items-center gap-2">
-                              <span className="hidden md:inline text-base md:text-lg font-bold bg-gradient-to-r from-accent to-accent-hover bg-clip-text text-transparent">Aura</span>
+                              <div className="w-7 h-7 rounded-lg overflow-hidden flex items-center justify-center">
+                                <img 
+                                  src="/icons/dark_icon_32x32.png" 
+                                  alt="Aura Manager" 
+                                  className="w-5 h-5 dark:hidden" 
+                                />
+                                <img 
+                                  src="/icons/light_icon_32x32.png" 
+                                  alt="Aura Manager" 
+                                  className="w-5 h-5 hidden dark:block" 
+                                />
+                              </div>
+                              <span className="hidden md:inline text-base md:text-lg font-bold bg-gradient-to-r from-accent to-accent-hover bg-clip-text text-transparent">Aura Manager</span>
                             </div>
                             <div className="flex-1" />
                             {/* Don Norman principle: Group related controls with consistent spacing */}

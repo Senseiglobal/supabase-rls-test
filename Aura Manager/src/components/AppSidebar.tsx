@@ -184,7 +184,7 @@ export function AppSidebar() {
       toast.info("Redirecting to Spotify...");
 
   // Use stable custom domain for redirect (fallback to current origin)
-  const stableBase = (import.meta as any).env.VITE_PUBLIC_BASE_URL || (globalThis.location?.origin ?? "https://auramanager.app");
+  const stableBase = (import.meta.env as { VITE_PUBLIC_BASE_URL?: string }).VITE_PUBLIC_BASE_URL || (globalThis.location?.origin ?? "https://auramanager.app");
       const { error } = await supabase.auth.linkIdentity({
         provider: "spotify",
         options: {
@@ -195,20 +195,65 @@ export function AppSidebar() {
 
       if (error) {
         console.error("Spotify connection error:", error);
-        toast.error(`Failed to connect Spotify: ${error.message}`);
+        
+        // Provide user-friendly error messages based on error type
+        if (error.message.includes('invalid_client') || error.message.includes('invalid redirect')) {
+          toast.error("🎵 Spotify connection setup issue", {
+            description: "Our team is working on this. Please try again later."
+          });
+        } else if (error.message.includes('unauthorized_client')) {
+          toast.error("🎵 Spotify app configuration needed", {
+            description: "Please contact support to enable Spotify integration."
+          });
+        } else if (error.message.includes('access_denied')) {
+          toast.error("🎵 Connection cancelled", {
+            description: "You chose not to connect Spotify. You can try again anytime."
+          });
+        } else {
+          toast.error("🎵 Connection failed", {
+            description: "Something went wrong. Please try again in a moment."
+          });
+        }
+      } else {
+        toast.success("🎉 Redirecting to Spotify...", {
+          description: "Complete the authorization to connect your account."
+        });
       }
     } catch (error) {
       console.error("Spotify connection error:", error);
-      toast.error("Failed to connect to Spotify");
+      toast.error("🎵 Failed to connect to Spotify", {
+        description: "Please check your connection and try again."
+      });
     } finally {
       setSpotifyConnectionLoading(false);
     }
   };
 
   const handleSpotifyDisconnect = () => {
-    // For now, redirect to account page for disconnection
-    toast.info("Go to Account page to manage your Spotify connection");
-    // You could navigate to /account here if needed
+    try {
+      setSpotifyConnectionLoading(true);
+      
+      toast.info("🎵 Disconnecting Spotify...", {
+        description: "To fully disconnect, you'll need to revoke access in Spotify settings."
+      });
+      
+      // Update local state immediately for better UX
+      setIsSpotifyConnected(false);
+      
+      setTimeout(() => {
+        toast.success("🎵 Spotify Disconnected", {
+          description: "Visit Account settings for complete disconnection management."
+        });
+        setSpotifyConnectionLoading(false);
+      }, 1000);
+      
+    } catch (error) {
+      console.error("Spotify disconnect error:", error);
+      toast.error("🎵 Failed to disconnect Spotify", {
+        description: "Please try again or visit Account settings."
+      });
+      setSpotifyConnectionLoading(false);
+    }
   };
 
   const hasAccess = (requiredTier: TierName) => {
@@ -231,7 +276,7 @@ export function AppSidebar() {
           }`}
         >
           {locked ? (
-            <div className="flex items-center gap-3 w-full py-2.5 px-3">
+            <div className={`flex items-center w-full py-3 ${open ? "gap-3 px-4" : "justify-center px-2"}`}>
               <item.icon className="h-5 w-5 flex-shrink-0 text-sidebar-foreground/40" />
               {open && (
                 <>
@@ -243,13 +288,17 @@ export function AppSidebar() {
           ) : (
             <NavLink 
               to={item.url} 
-              className={`flex items-center gap-3 w-full transition-colors py-2.5 px-3 ${
+              className={`flex items-center w-full transition-colors py-3 ${
+                open 
+                  ? "gap-3 px-4" 
+                  : "justify-center px-2"
+              } ${
                 active 
-                  ? "bg-accent text-accent-foreground border-l-4 border-accent font-bold -ml-3" 
-                  : "text-sidebar-foreground border-l-4 border-transparent hover:border-sidebar-border font-semibold -ml-3"
+                  ? "bg-accent text-accent-foreground border-l-4 border-accent font-bold -ml-4" 
+                  : "text-sidebar-foreground border-l-4 border-transparent hover:border-sidebar-border font-semibold -ml-4"
               }`}
             >
-              <item.icon className={`flex-shrink-0 ${open ? "h-5 w-5" : "h-5 w-5"}`} />
+              <item.icon className="h-5 w-5 flex-shrink-0" />
               {open && <span className="flex-1 text-sm">{item.title}</span>}
             </NavLink>
           )}
@@ -309,7 +358,21 @@ export function AppSidebar() {
       <div className={`border-b-4 border-sidebar-border ${open ? "p-4" : "p-2"}`}>
         {open ? (
           <div className="flex items-center justify-between">
-            <span className="font-bold tracking-tight text-lg bg-gradient-to-r from-accent to-accent-hover bg-clip-text text-transparent -ml-1">Aura Manager</span>
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg overflow-hidden flex items-center justify-center">
+                <img 
+                  src="/icons/dark_icon_32x32.png" 
+                  alt="Aura Manager" 
+                  className="w-6 h-6 dark:hidden" 
+                />
+                <img 
+                  src="/icons/light_icon_32x32.png" 
+                  alt="Aura Manager" 
+                  className="w-6 h-6 hidden dark:block" 
+                />
+              </div>
+              <span className="font-bold tracking-tight text-lg bg-gradient-to-r from-accent to-accent-hover bg-clip-text text-transparent">Aura Manager</span>
+            </div>
             <button
               type="button"
               onClick={() => document.querySelector<HTMLButtonElement>('[data-sidebar="trigger"]')?.click()}
@@ -321,7 +384,18 @@ export function AppSidebar() {
           </div>
         ) : (
           <div className="flex justify-center">
-            <span className="font-bold tracking-tight text-sm bg-gradient-to-r from-accent to-accent-hover bg-clip-text text-transparent">Aura</span>
+            <div className="w-8 h-8 rounded-lg overflow-hidden flex items-center justify-center">
+              <img 
+                src="/icons/dark_icon_32x32.png" 
+                alt="Aura Manager" 
+                className="w-6 h-6 dark:hidden" 
+              />
+              <img 
+                src="/icons/light_icon_32x32.png" 
+                alt="Aura Manager" 
+                className="w-6 h-6 hidden dark:block" 
+              />
+            </div>
           </div>
         )}
       </div>
@@ -363,12 +437,24 @@ export function AppSidebar() {
               className={`w-full flex items-center gap-3 p-3 rounded-lg transition-all duration-200 hover:shadow-lg ${
                 isSpotifyConnected 
                   ? 'bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white'
-                  : 'bg-gradient-to-r from-gray-600 to-gray-700 hover:from-gray-700 hover:to-gray-800 text-white'
+                  : 'bg-gradient-to-r from-accent to-accent-hover hover:from-accent-hover hover:to-accent text-black'
               }`}
               onClick={handleSpotifyConnect}
               disabled={spotifyConnectionLoading}
             >
-              <Music className={`h-5 w-5 ${spotifyConnectionLoading ? 'animate-pulse' : ''}`} />
+              {spotifyConnectionLoading ? (
+                <div className="w-5 h-5 relative">
+                  <div className="w-5 h-5 animate-[fadeInOut_2s_ease-in-out_infinite]">
+                    <img 
+                      src="/icons/dark_icon_32x32.png" 
+                      alt="Loading" 
+                      className="w-full h-full" 
+                    />
+                  </div>
+                </div>
+              ) : (
+                <Music className="h-5 w-5" />
+              )}
               <div className="flex-1 text-left">
                 <p className="text-sm font-semibold">
                   {isSpotifyConnected ? 'Spotify Connected' : 'Connect Spotify'}

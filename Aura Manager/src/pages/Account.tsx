@@ -277,7 +277,7 @@ const Account = () => {
           });
           
           // Use stable custom domain for redirect (prefer env-provided, fallback to current origin)
-          const stableDomain = (import.meta as any).env.VITE_PUBLIC_BASE_URL || (globalThis.location?.origin ?? "https://auramanager.app");
+          const stableDomain = (import.meta.env as { VITE_PUBLIC_BASE_URL?: string }).VITE_PUBLIC_BASE_URL || (globalThis.location?.origin ?? "https://auramanager.app");
           const redirectUrl = `${stableDomain}/account?connected=spotify`;
           
           // Reduced debug logging for production cleanliness
@@ -325,7 +325,7 @@ const Account = () => {
       } else {
         // Use custom OAuth function for other platforms
   // If/when we re-enable other platforms via Edge Functions, prefer current project from env
-  const envSupabaseUrl = (import.meta as any).env.VITE_SUPABASE_URL as string | undefined;
+  const envSupabaseUrl = (import.meta.env as { VITE_SUPABASE_URL?: string }).VITE_SUPABASE_URL;
   const supabaseBase = (envSupabaseUrl || '').replace(/\/$/, '');
   const redirectUri = `${supabaseBase}/functions/v1/oauth-callback?platform=${platformId}`;
         
