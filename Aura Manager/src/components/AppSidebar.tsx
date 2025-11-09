@@ -19,8 +19,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { Badge } from "@/components/ui/badge";
 import { toast } from "sonner";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
-import { useTerms } from "@/contexts/terms";
-import { useTermsAcceptance } from "@/hooks/use-terms-acceptance";
 import BrandLogo from "@/components/BrandLogo";
 
 import {
@@ -122,13 +120,11 @@ const settingsItems: NavItem[] = [
 
 export function AppSidebar() {
   const { open } = useSidebar();
-  const terms = useTerms();
   const location = useLocation();
   const currentPath = location.pathname;
   const [userTier, setUserTier] = useState<TierName>("Free");
   const [isSpotifyConnected, setIsSpotifyConnected] = useState(false);
   const [spotifyConnectionLoading, setSpotifyConnectionLoading] = useState(false);
-  const { hasAcceptedTerms } = useTermsAcceptance();
 
   useEffect(() => {
     fetchUserTier();
@@ -149,18 +145,25 @@ export function AppSidebar() {
   };
 
   const fetchUserTier = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
 
-    const { data: subscription } = await supabase
-      .from("subscriptions")
-      .select("plan_name")
-      .eq("user_id", user.id)
-      .eq("status", "active")
-      .single();
+      const { data: subscription, error: subscriptionError } = await supabase
+        .from("subscriptions")
+        .select("plan_name")
+        .eq("user_id", user.id)
+        .eq("status", "active")
+        .single();
 
-    if (subscription) {
-      setUserTier(subscription.plan_name as TierName);
+      if (subscription) {
+        setUserTier(subscription.plan_name as TierName);
+      } else if (subscriptionError) {
+        // Silent fallback: table missing / RLS denial shouldn't block UI
+        console.debug("Silent subscriptions fetch issue", subscriptionError.message);
+      }
+    } catch (e) {
+      console.debug("Silent error fetching user tier", e);
     }
   };
 
@@ -176,12 +179,6 @@ export function AppSidebar() {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) {
         toast.error("Please sign in to connect Spotify");
-        return;
-      }
-
-      // Check if user has accepted terms first
-      if (!hasAcceptedTerms) {
-        terms.open("platform_connect");
         return;
       }
 

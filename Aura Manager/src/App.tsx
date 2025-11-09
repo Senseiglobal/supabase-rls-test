@@ -14,7 +14,6 @@ import { AppSidebar } from "@/components/AppSidebar";
 import { BottomNav } from "@/components/BottomNav";
 import { NotificationCenter } from "@/components/NotificationCenter";
 import { UserMenu } from "@/components/UserMenu";
-import { TermsWrapper } from "@/components/TermsWrapper";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Onboarding from "./pages/Onboarding";
@@ -30,7 +29,7 @@ import Checkout from "./pages/Checkout";
 import Billing from "./pages/Billing";
 import Help from "./pages/Help";
 import Privacy from "./pages/Privacy";
-import Terms from "./pages/Terms";
+import Terms from "./pages/Terms"; // Static legal page retained
 import AuthCallback from "./pages/AuthCallback";
 
 const queryClient = new QueryClient();
@@ -88,7 +87,6 @@ const App = () => {
           <Toaster />
           <Sonner />
           <BrowserRouter>
-            <TermsWrapper>
             <Routes>
               <Route 
                 path="/" 
@@ -182,7 +180,6 @@ const App = () => {
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<Navigate to="/" />} />
             </Routes>
-            </TermsWrapper>
           </BrowserRouter>
         </TooltipProvider>
       </ThemeProvider>

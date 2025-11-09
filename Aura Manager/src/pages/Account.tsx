@@ -103,50 +103,60 @@ const Account = () => {
   }, []);
 
   const fetchUserData = async () => {
-    const { data: { user } } = await supabase.auth.getUser();
-    if (!user) return;
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) {
+        setLoading(false);
+        return;
+      }
 
-    // Fetch user profile
-    const { data: profileData } = await supabase
-      .from("profiles")
-      .select("*")
-      .eq("user_id", user.id)
-      .single();
+      // Fetch user profile (silent fallback)
+      const { data: profileData, error: profileError } = await supabase
+        .from("profiles")
+        .select("*")
+        .eq("user_id", user.id)
+        .single();
 
-    if (profileData) {
-      setProfile({
-        display_name: profileData.display_name || "",
-        bio: profileData.bio || "",
-        avatar_url: profileData.avatar_url || "",
-      });
-      
-      // Check connected platforms by looking at user identities
-      const identities = (user?.identities || []) as Array<{ provider?: string }>;
-      const connectedFromIdentities = identities.map(i => i.provider).filter(Boolean) as string[];
-      
-      // Also get from profile selected_platforms for non-Supabase OAuth providers
-      const fromProfile = Array.isArray(profileData.selected_platforms) 
-        ? (profileData.selected_platforms as string[])
-        : [];
-      
-      // Combine both sources and remove duplicates
-      const allConnected = [...new Set([...connectedFromIdentities, ...fromProfile])];
-      setConnectedPlatforms(allConnected);
+      if (profileData) {
+        setProfile({
+          display_name: profileData.display_name || "",
+          bio: profileData.bio || "",
+          avatar_url: profileData.avatar_url || "",
+        });
+        
+        // Identities from auth
+        const identities = (user?.identities || []) as Array<{ provider?: string }>;
+        const connectedFromIdentities = identities.map(i => i.provider).filter(Boolean) as string[];
+        
+        // Profile selected platforms (non-native OAuth)
+        const fromProfile = Array.isArray(profileData.selected_platforms) 
+          ? (profileData.selected_platforms as string[])
+          : [];
+        
+        const allConnected = [...new Set([...connectedFromIdentities, ...fromProfile])];
+        setConnectedPlatforms(allConnected);
+      } else if (profileError) {
+        console.debug("Silent profile fetch issue:", profileError.message);
+      }
+
+      // Fetch subscription (silent fallback)
+      const { data: subscription, error: subscriptionError } = await supabase
+        .from("subscriptions")
+        .select("plan_name")
+        .eq("user_id", user.id)
+        .eq("status", "active")
+        .single();
+
+      if (subscription) {
+        setUserPlan(subscription.plan_name as "Free" | "Creator" | "Pro");
+      } else if (subscriptionError) {
+        console.debug("Silent subscription fetch issue:", subscriptionError.message);
+      }
+    } catch (e) {
+      console.debug("Silent fetchUserData error", e);
+    } finally {
+      setLoading(false);
     }
-
-    // Fetch user's subscription
-    const { data: subscription } = await supabase
-      .from("subscriptions")
-      .select("plan_name")
-      .eq("user_id", user.id)
-      .eq("status", "active")
-      .single();
-
-    if (subscription) {
-      setUserPlan(subscription.plan_name as "Free" | "Creator" | "Pro");
-    }
-
-    setLoading(false);
   };
 
   const handleSaveProfile = async () => {
