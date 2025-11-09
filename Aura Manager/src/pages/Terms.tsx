@@ -4,11 +4,10 @@ import { FileText, Lock, Eye, Users } from "lucide-react";
 
 const Terms = () => {
   return (
-    <div className="min-h-screen w-full px-4 py-6 sm:px-6 lg:px-8">
-      <div className="max-w-4xl mx-auto space-y-6">
-        <div className="flex items-center justify-between">
-          <h1 className="text-2xl md:text-3xl font-bold">Legal & Terms</h1>
-        </div>
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h1 className="text-2xl md:text-3xl font-bold">Legal & Terms</h1>
+      </div>
 
       <Card className="border border-border">
         <CardHeader>
@@ -90,7 +89,6 @@ const Terms = () => {
           </ScrollArea>
         </CardContent>
       </Card>
-      </div>
     </div>
   );
 };

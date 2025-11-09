@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 
 interface PaymentMethod {
@@ -175,22 +175,22 @@ const Billing = () => {
                 {paymentMethods.map((method) => (
                   <div
                     key={method.id}
-                    className="flex items-center justify-between p-3 sm:p-4 border rounded-lg min-h-[70px] gap-3 w-full"
+                    className="flex items-center justify-between p-4 border rounded-lg"
                   >
-                    <div className="flex items-center gap-3 min-w-0 flex-1">
-                      <div className="p-2 bg-accent/10 rounded-lg flex-shrink-0">
-                        <CreditCard className="h-5 w-5 sm:h-6 sm:w-6 text-accent" />
+                    <div className="flex items-center gap-4">
+                      <div className="p-2 bg-accent/10 rounded-lg">
+                        <CreditCard className="h-6 w-6 text-accent" />
                       </div>
-                      <div className="min-w-0 flex-1">
-                        <div className="flex items-center gap-2 flex-nowrap">
-                          <p className="font-medium text-sm sm:text-base truncate flex-shrink-0">
+                      <div>
+                        <div className="flex items-center gap-2">
+                          <p className="font-medium">
                             {method.type} •••• {method.last4}
                           </p>
                           {method.isDefault && (
-                            <Badge variant="secondary" className="text-xs whitespace-nowrap flex-shrink-0 ml-2">Default</Badge>
+                            <Badge variant="secondary">Default</Badge>
                           )}
                         </div>
-                        <p className="text-xs sm:text-sm text-muted-foreground whitespace-nowrap">
+                        <p className="text-sm text-muted-foreground">
                           Expires {method.expiryDate}
                         </p>
                       </div>
@@ -200,9 +200,8 @@ const Billing = () => {
                         variant="ghost"
                         size="icon"
                         onClick={() => handleRemovePaymentMethod(method.id)}
-                        className="flex-shrink-0 h-8 w-8 sm:h-10 sm:w-10"
                       >
-                        <Trash2 className="h-3 w-3 sm:h-4 sm:w-4 text-destructive" />
+                        <Trash2 className="h-4 w-4 text-destructive" />
                       </Button>
                     )}
                   </div>
