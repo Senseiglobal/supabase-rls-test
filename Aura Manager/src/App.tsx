@@ -13,7 +13,6 @@ import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { BottomNav } from "@/components/BottomNav";
 import { NotificationCenter } from "@/components/NotificationCenter";
-import { FloatingActionButton } from "@/components/FloatingActionButton";
 import { UserMenu } from "@/components/UserMenu";
 import { TermsWrapper } from "@/components/TermsWrapper";
 import Index from "./pages/Index";
@@ -159,8 +158,7 @@ const App = () => {
                             </Routes>
                           </main>
                           
-                          {/* Mobile floating action button */}
-                          <FloatingActionButton />
+                          {/* FAB removed to keep mobile navigation clean */}
                           
                           {/* Mobile bottom navigation */}
                           <BottomNav />

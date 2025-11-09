@@ -62,6 +62,7 @@ const Account = () => {
     avatar_url: "",
   });
   const [loading, setLoading] = useState(true);
+  const [showHints, setShowHints] = useState(false);
   
   const { soundEnabled, soundVolume, setSoundEnabled, setSoundVolume } = useNotificationPreferences();
 
@@ -97,6 +98,22 @@ const Account = () => {
       // Refresh data to show the connection
       setTimeout(fetchUserData, 1000);
     }
+    // Swipe gestures to toggle hints (mobile UX)
+    let startY = 0;
+    const rootEl = document.getElementById('account-page-root');
+    const onTouchStart = (e: TouchEvent) => { startY = e.touches[0]?.clientY ?? 0; };
+    const onTouchEnd = (e: TouchEvent) => {
+      const endY = e.changedTouches[0]?.clientY ?? 0;
+      const delta = startY - endY;
+      if (delta > 30) setShowHints(true); // swipe up
+      if (delta < -30) setShowHints(false); // swipe down
+    };
+    rootEl?.addEventListener('touchstart', onTouchStart, { passive: true });
+    rootEl?.addEventListener('touchend', onTouchEnd, { passive: true });
+    return () => {
+      rootEl?.removeEventListener('touchstart', onTouchStart as any);
+      rootEl?.removeEventListener('touchend', onTouchEnd as any);
+    };
   }, []);
 
   const fetchUserData = async () => {
@@ -267,14 +284,7 @@ const Account = () => {
           const stableDomain = (import.meta as any).env.VITE_PUBLIC_BASE_URL || "https://auramanager.app";
           const redirectUrl = `${stableDomain}/account?connected=spotify`;
           
-          console.log("Using stable redirect URL:", redirectUrl);
-          console.log("Current origin:", globalThis.location.origin);
-          
-          console.log("🔍 OAuth Configuration:");
-          console.log("- Redirect URL:", redirectUrl);
-          console.log("- Current Domain:", globalThis.location.origin);
-          console.log("- Supabase Project:", "cpylmxhrobrhqettudjg.supabase.co");
-          console.log("- Client ID:", "2b48c7729298483c9588820c99bdbaef");
+          // Reduced debug logging for production cleanliness
 
           const { error } = await supabase.auth.linkIdentity({
             provider: "spotify",
@@ -318,8 +328,10 @@ const Account = () => {
         }
       } else {
         // Use custom OAuth function for other platforms
-  // If/when we re-enable other platforms via Edge Functions, prefer current project
-  const redirectUri = `https://cpylmxhrobrhqettudjg.supabase.co/functions/v1/oauth-callback?platform=${platformId}`;
+  // If/when we re-enable other platforms via Edge Functions, prefer current project from env
+  const envSupabaseUrl = (import.meta as any).env.VITE_SUPABASE_URL as string | undefined;
+  const supabaseBase = (envSupabaseUrl || '').replace(/\/$/, '');
+  const redirectUri = `${supabaseBase}/functions/v1/oauth-callback?platform=${platformId}`;
         
         const oauthUrls: Record<string, string> = {
           instagram: `https://api.instagram.com/oauth/authorize?client_id=YOUR_INSTAGRAM_CLIENT_ID&redirect_uri=${encodeURIComponent(redirectUri)}&scope=user_profile,user_media&response_type=code&state=${user.id}`,
@@ -347,7 +359,7 @@ const Account = () => {
   };
 
   return (
-    <>
+    <div id="account-page-root">
       <div className="mb-6 md:mb-8">
         <h1 className="text-3xl md:text-4xl font-bold mb-2 text-foreground">Account Settings</h1>
         <p className="text-sm md:text-base text-foreground/70">Manage your profile and preferences</p>
@@ -437,6 +449,7 @@ const Account = () => {
                   const isConnected = connectedPlatforms.includes(platform.id);
                   const isDisabled = !canConnectMore && !isConnected;
                   const isConnecting = connectingPlatform === platform.id;
+                  const isSpotify = platform.id === "spotify";
 
                   return (
                     <div
@@ -477,16 +490,34 @@ const Account = () => {
                               Upgrade to connect
                             </div>
                           )}
+                          {showHints && (
+                            <div className="text-xs text-foreground/60 mt-1">
+                              {isConnected ? "Swipe down to hide tips • Tap to disconnect" : "Swipe up to show tips • Tap to connect"}
+                            </div>
+                          )}
                         </div>
                       </div>
                       <Button
                         size="sm"
-                        variant={isConnected ? "outline" : "default"}
                         onClick={() => handlePlatformConnect(platform.id)}
                         disabled={isDisabled || isConnecting}
-                        className={isConnected ? "border-destructive/50 hover:bg-destructive/10" : ""}
+                        variant={isConnected ? "outline" : "default"}
+                        aria-label={`${isConnected ? "Disconnect" : "Connect"} ${platform.name}`}
+                        className={`min-w-28 ${
+                          isSpotify
+                            ? isConnected
+                              ? "border-red-300 text-red-600 hover:bg-red-50 bg-transparent"
+                              : "bg-green-600 hover:bg-green-700 text-white border-green-700"
+                            : isConnected
+                              ? "border-destructive/50 hover:bg-destructive/10"
+                              : ""
+                        }`}
                       >
-                        {isConnecting ? "..." : isConnected ? "Disconnect" : "Connect"}
+                        {isConnecting
+                          ? "..."
+                          : isConnected
+                            ? (isSpotify ? "Disconnect Spotify" : "Disconnect")
+                            : (isSpotify ? "Connect Spotify" : "Connect")}
                       </Button>
                     </div>
                   );
@@ -592,7 +623,7 @@ const Account = () => {
           </div>
         </div>
       {/* Removed auxiliary debug panels (Spotify setup, domain notice, diagnostics) */}
-    </>
+    </div>
   );
 };
 
