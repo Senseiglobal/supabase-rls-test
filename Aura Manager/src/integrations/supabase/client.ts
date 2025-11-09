@@ -12,7 +12,8 @@ export const PUBLIC_BASE_URL = import.meta.env.VITE_PUBLIC_BASE_URL;
 
 export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
   auth: {
-    storage: localStorage,
+// Use a safe storage that works in both browser and SSR
+        storage: typeof window !== 'undefined' ? window.localStorage : undefined,
     persistSession: true,
     autoRefreshToken: true,
   }
