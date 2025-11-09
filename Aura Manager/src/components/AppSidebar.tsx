@@ -310,7 +310,7 @@ export function AppSidebar() {
       <div className={`border-b-4 border-sidebar-border ${open ? "p-4" : "p-2"}`}>
         {open ? (
           <div className="flex items-center justify-between">
-            <BrandLogo size={28} showText={true} className="-ml-1" aria-label="Aura Manager" />
+            <span className="font-bold tracking-tight text-lg bg-gradient-to-r from-accent to-accent-hover bg-clip-text text-transparent -ml-1">Aura Manager</span>
             <button
               type="button"
               onClick={() => document.querySelector<HTMLButtonElement>('[data-sidebar="trigger"]')?.click()}
@@ -322,7 +322,7 @@ export function AppSidebar() {
           </div>
         ) : (
           <div className="flex justify-center">
-            <BrandLogo size={32} showText={false} aria-label="Aura Manager" />
+            <span className="font-bold tracking-tight text-sm bg-gradient-to-r from-accent to-accent-hover bg-clip-text text-transparent">Aura</span>
           </div>
         )}
       </div>

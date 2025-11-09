@@ -8,7 +8,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { Session } from "@supabase/supabase-js";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { ThemeToggle } from "@/components/ThemeToggle";
-import BrandLogo from "@/components/BrandLogo";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { AppSidebar } from "@/components/AppSidebar";
 import { BottomNav } from "@/components/BottomNav";
@@ -130,7 +129,6 @@ const App = () => {
                           <div className="sticky top-0 z-40 flex h-14 md:h-16 items-center gap-3 md:gap-4 border-b border-border bg-background px-4 md:px-6 lg:px-8">
                             <SidebarTrigger className="hover:bg-accent/10" />
                             <div className="flex items-center gap-2">
-                              <BrandLogo size={30} showText={false} aria-label="Aura Manager" />
                               <span className="hidden md:inline text-base md:text-lg font-bold bg-gradient-to-r from-accent to-accent-hover bg-clip-text text-transparent">Aura</span>
                             </div>
                             <div className="flex-1" />

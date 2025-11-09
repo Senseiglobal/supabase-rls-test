@@ -227,7 +227,6 @@ export function Header({ showAuth = false }: HeaderProps) {
             className="flex items-center gap-2 hover-scale group"
             aria-label="Go to home"
           >
-            <BrandLogo size={36} showText={false} className="transition-all duration-300 group-hover:drop-shadow" aria-label="Aura Manager" />
             <span className="text-2xl font-bold tracking-tight bg-gradient-to-r from-accent to-accent-hover bg-clip-text text-transparent">
               Aura
             </span>
