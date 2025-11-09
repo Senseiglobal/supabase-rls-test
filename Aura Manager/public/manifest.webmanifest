@@ -1,13 +1,32 @@
 {
-  "name": "Aura Manager",
-  "short_name": "Aura",
-  "description": "Your AI‑Powered Artist Manager",
+  "name": "Aura Manager - AI Artist Manager",
+  "short_name": "Aura Manager",
+  "description": "Your AI‑Powered Artist Manager - Boost your music career with intelligent insights and strategy",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#0d0f17",
-  "theme_color": "#0d0f17",
+  "theme_color": "#8B5CF6",
   "icons": [
+    {
+      "src": "/favicon.ico",
+      "sizes": "16x16 32x32 48x48",
+      "type": "image/x-icon",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    },
     {
       "src": "/icons/light_icon_192.png",
       "sizes": "192x192",
@@ -21,29 +40,13 @@
       "purpose": "any"
     },
     {
-      "src": "/icons/dark_icon_192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/icons/dark_icon_512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/favicon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
-    }
-    ,
-    {
       "src": "/icons/light_icon_512_maskable.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
     }
-  ]
+  ],
+  "categories": ["music", "productivity", "business"],
+  "lang": "en",
+  "dir": "ltr"
 }
