@@ -187,8 +187,8 @@ export function AppSidebar() {
 
       toast.info("Redirecting to Spotify...");
 
-      // Use stable custom domain for redirect
-      const stableBase = (import.meta as any).env.VITE_PUBLIC_BASE_URL || "https://auramanager.app";
+  // Use stable custom domain for redirect (fallback to current origin)
+  const stableBase = (import.meta as any).env.VITE_PUBLIC_BASE_URL || (globalThis.location?.origin ?? "https://auramanager.app");
       const { error } = await supabase.auth.linkIdentity({
         provider: "spotify",
         options: {
