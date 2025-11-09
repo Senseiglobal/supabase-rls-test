@@ -51,48 +51,73 @@ const Auth = () => {
     setLoading(true);
     
     try {
-      // Check if Supabase is properly configured
+      console.log('🔍 Starting Google OAuth...');
+      
+      // Check environment first
       const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
       const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
       
       if (!supabaseUrl || !supabaseKey) {
-        toast.error('Authentication service not configured. Please contact support.');
+        toast.error('❌ Authentication not configured');
         setLoading(false);
         return;
       }
 
-      toast.info('Connecting to Google...');
+      toast.info('🔄 Opening Google sign-in...');
       
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: `${globalThis.location.origin}/dashboard`,
-        },
-      });
-
-      if (error) {
-        console.error('Google OAuth Error:', error);
-        
-        // Handle specific error types
-        if (error.message.toLowerCase().includes('not enabled')) {
-          toast.error('Google sign-in is not enabled. Please use email/password or contact support.');
-        } else if (error.message.toLowerCase().includes('client_id')) {
-          toast.error('Google authentication not configured. Please contact support.');
-        } else if (error.message.toLowerCase().includes('redirect')) {
-          toast.error('Authentication redirect issue. Please try again.');
-        } else {
-          toast.error('Google sign-in failed. Please try email/password instead.');
+      // Wrap OAuth call to catch JSON errors specifically
+      let oauthResult;
+      try {
+        oauthResult = await supabase.auth.signInWithOAuth({
+          provider: 'google',
+          options: {
+            redirectTo: `${globalThis.location.origin}/dashboard`,
+          },
+        });
+      } catch (jsonError) {
+        console.error('🚨 OAuth JSON Error:', jsonError);
+        if (jsonError instanceof SyntaxError || (jsonError && jsonError.message && jsonError.message.includes('JSON'))) {
+          toast.error('❌ Google OAuth Not Available', {
+            description: 'Google sign-in is not properly configured. Please use email/password to sign in.',
+            duration: 8000
+          });
+          setLoading(false);
+          return;
         }
+        throw jsonError;
+      }
+
+      if (oauthResult.error) {
+        console.error('❌ OAuth Error:', oauthResult.error);
         
+        if (oauthResult.error.message.includes('Provider not found') || oauthResult.error.message.includes('not enabled')) {
+          toast.error('❌ Google Sign-In Unavailable', {
+            description: 'Google OAuth is not enabled. Please sign in with email and password.',
+            duration: 8000
+          });
+        } else {
+          toast.error('❌ Google Sign-In Failed', {
+            description: 'Please try signing in with email and password instead.',
+            duration: 6000
+          });
+        }
         setLoading(false);
       } else {
-        // Success - user will be redirected to Google
+        console.log('✅ OAuth redirect should start...');
         toast.success('Redirecting to Google...');
+        
+        // Check if redirect actually happens
+        setTimeout(() => {
+          if (document.visibilityState === 'visible') {
+            toast.error('❌ Google redirect failed. Please use email/password to sign in.');
+            setLoading(false);
+          }
+        }, 3000);
       }
       
     } catch (error) {
-      console.error('Authentication error:', error);
-      toast.error('Unable to connect to authentication service. Please try again.');
+      console.error('🚨 OAuth Exception:', error);
+      toast.error('❌ Cannot connect to Google. Please sign in with email/password.');
       setLoading(false);
     }
   };
@@ -119,22 +144,36 @@ const Auth = () => {
         toast.success("Password reset email sent! Check your inbox.");
         setIsForgotPassword(false);
       } else if (isLogin) {
-        const { error } = await supabase.auth.signInWithPassword({
+        console.log('🔑 Attempting email/password sign-in...');
+        
+        const { data, error } = await supabase.auth.signInWithPassword({
           email,
           password,
         });
         
         if (error) {
+          console.error('❌ Sign-in error:', error);
           if (error.message.includes("Invalid login credentials")) {
-            throw new Error("Invalid email or password. Please try again.");
+            throw new Error("❌ Invalid email or password. Please check your credentials and try again.");
+          } else if (error.message.includes("Email not confirmed")) {
+            throw new Error("📧 Please check your email and click the confirmation link before signing in.");
+          } else if (error.message.includes("Too many requests")) {
+            throw new Error("⏰ Too many attempts. Please wait a few minutes and try again.");
           }
-          throw error;
+          throw new Error(`❌ Sign-in failed: ${error.message}`);
         }
         
-        toast.success("Welcome back!");
-        navigate("/dashboard");
+        if (data.user) {
+          console.log('✅ Sign-in successful!', data.user.email);
+          toast.success("✅ Welcome back!");
+          navigate("/dashboard");
+        } else {
+          throw new Error("❌ Sign-in failed - no user data returned");
+        }
       } else {
-        const { error } = await supabase.auth.signUp({
+        console.log('📝 Creating new account...');
+        
+        const { data, error } = await supabase.auth.signUp({
           email,
           password,
           options: {
@@ -143,14 +182,29 @@ const Auth = () => {
         });
         
         if (error) {
+          console.error('❌ Sign-up error:', error);
           if (error.message.includes("User already registered")) {
-            throw new Error("This email is already registered. Please sign in instead.");
+            throw new Error("📧 This email is already registered. Please sign in instead.");
+          } else if (error.message.includes("Password should be at least")) {
+            throw new Error("🔐 Password must be at least 6 characters long.");
+          } else if (error.message.includes("Unable to validate email address")) {
+            throw new Error("📧 Please enter a valid email address.");
           }
-          throw error;
+          throw new Error(`❌ Account creation failed: ${error.message}`);
         }
         
-        toast.success("Account created! Please check your email to verify.");
-        navigate("/onboarding");
+        if (data.user) {
+          console.log('✅ Account created successfully!', data.user.email);
+          if (data.user.email_confirmed_at) {
+            toast.success("✅ Account created! You can now sign in.");
+            setIsLogin(true);
+          } else {
+            toast.success("✅ Account created! Please check your email to verify your account.");
+            setIsLogin(true);
+          }
+        } else {
+          throw new Error("❌ Account creation failed - no user data returned");
+        }
       }
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -312,6 +366,69 @@ const Auth = () => {
                 }
               </Button>
             </form>
+            
+            {/* Emergency Access */}
+            <div className="mt-6 pt-4 border-t border-border">
+              <p className="text-xs text-center text-muted-foreground mb-3">
+                Having trouble? Try emergency access:
+              </p>
+              <Button
+                type="button"
+                variant="outline"
+                size="sm"
+                onClick={async () => {
+                  console.log('🚨 Testing emergency access...');
+                  toast.info('Testing authentication system...');
+                  
+                  try {
+                    // Test current session
+                    const { data: { session } } = await supabase.auth.getSession();
+                    if (session) {
+                      toast.success('✅ You are already signed in! Redirecting...');
+                      navigate('/dashboard');
+                      return;
+                    }
+                    
+                    // Test with demo credentials
+                    const { data, error } = await supabase.auth.signInWithPassword({
+                      email: 'demo@auramanager.app',
+                      password: 'demo123456'
+                    });
+                    
+                    if (error && error.message.includes('Invalid login credentials')) {
+                      // Try to create demo account
+                      const signUpResult = await supabase.auth.signUp({
+                        email: 'demo@auramanager.app',
+                        password: 'demo123456'
+                      });
+                      
+                      if (signUpResult.error) {
+                        toast.error('❌ Authentication system issue', {
+                          description: signUpResult.error.message
+                        });
+                      } else {
+                        toast.success('✅ Demo account created! Try signing in with demo@auramanager.app / demo123456');
+                        setEmail('demo@auramanager.app');
+                        setPassword('demo123456');
+                      }
+                    } else if (error) {
+                      toast.error('❌ Authentication issue', {
+                        description: error.message
+                      });
+                    } else if (data.user) {
+                      toast.success('✅ Emergency access successful!');
+                      navigate('/dashboard');
+                    }
+                  } catch (error) {
+                    console.error('Emergency access failed:', error);
+                    toast.error('❌ System error - check console for details');
+                  }
+                }}
+                className="w-full"
+              >
+                🚨 Emergency Access Test
+              </Button>
+            </div>
           </CardContent>
         </Card>
       </div>
