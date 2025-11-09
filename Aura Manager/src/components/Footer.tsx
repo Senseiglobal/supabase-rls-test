@@ -1,6 +1,5 @@
 import { Twitter, Instagram, Youtube, Github, ChevronUp, ShieldCheck } from "lucide-react";
 import { Link } from "react-router-dom";
-import BrandLogo from "@/components/BrandLogo";
 
 export function Footer() {
   const currentYear = new Date().getFullYear();
@@ -36,7 +35,6 @@ export function Footer() {
           {/* Brand Section */}
           <div className="max-w-sm">
             <Link to="/" className="flex items-center gap-2 mb-4 hover-scale group">
-              <BrandLogo size={32} showText={false} aria-label="Aura Manager" />
               <span className="text-2xl font-bold bg-gradient-to-r from-accent to-accent-hover bg-clip-text text-transparent">Aura</span>
             </Link>
             <p className="text-foreground/70 text-sm mb-4">
