@@ -62,7 +62,7 @@ const Account = () => {
     avatar_url: "",
   });
   const [loading, setLoading] = useState(true);
-  const [showHints, setShowHints] = useState(false);
+  // Clean UI: remove hint overlays/gestures for mobile
   
   const { soundEnabled, soundVolume, setSoundEnabled, setSoundVolume } = useNotificationPreferences();
 
@@ -98,22 +98,8 @@ const Account = () => {
       // Refresh data to show the connection
       setTimeout(fetchUserData, 1000);
     }
-    // Swipe gestures to toggle hints (mobile UX)
-    let startY = 0;
-    const rootEl = document.getElementById('account-page-root');
-    const onTouchStart = (e: TouchEvent) => { startY = e.touches[0]?.clientY ?? 0; };
-    const onTouchEnd = (e: TouchEvent) => {
-      const endY = e.changedTouches[0]?.clientY ?? 0;
-      const delta = startY - endY;
-      if (delta > 30) setShowHints(true); // swipe up
-      if (delta < -30) setShowHints(false); // swipe down
-    };
-    rootEl?.addEventListener('touchstart', onTouchStart, { passive: true });
-    rootEl?.addEventListener('touchend', onTouchEnd, { passive: true });
-    return () => {
-      rootEl?.removeEventListener('touchstart', onTouchStart as any);
-      rootEl?.removeEventListener('touchend', onTouchEnd as any);
-    };
+    // Gestures removed for a cleaner interface
+    return () => {};
   }, []);
 
   const fetchUserData = async () => {
@@ -280,8 +266,8 @@ const Account = () => {
             description: "You'll be redirected to Spotify to authorize the connection."
           });
           
-          // Use stable custom domain for redirect (prefer env-provided)
-          const stableDomain = (import.meta as any).env.VITE_PUBLIC_BASE_URL || "https://auramanager.app";
+          // Use stable custom domain for redirect (prefer env-provided, fallback to current origin)
+          const stableDomain = (import.meta as any).env.VITE_PUBLIC_BASE_URL || (globalThis.location?.origin ?? "https://auramanager.app");
           const redirectUrl = `${stableDomain}/account?connected=spotify`;
           
           // Reduced debug logging for production cleanliness
@@ -490,11 +476,7 @@ const Account = () => {
                               Upgrade to connect
                             </div>
                           )}
-                          {showHints && (
-                            <div className="text-xs text-foreground/60 mt-1">
-                              {isConnected ? "Swipe down to hide tips • Tap to disconnect" : "Swipe up to show tips • Tap to connect"}
-                            </div>
-                          )}
+                          {/* Hints removed for minimal UI */}
                         </div>
                       </div>
                       <Button
