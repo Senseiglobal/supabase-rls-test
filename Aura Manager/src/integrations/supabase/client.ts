@@ -4,6 +4,15 @@ import type { Database } from './types';
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+
+// Validate environment variables
+if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
+    console.error('[Supabase Client] Missing environment variables:', {
+          VITE_SUPABASE_URL: SUPABASE_URL ? 'SET' : 'MISSING',
+              VITE_SUPABASE_PUBLISHABLE_KEY: SUPABASE_PUBLISHABLE_KEY ? 'SET' : 'MISSING'
+                });
+                  throw new Error('Supabase environment variables are not properly configured. Please check your .env file and ensure VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY are set.');
+                  }
 // Optional: public base URL for stable OAuth redirects (production domain)
 export const PUBLIC_BASE_URL = import.meta.env.VITE_PUBLIC_BASE_URL;
 
