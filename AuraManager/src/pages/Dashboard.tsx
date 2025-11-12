@@ -13,7 +13,7 @@ export default function Dashboard() {
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
-            Welcome back, Artist! 🎵
+              Welcome back, Artist!
           </h1>
           <p className="text-foreground/70">
             Here's what's happening with your music career today
@@ -127,7 +127,7 @@ export default function Dashboard() {
               <p className="text-sm text-foreground/70 mb-2">
                 You're 250 streams away from hitting 15,000 total streams! Share your latest track to celebrate.
               </p>
-              <Badge variant="secondary">Celebrate 🎉</Badge>
+                    <Badge variant="secondary">Celebrate</Badge>
             </div>
           </div>
         </CardContent>
