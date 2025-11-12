@@ -121,8 +121,17 @@ const Chat = () => {
           {/* Header */}
           <div className="border-b p-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center bg-gradient-to-br from-accent/20 to-accent-hover/20 border border-accent/30">
-                <span className="font-bold text-2xl bg-gradient-to-r from-accent to-accent-hover bg-clip-text text-transparent">A</span>
+              <div className="w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center bg-gradient-to-br from-accent/10 to-accent-hover/10 border border-accent/20">
+                <img 
+                  src="/icons/light_icon_32x32.png" 
+                  alt="AURA Manager" 
+                  className="w-8 h-8 dark:hidden"
+                />
+                <img 
+                  src="/icons/dark_icon_32x32.png" 
+                  alt="AURA Manager" 
+                  className="w-8 h-8 hidden dark:block"
+                />
               </div>
               <div>
                 <h2 className="font-semibold">Aura Manager</h2>
@@ -144,11 +153,16 @@ const Chat = () => {
                 }`}
               >
                 {msg.role === "assistant" && (
-                  <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden bg-gradient-to-r from-accent to-accent-hover">
+                  <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden bg-gradient-to-r from-accent/10 to-accent-hover/10 border border-accent/20">
                     <img 
-                      src="/favicon.svg" 
+                      src="/icons/light_icon_32x32.png" 
                       alt="AURA Manager" 
-                      className="w-6 h-6"
+                      className="w-6 h-6 dark:hidden"
+                    />
+                    <img 
+                      src="/icons/dark_icon_32x32.png" 
+                      alt="AURA Manager" 
+                      className="w-6 h-6 hidden dark:block"
                     />
                   </div>
                 )}
@@ -186,11 +200,16 @@ const Chat = () => {
             {/* Thinking indicator */}
             {isLoading && (
               <div className="flex gap-3 animate-fade-in">
-                <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden bg-gradient-to-r from-accent to-accent-hover">
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden bg-gradient-to-r from-accent/10 to-accent-hover/10 border border-accent/20">
                   <img 
-                    src="/favicon.svg" 
+                    src="/icons/light_icon_32x32.png" 
                     alt="AURA Manager" 
-                    className="w-6 h-6"
+                    className="w-6 h-6 dark:hidden"
+                  />
+                  <img 
+                    src="/icons/dark_icon_32x32.png" 
+                    alt="AURA Manager" 
+                    className="w-6 h-6 hidden dark:block"
                   />
                 </div>
                 <div className="flex-1 max-w-3xl">

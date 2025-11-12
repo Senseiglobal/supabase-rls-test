@@ -245,7 +245,12 @@ const Billing = () => {
                         <p className="text-sm text-muted-foreground">Connect your PayPal account</p>
                       </div>
                     </div>
-                    <Button variant="outline" size="sm">
+                    <Button 
+                      variant="outline" 
+                      size="sm"
+                      title="Connect your PayPal account"
+                      onClick={() => window.open('https://www.paypal.com/signin', '_blank')}
+                    >
                       <Plus className="h-4 w-4 mr-2" />
                       Connect
                     </Button>

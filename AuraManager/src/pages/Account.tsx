@@ -382,7 +382,12 @@ const Account = () => {
                 {userPlan} Plan
               </p>
             </div>
-            <Button className="w-full" variant="outline">
+            <Button 
+              className="w-full" 
+              variant="outline"
+              title="Change your profile avatar"
+              onClick={() => alert('Avatar upload coming soon!')}
+            >
               Change Avatar
             </Button>
           </Card>
@@ -614,10 +619,20 @@ const Account = () => {
                 <h3 className="text-xl font-semibold text-foreground">Security</h3>
               </div>
               <div className="space-y-4">
-                <Button variant="outline" className="w-full justify-start">
+                <Button 
+                  variant="outline" 
+                  className="w-full justify-start"
+                  title="Change your password"
+                  onClick={() => window.open('/account/security', '_self')}
+                >
                   Change Password
                 </Button>
-                <Button variant="outline" className="w-full justify-start">
+                <Button 
+                  variant="outline" 
+                  className="w-full justify-start"
+                  title="Enable Two-Factor Authentication"
+                  onClick={() => alert('2FA setup coming soon!')}
+                >
                   Enable Two-Factor Authentication
                 </Button>
               </div>
