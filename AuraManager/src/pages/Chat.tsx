@@ -101,7 +101,14 @@ const Chat = () => {
             <h3 className="text-sm font-semibold mb-3">Quick Actions</h3>
             <div className="space-y-2">
               {quickActions.slice(0, 2).map((action, idx) => (
-                <Button key={idx} variant="outline" size="sm" className="w-full justify-start text-xs">
+                <Button 
+                  key={idx} 
+                  variant="outline" 
+                  size="sm" 
+                  className="w-full justify-start text-xs"
+                  title={`Send: ${action}`}
+                  onClick={() => sendMessage(action)}
+                >
                   {action}
                 </Button>
               ))}
@@ -137,8 +144,12 @@ const Chat = () => {
                 }`}
               >
                 {msg.role === "assistant" && (
-                  <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
-                    <span className="font-bold text-lg bg-gradient-to-r from-accent to-accent-hover bg-clip-text text-transparent">A</span>
+                  <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden bg-gradient-to-r from-accent to-accent-hover">
+                    <img 
+                      src="/favicon.svg" 
+                      alt="AURA Manager" 
+                      className="w-6 h-6"
+                    />
                   </div>
                 )}
                 <div
@@ -175,8 +186,12 @@ const Chat = () => {
             {/* Thinking indicator */}
             {isLoading && (
               <div className="flex gap-3 animate-fade-in">
-                <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
-                  <span className="font-bold text-lg bg-gradient-to-r from-accent to-accent-hover bg-clip-text text-transparent">A</span>
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden bg-gradient-to-r from-accent to-accent-hover">
+                  <img 
+                    src="/favicon.svg" 
+                    alt="AURA Manager" 
+                    className="w-6 h-6"
+                  />
                 </div>
                 <div className="flex-1 max-w-3xl">
                   <div className="p-4 rounded-2xl bg-card border shadow-sm">
