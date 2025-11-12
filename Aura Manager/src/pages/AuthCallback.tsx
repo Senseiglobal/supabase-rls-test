@@ -1,40 +1,47 @@
-import { useEffect } from "react";
+// src/pages/AuthCallback.tsx
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
+import { Loading } from "@/components/Loading";
 
 const AuthCallback = () => {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const handleAuthCallback = async () => {
+    const handleOAuthRedirect = async () => {
       try {
-        const { data, error } = await supabase.auth.getSession();
-        
-        if (error) {
-          console.error('Auth callback error:', error);
-          navigate('/auth');
-          return;
-        }
+        const { data, error } = await supabase.auth.getSessionFromUrl({
+          storeSession: true,
+        });
 
-        if (data.session) {
-          // User is authenticated, redirect to dashboard
-          navigate('/dashboard');
+        if (error) {
+          console.error("[AuthCallback] OAuth error:", error);
+          toast.error("Authentication failed. Please try again.");
+          navigate("/auth");
+        } else if (data?.session) {
+          toast.success("Welcome back!");
+          navigate("/dashboard");
         } else {
-          // No session found, redirect to auth
-          navigate('/auth');
+          // Fallback if no session
+          navigate("/auth");
         }
-      } catch (error) {
-        console.error('Auth callback error:', error);
-        navigate('/auth');
+      } catch (err) {
+        console.error("[AuthCallback] Exception:", err);
+        toast.error("Something went wrong. Please try again.");
+        navigate("/auth");
+      } finally {
+        setLoading(false);
       }
     };
 
-    handleAuthCallback();
+    handleOAuthRedirect();
   }, [navigate]);
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="animate-pulse text-foreground">Signing you in...</div>
+      <Loading size="lg" text="Signing you in..." />
     </div>
   );
 };

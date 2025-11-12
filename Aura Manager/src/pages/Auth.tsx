@@ -43,27 +43,32 @@ const Auth = () => {
   }, []);
 
   const handleGoogleAuth = async () => {
-    setLoading(true);
-    
-    try {
-      const { error } = await supabase.auth.signInWithOAuth({
-        provider: 'google',
-        options: {
-          redirectTo: `${globalThis.location.origin}/dashboard`,
-        },
-      });
+  setLoading(true);
 
-      if (error) {
-        console.error('Google OAuth Error:', error);
-        toast.error('Google sign-in failed. Please try email/password instead.');
-      }
-    } catch (error) {
-      console.error('Google OAuth Exception:', error);
-      toast.error('Google sign-in unavailable. Please use email/password.');
-    } finally {
-      setLoading(false);
+  try {
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: "google",
+      options: {
+        redirectTo: `${globalThis.location.origin}/auth/callback`,
+      },
+    });
+
+    if (error) {
+      console.error("[Auth] Google OAuth Error:", error);
+      toast.error(
+        "Google sign-in failed. Please try email/password instead."
+      );
     }
-  };
+  } catch (err) {
+    console.error("[Auth] Google OAuth Exception:", err);
+    toast.error(
+      "Google sign-in unavailable. Please use email/password."
+    );
+  } finally {
+    setLoading(false);
+  }
+};
+
 
   const handleAuth = async (e: React.FormEvent) => {
     e.preventDefault();
