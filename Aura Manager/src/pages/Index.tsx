@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { useNavigate } from "react-router-dom";
-import { Music2, Sparkles, TrendingUp, Users, Target, MessageSquare, ArrowRight, Zap, Calendar, BarChart3, Brain } from "lucide-react";
+import { Sparkles, TrendingUp, Target, MessageSquare, ArrowRight, Zap, Calendar, BarChart3, Brain } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 
@@ -32,7 +32,7 @@ const Index = () => {
     description: "Understand listener demographics, behavior patterns, and preferences to create music that resonates and grows your fanbase"
   }];
   return <div className="min-h-screen">
-      <Header showAuth={true} />
+      <Header showAuth />
       {/* Hero Section */}
       <div className="container mx-auto px-4 py-20">
         <div className="max-w-4xl mx-auto text-center space-y-8 animate-fade-in">
