@@ -1,15 +1,58 @@
+import { useState, useEffect } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Sparkles, TrendingUp, Music2, Calendar, MessageSquare, BarChart3, Plus, ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
 
 export default function Dashboard() {
   const navigate = useNavigate();
+  const [search, setSearch] = useState("");
+  const [connectedPlatforms, setConnectedPlatforms] = useState<string[]>([]);
+  const [stats, setStats] = useState({
+    streams: 12345,
+    fans: 2350,
+    engagement: 8.2,
+    nextRelease: "14d",
+    nextReleaseTitle: "Summer Vibes",
+    nextReleaseDate: "Dec 1"
+  });
+  // Simulate real-time updates if user has connected platforms
+  useEffect(() => {
+    const fetchPlatforms = async () => {
+      const user = await supabase.auth.getUser();
+      if (!user.data.user) return;
+      const { data } = await supabase
+        .from("profiles")
+        .select("selected_platforms")
+        .eq("user_id", user.data.user.id)
+        .single();
+      setConnectedPlatforms(Array.isArray(data?.selected_platforms) ? data.selected_platforms : []);
+    };
+    fetchPlatforms();
+  }, []);
+  useEffect(() => {
+    if (connectedPlatforms.length === 0) return;
+    // Simulate polling or subscription for real-time updates
+    const interval = setInterval(() => {
+      setStats((prev) => ({
+        ...prev,
+        streams: prev.streams + Math.floor(Math.random() * 5),
+        fans: prev.fans + Math.floor(Math.random() * 2),
+        engagement: +(prev.engagement + (Math.random() * 0.05 - 0.02)).toFixed(2),
+      }));
+    }, 5000);
+    return () => clearInterval(interval);
+  }, [connectedPlatforms]);
+
+  // Filter helpers
+  const matches = (text: string) => text.toLowerCase().includes(search.toLowerCase());
 
   return (
     <div className="container mx-auto px-4 py-8 space-y-8 animate-fade-in">
-      {/* Welcome Header */}
+      {/* Welcome Header + Search */}
       <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
           <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
@@ -19,65 +62,80 @@ export default function Dashboard() {
             Here's what's happening with your music career today
           </p>
         </div>
-        <Button onClick={() => navigate("/chat")} size="lg" className="gap-2">
-          <MessageSquare className="h-5 w-5" />
-          Chat with AI Manager
-        </Button>
+        <div className="flex flex-col gap-2 w-full md:w-auto md:flex-row md:items-center">
+          <Input
+            type="search"
+            placeholder="Search your dashboard..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            className="max-w-xs"
+            aria-label="Search dashboard"
+          />
+          <Button onClick={() => navigate("/chat")} size="lg" className="gap-2 mt-2 md:mt-0">
+            <MessageSquare className="h-5 w-5" />
+            Chat with AI Manager
+          </Button>
+        </div>
       </div>
 
       {/* Quick Stats */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="card-hover border-accent/30">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Total Streams</CardTitle>
-            <TrendingUp className="h-4 w-4 text-accent" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">12,345</div>
-            <p className="text-xs text-success flex items-center gap-1 mt-1">
-              <TrendingUp className="h-3 w-3" /> +20.1% from last month
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card className="card-hover border-accent/30">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Fans</CardTitle>
-            <Music2 className="h-4 w-4 text-accent" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">2,350</div>
-            <p className="text-xs text-success flex items-center gap-1 mt-1">
-              <TrendingUp className="h-3 w-3" /> +180 new this week
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card className="card-hover border-accent/30">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Engagement Rate</CardTitle>
-            <BarChart3 className="h-4 w-4 text-accent" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">8.2%</div>
-            <p className="text-xs text-success flex items-center gap-1 mt-1">
-              <TrendingUp className="h-3 w-3" /> +2.5% from last week
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card className="card-hover border-accent/30">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Next Release</CardTitle>
-            <Calendar className="h-4 w-4 text-accent" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">14d</div>
-            <p className="text-xs text-foreground/70 mt-1">
-              "Summer Vibes" drops Dec 1
-            </p>
-          </CardContent>
-        </Card>
+        {(!search || matches("streams")) && (
+          <Card className="card-hover border-accent/30">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Total Streams</CardTitle>
+              <TrendingUp className="h-4 w-4 text-accent" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{stats.streams.toLocaleString()}</div>
+              <p className="text-xs text-success flex items-center gap-1 mt-1">
+                <TrendingUp className="h-3 w-3" /> +20.1% from last month
+              </p>
+            </CardContent>
+          </Card>
+        )}
+        {(!search || matches("fans")) && (
+          <Card className="card-hover border-accent/30">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Active Fans</CardTitle>
+              <Music2 className="h-4 w-4 text-accent" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{stats.fans.toLocaleString()}</div>
+              <p className="text-xs text-success flex items-center gap-1 mt-1">
+                <TrendingUp className="h-3 w-3" /> +180 new this week
+              </p>
+            </CardContent>
+          </Card>
+        )}
+        {(!search || matches("engagement")) && (
+          <Card className="card-hover border-accent/30">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Engagement Rate</CardTitle>
+              <BarChart3 className="h-4 w-4 text-accent" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{stats.engagement}%</div>
+              <p className="text-xs text-success flex items-center gap-1 mt-1">
+                <TrendingUp className="h-3 w-3" /> +2.5% from last week
+              </p>
+            </CardContent>
+          </Card>
+        )}
+        {(!search || matches("release") || matches(stats.nextReleaseTitle)) && (
+          <Card className="card-hover border-accent/30">
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">Next Release</CardTitle>
+              <Calendar className="h-4 w-4 text-accent" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold">{stats.nextRelease}</div>
+              <p className="text-xs text-foreground/70 mt-1">
+                "{stats.nextReleaseTitle}" drops {stats.nextReleaseDate}
+              </p>
+            </CardContent>
+          </Card>
+        )}
       </div>
 
       {/* AI Insights */}
