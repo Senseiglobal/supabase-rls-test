@@ -1,7 +1,0 @@
-project_id = "cpylmxhrobrhqettudjg"
-
-[functions.oauth-callback]
-verify_jwt = false
-
-[functions.analyze-song]
-verify_jwt = true

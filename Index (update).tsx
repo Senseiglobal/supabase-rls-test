@@ -92,14 +92,14 @@ const Index = () => {
             </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {features.map((feature, idx) => <div key={idx} className="card-urban p-8 card-hover animate-slide-up group" style={{
+            {features.map((feature, idx) => <div key={idx} className="card-urban p-8 card-hover animate-slide-up group flex flex-col items-center text-center" style={{
             animationDelay: `${idx * 0.1}s`
           }}>
                 <div className="w-14 h-14 bg-accent/10 border border-accent/30 rounded-xl flex items-center justify-center mb-6 group-hover:bg-accent/20 group-hover:scale-110 transition-all duration-300">
                   <feature.icon className="h-7 w-7 text-accent" />
                 </div>
-                <h3 className="text-xl font-bold mb-3 text-foreground">{feature.title}</h3>
-                <p className="text-foreground/70 leading-relaxed">
+                <h3 className="text-xl font-bold mb-3 text-foreground break-words w-full">{feature.title}</h3>
+                <p className="text-foreground/70 leading-relaxed break-words w-full">
                   {feature.description}
                 </p>
               </div>)}
