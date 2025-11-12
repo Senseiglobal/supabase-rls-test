@@ -12,7 +12,7 @@ This error occurs when the Spotify app configuration doesn't match the OAuth req
 
 ### Required Settings:
 
-**App Name:** Your choice (e.g., "Aura Manager")
+**App Name:** Your choice (e.g., "AuraManager")
 **App Description:** Your choice
 **Website:** https://auramanager.app
 **Redirect URIs:** Add ALL of these:
