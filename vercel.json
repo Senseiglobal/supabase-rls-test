@@ -1,8 +1,8 @@
 {
-  "installCommand": "cd \"Aura Manager\" && npm ci",
-  "buildCommand": "cd \"Aura Manager\" && npm run build",
+  "installCommand": "cd \"AuraManager\" && npm ci",
+  "buildCommand": "cd \"AuraManager\" && npm run build",
   "framework": "vite",
-  "outputDirectory": "Aura Manager/dist",
+  "outputDirectory": "AuraManager/dist",
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ]
