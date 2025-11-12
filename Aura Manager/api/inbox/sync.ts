@@ -2,9 +2,7 @@ import { createClient } from '@supabase/supabase-js';
 import { google } from 'googleapis';
 
 export const config = {
-  runtime: 'edge',
-};
-
+  runtime: 'nodejs',
 interface GmailMessage {
   id: string;
   threadId: string;
