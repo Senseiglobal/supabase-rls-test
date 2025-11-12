@@ -114,17 +114,8 @@ const Chat = () => {
           {/* Header */}
           <div className="border-b p-4 flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center">
-                <img 
-                  src="/icons/dark_icon_32x32.png" 
-                  alt="Aura Manager" 
-                  className="w-8 h-8 dark:hidden" 
-                />
-                <img 
-                  src="/icons/light_icon_32x32.png" 
-                  alt="Aura Manager" 
-                  className="w-8 h-8 hidden dark:block" 
-                />
+              <div className="w-10 h-10 rounded-xl overflow-hidden flex items-center justify-center bg-gradient-to-br from-accent/20 to-accent-hover/20 border border-accent/30">
+                <span className="font-bold text-2xl bg-gradient-to-r from-accent to-accent-hover bg-clip-text text-transparent">A</span>
               </div>
               <div>
                 <h2 className="font-semibold">Aura Manager</h2>
@@ -146,8 +137,8 @@ const Chat = () => {
                 }`}
               >
                 {msg.role === "assistant" && (
-                  <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-success flex items-center justify-center flex-shrink-0">
-                    <Music className="h-4 w-4 text-white" />
+                  <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
+                    <span className="font-bold text-lg bg-gradient-to-r from-accent to-accent-hover bg-clip-text text-transparent">A</span>
                   </div>
                 )}
                 <div
@@ -184,8 +175,8 @@ const Chat = () => {
             {/* Thinking indicator */}
             {isLoading && (
               <div className="flex gap-3 animate-fade-in">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-success flex items-center justify-center flex-shrink-0">
-                  <Music className="h-4 w-4 text-white" />
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 overflow-hidden">
+                  <span className="font-bold text-lg bg-gradient-to-r from-accent to-accent-hover bg-clip-text text-transparent">A</span>
                 </div>
                 <div className="flex-1 max-w-3xl">
                   <div className="p-4 rounded-2xl bg-card border shadow-sm">

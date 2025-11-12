@@ -45,10 +45,10 @@ const BottomNavItem = ({
       activeClassName="text-foreground"
     >
       <RippleContainer />
-      <div className="relative z-10 flex flex-col items-center gap-0.5">
+      <div className="relative z-10 flex flex-col items-center gap-1">
         <div className="relative">
           <item.icon className={cn(
-            "h-6 w-6 transition-colors duration-150",
+            "h-5 w-5 transition-colors duration-150",
             isActive ? "text-foreground" : "text-foreground/50"
           )} />
           {badgeCount && badgeCount > 0 && (
@@ -60,8 +60,8 @@ const BottomNavItem = ({
           )}
         </div>
         <span className={cn(
-          "text-xs font-normal relative z-10 transition-colors duration-150",
-          isActive ? "text-foreground font-medium" : "text-foreground/50"
+          "text-[10px] font-medium relative z-10 transition-colors duration-150 leading-tight",
+          isActive ? "text-foreground" : "text-foreground/60"
         )}>
           {item.title}
         </span>

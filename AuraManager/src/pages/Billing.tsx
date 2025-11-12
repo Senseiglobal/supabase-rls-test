@@ -108,8 +108,8 @@ const Billing = () => {
 
   return (
     <div className="min-h-screen w-full">
-      <div className="w-full px-4 py-6 sm:px-6 lg:px-8">
-        <div className="max-w-7xl mx-auto space-y-6 md:space-y-8">
+      <div className="w-full px-4 py-6 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+        <div className="space-y-8">
           {/* Header */}
           <div>
             <h1 className="text-3xl font-bold tracking-tight">Billing & Payments</h1>
@@ -175,37 +175,82 @@ const Billing = () => {
                 {paymentMethods.map((method) => (
                   <div
                     key={method.id}
-                    className="flex items-center justify-between p-4 border rounded-lg"
+                    className="flex flex-col sm:flex-row sm:items-center justify-between p-4 sm:p-5 border rounded-lg gap-4 hover:border-accent/50 transition-colors"
                   >
-                    <div className="flex items-center gap-4">
+                    <div className="flex items-center gap-4 flex-1">
                       <div className="p-2 bg-accent/10 rounded-lg">
                         <CreditCard className="h-6 w-6 text-accent" />
                       </div>
-                      <div>
-                        <div className="flex items-center gap-2">
-                          <p className="font-medium">
+                      <div className="flex-1">
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <p className="font-medium whitespace-nowrap">
                             {method.type} •••• {method.last4}
                           </p>
                           {method.isDefault && (
                             <Badge variant="secondary">Default</Badge>
                           )}
                         </div>
-                        <p className="text-sm text-muted-foreground">
+                        <p className="text-sm text-muted-foreground mt-1">
                           Expires {method.expiryDate}
                         </p>
                       </div>
                     </div>
-                    {!method.isDefault && (
+                    <div className="flex gap-2 sm:flex-shrink-0">
+                      {!method.isDefault && (
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="flex-1 sm:flex-initial"
+                          onClick={() => {
+                            setPaymentMethods(prev => 
+                              prev.map(pm => 
+                                pm.id === method.id 
+                                  ? { ...pm, isDefault: true }
+                                  : { ...pm, isDefault: false }
+                              )
+                            );
+                            toast({
+                              title: "Default payment method updated",
+                              description: "This card is now your default payment method.",
+                            });
+                          }}
+                        >
+                          Set as Default
+                        </Button>
+                      )}
                       <Button
                         variant="ghost"
-                        size="icon"
+                        size="sm"
                         onClick={() => handleRemovePaymentMethod(method.id)}
                       >
-                        <Trash2 className="h-4 w-4 text-destructive" />
+                        <Trash2 className="h-4 w-4 sm:mr-0 mr-2" />
+                        <span className="sm:hidden">Remove</span>
                       </Button>
-                    )}
+                    </div>
                   </div>
                 ))}
+                
+                {/* PayPal Option */}
+                <div className="mt-4 p-4 border-2 border-dashed rounded-lg hover:border-accent/50 transition-colors">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="p-2 bg-blue-50 dark:bg-blue-950/30 rounded-lg">
+                        <svg className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
+                          <path fill="#00457C" d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944 3.72a.768.768 0 0 1 .759-.632h8.548c2.276 0 4.139.557 5.39 1.611 1.108.934 1.609 2.157 1.609 3.718 0 2.407-1.023 4.168-3.125 5.378-1.21.697-2.85 1.048-4.875 1.048H9.43a.768.768 0 0 0-.759.632l-1.595 6.862Z"/>
+                          <path fill="#0079C1" d="M19.088 7.917c0 2.407-1.023 4.168-3.125 5.378-1.21.697-2.85 1.048-4.875 1.048H9.43a.768.768 0 0 0-.759.632l-1.595 6.862h3.923a.67.67 0 0 0 .662-.564l.027-.145.528-3.348.034-.184a.67.67 0 0 1 .662-.564h.417c3.786 0 6.75-1.538 7.616-5.987.361-1.855.174-3.403-.785-4.492a3.719 3.719 0 0 0-1.072-.884Z"/>
+                        </svg>
+                      </div>
+                      <div>
+                        <p className="font-medium">PayPal</p>
+                        <p className="text-sm text-muted-foreground">Connect your PayPal account</p>
+                      </div>
+                    </div>
+                    <Button variant="outline" size="sm">
+                      <Plus className="h-4 w-4 mr-2" />
+                      Connect
+                    </Button>
+                  </div>
+                </div>
               </div>
             </CardContent>
           </Card>

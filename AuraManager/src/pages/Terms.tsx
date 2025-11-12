@@ -4,7 +4,7 @@ import { FileText, Lock, Eye, Users } from "lucide-react";
 
 const Terms = () => {
   return (
-    <div className="space-y-6">
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 space-y-8">
       <div className="flex items-center justify-between">
         <h1 className="text-2xl md:text-3xl font-bold">Legal & Terms</h1>
       </div>
@@ -40,7 +40,7 @@ const Terms = () => {
             </div>
           </div>
 
-          <ScrollArea className="h-[60vh] rounded-lg border border-border p-4 bg-muted/30">
+          <ScrollArea className="h-[60vh] rounded-lg border border-border p-6 sm:p-8 bg-muted/30">
             <div className="space-y-6 text-sm">
               <section>
                 <h3 className="text-lg font-bold text-foreground mb-3">1. Data Usage & Privacy</h3>

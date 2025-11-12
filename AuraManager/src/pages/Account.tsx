@@ -499,20 +499,26 @@ const Account = () => {
                         disabled={isDisabled || isConnecting}
                         variant={isConnected ? "outline" : "default"}
                         aria-label={`${isConnected ? "Disconnect" : "Connect"} ${platform.name}`}
-                        className={`min-w-28 ${
+                        className={`min-w-32 relative ${
                           isSpotify
                             ? isConnected
-                              ? "border-red-300 text-red-600 hover:bg-red-50 bg-transparent"
-                              : "bg-green-600 hover:bg-green-700 text-white border-green-700"
+                              ? "border-green-500 bg-green-50 dark:bg-green-950/20 text-green-700 dark:text-green-400 hover:bg-green-100 dark:hover:bg-green-900/30"
+                              : "bg-green-600 hover:bg-green-700 text-white border-green-700 shadow-lg shadow-green-600/20"
                             : isConnected
-                              ? "border-destructive/50 hover:bg-destructive/10"
+                              ? "border-accent bg-accent/10 text-accent hover:bg-accent/20"
                               : ""
                         }`}
                       >
+                        {isSpotify && isConnected && (
+                          <span className="absolute -top-1 -right-1 flex h-3 w-3">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                            <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+                          </span>
+                        )}
                         {isConnecting
                           ? "..."
                           : isConnected
-                            ? (isSpotify ? "Disconnect Spotify" : "Disconnect")
+                            ? (isSpotify ? "✓ Connected" : "Disconnect")
                             : (isSpotify ? "Connect Spotify" : "Connect")}
                       </Button>
                     </div>
