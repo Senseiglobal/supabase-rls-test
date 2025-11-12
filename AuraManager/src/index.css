@@ -1,0 +1,427 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
+All colors MUST be HSL.
+*/
+
+@layer base {
+  /* Lovable update start - Bybit-Inspired Dark Theme */
+  :root {
+    /* Bybit dark theme - Deep blacks with vibrant accents */
+    --background: 0 0% 6%; /* Deep black #0f0f0f */
+    --foreground: 0 0% 98%; /* Near white */
+
+    --card: 0 0% 9%; /* Slightly lighter black #171717 */
+    --card-foreground: 0 0% 98%;
+
+    --popover: 0 0% 9%;
+    --popover-foreground: 0 0% 98%;
+
+    /* Primary - Subtle gold for secondary actions */
+    --primary: 39 75% 68%;
+    --primary-foreground: 0 0% 0%;
+    --primary-hover: 39 80% 62%;
+
+    /* Sedimentary palette - Urban gold accents */
+    --sedimentary-base: 39 75% 68%;
+    --sedimentary-mid: 36 70% 58%;
+    --sedimentary-dark: 33 65% 52%;
+
+    /* Success - Vibrant green */
+    --success: 152 85% 45%; /* #16c784 */
+    --success-foreground: 0 0% 0%;
+    --success-light: 152 75% 20%;
+
+    /* Warning - Bright orange */
+    --warning: 28 100% 60%; /* #ff8c3a */
+    --warning-foreground: 0 0% 0%;
+    --warning-light: 28 90% 25%;
+
+    /* Danger - Vibrant red */
+    --danger: 7 90% 58%; /* #ea3943 */
+    --danger-foreground: 0 0% 100%;
+    --danger-light: 7 80% 25%;
+
+    --secondary: 0 0% 13%; /* Slightly lighter than card */
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 60%;
+
+    /* Accent - Sunset Yellow/Orange (Main CTA color) */
+    --accent: 28 100% 56%; /* #FF8F1F - Bybit orange */
+    --accent-foreground: 0 0% 0%;
+    --accent-hover: 28 100% 62%;
+    --accent-glow: 28 100% 68%;
+
+    --destructive: 7 90% 58%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 0 0% 18%; /* Subtle borders */
+    --input: 0 0% 15%;
+    --ring: 28 100% 56%; /* Accent ring */
+
+    --radius: 0.375rem; /* Sharper corners like Bybit */
+
+    /* Bybit-style gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(39 75% 68%) 0%, hsl(36 70% 58%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(28 100% 56%) 0%, hsl(28 100% 68%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(28 100% 56%) 0%, hsl(39 75% 68%) 50%, hsl(152 85% 45%) 100%);
+    --gradient-card: linear-gradient(135deg, hsl(0 0% 9%) 0%, hsl(0 0% 11%) 100%);
+    --gradient-urban: linear-gradient(180deg, hsl(0 0% 6%) 0%, hsl(0 0% 8%) 100%);
+    
+    /* Enhanced shadows with glow */
+    --shadow-sm: 0 2px 4px hsl(0 0% 0% / 0.4);
+    --shadow-md: 0 4px 12px hsl(0 0% 0% / 0.5), 0 0 0 1px hsl(0 0% 18%);
+    --shadow-lg: 0 12px 32px hsl(0 0% 0% / 0.6), 0 0 0 1px hsl(0 0% 18%);
+    --shadow-card: 0 4px 16px hsl(0 0% 0% / 0.5), 0 0 0 1px hsl(0 0% 18% / 0.5);
+    --shadow-accent: 0 0 30px hsl(28 100% 56% / 0.4), 0 4px 16px hsl(0 0% 0% / 0.4);
+    --shadow-hover: 0 8px 32px hsl(0 0% 0% / 0.7), 0 0 30px hsl(28 100% 56% / 0.25);
+    --shadow-success: 0 0 30px hsl(152 85% 45% / 0.4);
+    --shadow-danger: 0 0 30px hsl(7 90% 58% / 0.4);
+
+    /* Smooth transitions */
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    /* GDS-inspired sidebar tokens */
+    --sidebar: 0 0% 8%; /* Dark sidebar background */
+    --sidebar-foreground: 0 0% 90%; /* Light text */
+    --sidebar-accent: 0 0% 12%; /* Hover/active background */
+    --sidebar-accent-foreground: 0 0% 98%; /* Active text */
+    --sidebar-border: 0 0% 16%; /* Sidebar borders */
+    --sidebar-section-label: 0 0% 50%; /* Section headers */
+  }
+  /* Lovable update end */
+
+  /* Lovable update start - Bright Light Mode with Material Design Standards */
+  .light {
+    --background: 250 100% 99%; /* Subtle blue-white tint #FEFEFF */
+    --foreground: 220 15% 15%; /* Rich dark blue-gray #1a1d23 */
+
+    --card: 240 100% 99%; /* Slightly tinted white cards #FEFFFE */
+    --card-foreground: 220 15% 15%; /* Rich text on cards */
+
+    --popover: 240 100% 99%;
+    --popover-foreground: 220 15% 15%;
+
+    --primary: 220 100% 55%; /* Vibrant blue #1976d2 */
+    --primary-foreground: 0 0% 100%; /* White text on primary */
+    --primary-hover: 220 100% 50%;
+
+    --sedimentary-base: 35 90% 55%; /* Warm gold #e6a928 */
+    --sedimentary-mid: 30 85% 50%;
+    --sedimentary-dark: 25 80% 45%;
+
+    --success: 142 76% 36%; /* Rich green #16a34a */
+    --success-foreground: 0 0% 100%; /* White text on green */
+    --success-light: 142 76% 97%;
+
+    --warning: 24 95% 53%; /* Vibrant orange #fa8500 */
+    --warning-foreground: 0 0% 100%; /* White text on orange */
+    --warning-light: 24 95% 97%;
+
+    --danger: 0 84% 60%; /* Bright red #f87171 */
+    --danger-foreground: 0 0% 100%; /* White text on red */
+    --danger-light: 0 84% 97%;
+
+    --secondary: 220 60% 97%; /* Subtle blue tinted background #f8fafc */
+    --secondary-foreground: 220 15% 15%;
+
+    --muted: 220 43% 95%; /* Blue-gray muted areas #f1f5f9 */
+    --muted-foreground: 220 9% 46%; /* Medium blue-gray text */
+
+    --accent: 28 96% 52%; /* Vibrant brand orange #ff7b00 */
+    --accent-foreground: 0 0% 100%; /* White text on accent */
+    --accent-hover: 28 96% 48%;
+    --accent-glow: 28 96% 56%;
+
+    --destructive: 7 90% 48%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 220 13% 91%; /* Subtle blue-gray border #e2e8f0 */
+    --input: 220 43% 97%; /* Light blue-tinted input background #fafbfc */
+    --ring: 28 96% 52%; /* Vibrant orange focus ring */
+
+    --radius: 0.375rem;
+
+    /* Enhanced light mode gradients with brand colors */
+    --gradient-primary: linear-gradient(135deg, hsl(220 100% 55%) 0%, hsl(28 96% 52%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(28 96% 52%) 0%, hsl(35 90% 55%) 100%);
+    --gradient-hero: linear-gradient(135deg, hsl(220 100% 55%) 0%, hsl(28 96% 52%) 50%, hsl(142 76% 36%) 100%);
+    --gradient-card: linear-gradient(135deg, hsl(240 100% 99%) 0%, hsl(220 60% 97%) 100%);
+    --gradient-urban: linear-gradient(180deg, hsl(0 0% 98%) 0%, hsl(0 0% 100%) 100%);
+
+    /* Enhanced light shadows with brand color tints */
+    --shadow-sm: 0 1px 3px hsl(220 60% 20% / 0.08);
+    --shadow-md: 0 4px 12px hsl(220 60% 20% / 0.06), 0 0 0 1px hsl(220 13% 91%);
+    --shadow-lg: 0 12px 32px hsl(220 60% 20% / 0.08), 0 0 0 1px hsl(220 13% 91%);
+    --shadow-card: 0 2px 8px hsl(220 60% 20% / 0.04), 0 0 0 1px hsl(220 13% 93%);
+    --shadow-accent: 0 0 25px hsl(28 96% 52% / 0.3), 0 4px 16px hsl(220 60% 20% / 0.08);
+    --shadow-hover: 0 8px 28px hsl(220 60% 20% / 0.12), 0 0 25px hsl(28 96% 52% / 0.2);
+    --shadow-success: 0 0 25px hsl(142 76% 36% / 0.3);
+    --shadow-danger: 0 0 25px hsl(0 84% 60% / 0.3);
+
+    --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-fast: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    /* Enhanced sidebar tokens for light mode with brand colors */
+    --sidebar: 220 60% 98%; /* Subtle blue-tinted sidebar #fafbfc */
+    --sidebar-foreground: 220 15% 15%; /* Rich dark blue-gray text */
+    --sidebar-accent: 28 96% 95%; /* Subtle orange-tinted hover background #fef7f0 */
+    --sidebar-accent-foreground: 220 15% 10%; /* Very dark text on hover */
+    --sidebar-border: 220 13% 91%; /* Blue-gray borders */
+    --sidebar-section-label: 220 9% 46%; /* Blue-gray labels */
+  }
+  /* Lovable update end */
+}
+
+@layer base {
+  /* Lovable update start - Urban base styles with light mode support */
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    background-image: var(--gradient-urban);
+    background-attachment: fixed;
+  }
+
+  body.light {
+    background-image: linear-gradient(180deg, hsl(0 0% 98%) 0%, hsl(0 0% 100%) 100%);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold tracking-tight text-foreground;
+    letter-spacing: -0.02em;
+  }
+
+  h1 {
+    @apply text-4xl md:text-5xl lg:text-6xl;
+  }
+
+  h2 {
+    @apply text-3xl md:text-4xl;
+  }
+
+  h3 {
+    @apply text-2xl md:text-3xl;
+  }
+  /* Lovable update end */
+}
+
+@layer components {
+  /* Lovable update start - Urban crypto-style components with light mode support */
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-[var(--shadow-hover)] 
+           hover:-translate-y-2 hover:scale-[1.02] hover:border-accent/30;
+  }
+
+  .card-stats {
+    @apply bg-[var(--gradient-card)] rounded-xl p-6 shadow-[var(--shadow-card)]
+           transition-all duration-300 hover:shadow-[var(--shadow-md)]
+           border border-border/50 backdrop-blur-sm;
+  }
+
+  .card-urban {
+    @apply bg-card backdrop-blur-md rounded-lg border border-border
+           shadow-[var(--shadow-card)] transition-all duration-300
+           hover:border-accent/30 hover:shadow-[var(--shadow-md)];
+  }
+
+  /* Enhanced badge variants with light mode support */
+  .badge-success {
+    @apply bg-success/20 text-success border-success/30
+           border px-3 py-1 rounded-md text-xs font-bold uppercase tracking-wide
+           transition-all duration-200 hover:scale-105 hover:shadow-[var(--shadow-success)];
+  }
+
+  .badge-warning {
+    @apply bg-warning/20 text-warning border-warning/30
+           border px-3 py-1 rounded-md text-xs font-bold uppercase tracking-wide
+           transition-all duration-200 hover:scale-105 hover:shadow-sm;
+  }
+
+  .badge-danger {
+    @apply bg-danger/20 text-danger border-danger/30
+           border px-3 py-1 rounded-md text-xs font-bold uppercase tracking-wide
+           transition-all duration-200 hover:scale-105 hover:shadow-[var(--shadow-danger)];
+  }
+
+  .badge-primary {
+    @apply bg-primary/20 text-primary border-primary/30
+           border px-3 py-1 rounded-md text-xs font-bold uppercase tracking-wide
+           transition-all duration-200 hover:scale-105;
+  }
+
+  .badge-accent {
+    @apply bg-accent/20 text-accent border-accent/30
+           border px-3 py-1 rounded-md text-xs font-bold uppercase tracking-wide
+           transition-all duration-200 hover:scale-105 hover:shadow-[var(--shadow-accent)];
+  }
+
+  /* Vibrant gradient text */
+  .gradient-text {
+    @apply bg-clip-text text-transparent bg-gradient-to-r from-accent via-sedimentary-base to-success;
+  }
+
+  .gradient-text-gold {
+    @apply bg-clip-text text-transparent bg-[var(--gradient-primary)];
+  }
+
+  .gradient-text-vibrant {
+    @apply bg-clip-text text-transparent bg-[var(--gradient-hero)];
+  }
+
+  /* Brand text - responsive to theme */
+  .brand-text {
+    @apply text-foreground dark:bg-gradient-to-r dark:from-accent dark:via-sedimentary-base dark:to-success 
+           dark:bg-clip-text dark:text-transparent;
+  }
+
+  /* Neon glow effects */
+  .glow-accent {
+    box-shadow: 0 0 20px hsl(var(--accent) / 0.5), 0 0 40px hsl(var(--accent) / 0.3);
+  }
+
+  .glow-success {
+    box-shadow: 0 0 20px hsl(var(--success) / 0.5), 0 0 40px hsl(var(--success) / 0.3);
+  }
+  /* Lovable update end */
+
+  /* Don Norman principles: Sleep mode reduces visual noise and resource usage */
+  .sleep-mode {
+    filter: grayscale(0.3);
+  }
+  
+  .sleep-mode * {
+    animation-play-state: paused !important;
+  }
+}
+
+@layer utilities {
+  /* Don Norman principle: Consistent spacing creates predictable patterns */
+  .button-group {
+    @apply flex items-center gap-3 md:gap-4;
+  }
+  
+  .button-group-tight {
+    @apply flex items-center gap-2 md:gap-3;
+  }
+  
+  .button-group-loose {
+    @apply flex items-center gap-4 md:gap-6;
+  }
+  /* Animation utilities with micro-animations */
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.3s ease-out;
+  }
+
+  .animate-scale-in {
+    animation: scaleIn 0.2s ease-out;
+  }
+
+  .animate-glow {
+    animation: glow 2s ease-in-out infinite;
+  }
+
+  .animate-pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  /* Gradient utilities */
+  .bg-gradient-radial {
+    background: radial-gradient(var(--tw-gradient-stops));
+  }
+
+  /* Hover micro-animations */
+  .hover-lift {
+    @apply transition-all duration-200 hover:-translate-y-1 hover:shadow-[var(--shadow-md)];
+  }
+
+  .hover-scale {
+    @apply transition-transform duration-200 hover:scale-105;
+  }
+
+  .hover-accent {
+    @apply transition-all duration-200 hover:text-accent hover:scale-105;
+  }
+
+  .hover-glow {
+    @apply transition-all duration-300 hover:shadow-[var(--shadow-accent)];
+  }
+
+  .hover-brightness {
+    @apply transition-all duration-200 hover:brightness-110;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes glow {
+    0%, 100% {
+      box-shadow: 0 0 5px hsl(var(--accent) / 0.5);
+    }
+    50% {
+      box-shadow: 0 0 20px hsl(var(--accent) / 0.8), 0 0 30px hsl(var(--accent) / 0.4);
+    }
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+
+  @keyframes fadeInOut {
+    0%, 100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.3;
+      transform: scale(1.05);
+    }
+  }
+  /* Lovable update end */
+}
