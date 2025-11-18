@@ -309,7 +309,7 @@ export function AppSidebar() {
                             >
               <item.icon className="h-5 w-5 flex-shrink-0" />
                 <span className="flex-1 text-sm">{item.title}</span>
-                          </NavLink>
+                  </NavLink>
         </SidebarMenuButton>
       </SidebarMenuItem>
     );
