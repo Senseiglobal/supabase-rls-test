@@ -37,6 +37,7 @@ const AuthCallback = () => {
           toast.success("Welcome back!");
           navigate("/dashboard");
         }
+                }
            else {
         // Fallback if no session
         navigate("/auth");
