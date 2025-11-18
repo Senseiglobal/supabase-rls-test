@@ -108,6 +108,13 @@ const settingsItems: NavItem[] = [
     requiredTier: "Free",
     description: "Manage your profile & settings"
   },
+      {
+              title: "Preferences",
+              url: "/settings/preferences",
+              icon: Settings,
+              requiredTier: "free",
+              description: "Manage your music preferences and personalization settings"
+                    },
   { 
     title: "Legal & Terms", 
     url: "/terms", 
