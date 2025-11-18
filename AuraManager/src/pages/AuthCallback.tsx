@@ -37,9 +37,11 @@ const AuthCallback = () => {
           toast.success("Welcome back!");
           navigate("/dashboard");
         }
-          // Fallback if no session
-          navigate("/auth");
-        }
+           else {
+        // Fallback if no session
+        navigate("/auth");
+      }
+          
       } catch (err) {
         console.error("[AuthCallback] Exception:", err);
         toast.error("Something went wrong. Please try again.");
