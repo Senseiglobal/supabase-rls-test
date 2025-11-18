@@ -60,18 +60,18 @@ const navItems: NavItem[] = [
     title: "Analytics", 
     url: "/analytics", 
     icon: BarChart3,
-    requiredTier: "Creator",
+    requiredTier: "Free",
     description: "AI-powered insights and charts"
   },
   { 
     title: "My Content", 
     url: "/my-content", 
     icon: FolderOpen,
-    requiredTier: "Creator",
+    requiredTier: "Free",
     description: "Upload & analyze your music"
   },
   { 
-    title: "AI Chat", 
+    title: "AI Chat",Free
     url: "/chat", 
     icon: MessageSquare,
     requiredTier: "Free",
@@ -81,14 +81,14 @@ const navItems: NavItem[] = [
     title: "Reports", 
     url: "/reports", 
     icon: TrendingUp,
-    requiredTier: "Pro",
+    requiredTier: "Free",
     description: "Advanced performance reports"
   },
   { 
     title: "Feed", 
     url: "/feed", 
     icon: TrendingUp,
-    requiredTier: "Creator",
+    requiredTier: "Free",
     description: "Industry news and trends"
   },
 ];
@@ -112,7 +112,7 @@ const settingsItems: NavItem[] = [
               title: "Preferences",
               url: "/settings/preferences",
               icon: Settings,
-              requiredTier: "free",
+              requiredTier: "Free",
               description: "Manage your music preferences and personalization settings"
                     },
   { 
