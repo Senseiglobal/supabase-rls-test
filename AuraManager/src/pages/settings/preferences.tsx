@@ -240,12 +240,15 @@ export default function Preferences() {
               </div>
             </div>
 
-            <div className="flex gap-3 pt-4">
-              <Button onClick={handleSave} disabled={saving} className="flex-1">
-                {saving ? 'Saving...' : 'Save Preferences'}
-              </Button>
-              <Button
-                variant="outline"
+    <div className="flex flex-col md:flex-row gap-4 pt-4 md:gap-6">              <Button onClick={handleSave} disabled={saving} className="flex-1">
+     <Button onClick={handleSave} disabled={saving} className="w-full md:flex-1">              </Button>
+     <Button
+       variant="outline"
+       onClick={() => navigate('/onboarding')}
+       disabled={saving}
+       className="w-full md:flex-1"
+       title="Reconfigure your preferences from the beginning"
+     >                variant="outline"
                 onClick={() => navigate('/onboarding')}
                 disabled={saving}
               >
