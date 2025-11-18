@@ -247,10 +247,6 @@ export default function Preferences() {
        onClick={() => navigate('/onboarding')}
        disabled={saving}
        className="w-full md:flex-1"
-       title="Reconfigure your preferences from the beginning"
-     >                variant="outline"
-                onClick={() => navigate('/onboarding')}
-                disabled={saving}
               >
                 Reconfigure from Onboarding
               </Button>
