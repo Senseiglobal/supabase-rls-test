@@ -306,7 +306,6 @@ export function AppSidebar() {
                   ? "bg-accent text-accent-foreground border-l-4 border-accent font-bold -ml-4" 
                   : "text-sidebar-foreground border-l-4 border-transparent hover:border-sidebar-border font-semibold -ml-4"
               }`}
-            >
               <item.icon className="h-5 w-5 flex-shrink-0" />
                 <span className="flex-1 text-sm">{item.title}</span>
                           </NavLink>
