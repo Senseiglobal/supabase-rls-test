@@ -21,9 +21,22 @@ const AuthCallback = () => {
           toast.error("Authentication failed. Please try again.");
           navigate("/auth");
         } else if (data?.session) {
+          // Check if user has completed onboarding
+        const { data: preferences } = await supabase
+          .from('user_preferences')
+          .select('*')
+          .eq('user_id', data.session.user.id)
+          .single();
+
+        if (!preferences) {
+          // First time user - redirect to onboarding
+          toast.success("Welcome! Let's get you set up.");
+          navigate("/onboarding");
+        } else {
+          // Returning user - go to dashboard
           toast.success("Welcome back!");
           navigate("/dashboard");
-        } else {
+        }else {
           // Fallback if no session
           navigate("/auth");
         }
