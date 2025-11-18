@@ -113,7 +113,7 @@ const settingsItems: NavItem[] = [
       {
               title: "Preferences",
               url: "/settings/preferences",
-              Sliders: ,
+              icon: Sliders,
               requiredTier: "Free",
               description: "Manage your music preferences and personalization settings"
                     },
