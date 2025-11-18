@@ -285,14 +285,13 @@ export function AppSidebar() {
           }`}
         >
           {locked ? (
-            <div className={`flex items-center w-full py-3 ${open ? "gap-3 px-4" : "justify-center px-2"}`}>
+            <div className={`flex items-center w-full py-3 gap-3 px-4`}>
               <item.icon className="h-5 w-5 flex-shrink-0 text-sidebar-foreground/40" />
-              {open && (
-                <>
+                            <>
                   <span className="flex-1 text-sm font-semibold text-sidebar-foreground/50">{item.title}</span>
                   <Lock className="h-4 w-4 text-sidebar-foreground/40" />
                 </>
-              )}
+            
             </div>
           ) : (
             <NavLink 
@@ -357,7 +356,7 @@ export function AppSidebar() {
 
   return (
     <Sidebar
-      className={`border-r-4 border-sidebar-border bg-sidebar transition-all duration-200 ${open ? "w-64" : "w-16"}`}
+      className={`border-r-4 border-sidebar-border bg-sidebar transition-all duration-200 gap-3 px-4 w-64`}
       collapsible="icon"
       {/* GDS-style header with branding */}
       <div className={`border-b-4 border-sidebar-border ${open ? "p-4" : "p-2"}`}>
