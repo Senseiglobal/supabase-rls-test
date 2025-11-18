@@ -31,6 +31,7 @@ import Help from "./pages/Help";
 import Privacy from "./pages/Privacy";
 import Terms from "./pages/Terms"; // Static legal page retained
 import AuthCallback from "./pages/AuthCallback";
+import Preferences from "./pages/settings/preferences";
 
 const queryClient = new QueryClient();
 
@@ -164,6 +165,7 @@ const App = () => {
                               <Route path="/billing" element={<Billing />} />
                               <Route path="/account" element={<Account />} />
                               <Route path="/chat" element={<Chat />} />
+                                              <Route path="/settings/preferences" element={<Preferences />} />
                             </Routes>
                           </main>
                           
