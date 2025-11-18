@@ -71,7 +71,7 @@ const navItems: NavItem[] = [
     description: "Upload & analyze your music"
   },
   { 
-    title: "AI Chat",Free
+    title: "AI Chat",
     url: "/chat", 
     icon: MessageSquare,
     requiredTier: "Free",
