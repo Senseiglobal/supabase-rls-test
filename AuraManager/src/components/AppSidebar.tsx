@@ -11,7 +11,9 @@ import {
   CreditCard,
   X,
   Music,
-  FileText
+  FileText,
+  PieChart,
+  Sliders
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -80,7 +82,7 @@ const navItems: NavItem[] = [
   { 
     title: "Reports", 
     url: "/reports", 
-    icon: TrendingUp,
+    icon: PieChart,
     requiredTier: "Free",
     description: "Advanced performance reports"
   },
@@ -111,7 +113,7 @@ const settingsItems: NavItem[] = [
       {
               title: "Preferences",
               url: "/settings/preferences",
-              icon: Settings,
+              Sliders: ,
               requiredTier: "Free",
               description: "Manage your music preferences and personalization settings"
                     },
