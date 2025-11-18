@@ -308,8 +308,8 @@ export function AppSidebar() {
               }`}
             >
               <item.icon className="h-5 w-5 flex-shrink-0" />
-              {open && <span className="flex-1 text-sm">{item.title}</span>}
-            </NavLink>
+<span className="flex-1 text-sm text-xs md:hidden">{item.title}</span>
+              {open && <span className="hidden md:inline flex-1 text-sm">{item.title}</span>}            </NavLink>
           )}
         </SidebarMenuButton>
       </SidebarMenuItem>
