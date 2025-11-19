@@ -360,7 +360,7 @@ export function AppSidebar() {
 
       collapsible="icon"
       {/* GDS-style header with branding */}
-      <div className={`border-b-4 border-sidebar-border ${open ? "p-4" : "p-2"}`}>
+      <div className=`border-b-4 border-sidebar-border ${open ? "p-4" : "p-2"}`}>
         {open ? (
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
