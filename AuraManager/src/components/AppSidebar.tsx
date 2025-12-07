@@ -311,9 +311,9 @@ export function AppSidebar() {
           className={`relative ${locked ? "cursor-not-allowed opacity-50" : ""}`}
         >
           {locked ? (
-            <div className="flex items-center w-full gap-3 py-3 px-4">
+            <div className="flex items-center w-full gap-4 py-3 px-4">
               {/* Icon - Hidden on mobile, visible on desktop */}
-              <span className="hidden lg:inline-flex nav-item-icon">
+              <span className="hidden lg:inline-flex items-center justify-center flex-shrink-0 w-5 nav-item-icon">
                 <item.icon className="h-5 w-5 flex-shrink-0 text-sidebar-foreground/40" />
               </span>
               
@@ -330,14 +330,14 @@ export function AppSidebar() {
           ) : (
             <NavLink 
               to={item.url} 
-              className={`flex items-center w-full transition-all duration-200 rounded-md gap-3 py-3 px-4 ${
+              className={`flex items-center w-full transition-all duration-200 rounded-md gap-4 py-3 px-4 ${
                 active 
                   ? "bg-accent text-accent-foreground font-semibold" 
                   : "text-sidebar-foreground hover:bg-sidebar-accent/50 font-medium"
               }`}
             >
               {/* Icon - Hidden on mobile, visible on desktop */}
-              <span className="hidden lg:inline-flex nav-item-icon">
+              <span className="hidden lg:inline-flex items-center justify-center flex-shrink-0 w-5 nav-item-icon">
                 <item.icon className="h-5 w-5 flex-shrink-0" />
               </span>
               
@@ -399,7 +399,7 @@ export function AppSidebar() {
     >
       {/* Clean header with branding - Responsive: Text only on mobile, Icon+Text on desktop */}
       <div className="border-b border-sidebar-border px-4 py-3 flex items-center justify-between w-full">
-        <div className="flex items-center gap-3 lg:gap-3 flex-1 min-w-0">
+        <div className="flex items-center gap-4 flex-1 min-w-0">
           {/* Logo Icon - Hidden on mobile, visible on desktop */}
           <span className="hidden lg:flex w-8 h-8 rounded-md overflow-hidden items-center justify-center flex-shrink-0">
             <img 
@@ -477,7 +477,7 @@ export function AppSidebar() {
         <div className="mt-6 px-4">
             <button 
               type="button"
-              className={`w-full flex items-center gap-3 lg:gap-3 p-3 rounded-lg transition-all duration-200 hover:shadow-lg ${
+              className={`w-full flex items-center gap-4 p-3 rounded-lg transition-all duration-200 hover:shadow-lg ${
                 isSpotifyConnected 
                   ? 'bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white'
                   : 'bg-gradient-to-r from-accent to-accent-hover hover:from-accent-hover hover:to-accent text-black'
@@ -487,7 +487,7 @@ export function AppSidebar() {
             >
               {/* Icon - Hidden on mobile, visible on desktop */}
               {spotifyConnectionLoading ? (
-                <span className="hidden lg:flex w-5 h-5 relative flex-shrink-0">
+                <span className="hidden lg:flex w-5 h-5 items-center justify-center flex-shrink-0">
                   <div className="w-5 h-5 animate-[fadeInOut_2s_ease-in-out_infinite]">
                     <img 
                       src="/icons/dark_icon_32x32.png" 
@@ -497,7 +497,7 @@ export function AppSidebar() {
                   </div>
                 </span>
               ) : (
-                <span className="hidden lg:block">
+                <span className="hidden lg:inline-flex items-center justify-center flex-shrink-0 w-5">
                   <Music className="h-5 w-5 flex-shrink-0" />
                 </span>
               )}
@@ -522,10 +522,10 @@ export function AppSidebar() {
         {/* Tier Badge - Responsive: Text only on mobile, Icon+Text on desktop */}
         <div className="mt-auto pt-6 px-4">
           <div className="border-l-4 border-accent pl-3 py-2 bg-sidebar-accent">
-            <div className="flex items-center gap-3 lg:gap-3">
+            <div className="flex items-center gap-4">
               {/* Icon - Hidden on mobile, visible on desktop */}
-              <span className="hidden lg:block">
-                <Crown className={`h-5 w-5 ${
+              <span className="hidden lg:inline-flex items-center justify-center flex-shrink-0 w-5">
+                <Crown className={`h-5 w-5 flex-shrink-0 ${
                   userTier === "Pro" ? "text-accent" : 
                   userTier === "Creator" ? "text-sedimentary-base" : 
                   "text-sidebar-foreground/60"
