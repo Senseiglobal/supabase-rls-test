@@ -1,7 +1,8 @@
 {
   "buildCommand": "npm run build",
   "framework": "vite",
-  "outputDirectory": "dist",
+  "outputDirectory": "AuraManager/dist",
+  "installCommand": "npm install",
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ]

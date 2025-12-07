@@ -13,7 +13,10 @@ import {
   Music,
   FileText,
   PieChart,
-  Sliders
+  Sliders,
+  Languages,
+  HelpCircle,
+  MessageCircle
 } from "lucide-react";
 import { NavLink } from "@/components/NavLink";
 import { useLocation } from "react-router-dom";
@@ -110,13 +113,34 @@ const settingsItems: NavItem[] = [
     requiredTier: "Free",
     description: "Manage your profile & settings"
   },
-      {
-              title: "Preferences",
-              url: "/settings/preferences",
-              icon: Sliders,
-              requiredTier: "Free",
-              description: "Manage your music preferences and personalization settings"
-                    },
+  {
+    title: "Preferences",
+    url: "/settings/preferences",
+    icon: Sliders,
+    requiredTier: "Free",
+    description: "Manage your music preferences and personalization settings"
+  },
+  {
+    title: "Language",
+    url: "/settings/language",
+    icon: Languages,
+    requiredTier: "Free",
+    description: "Change app language"
+  },
+  {
+    title: "Support",
+    url: "/help",
+    icon: HelpCircle,
+    requiredTier: "Free",
+    description: "Help center and FAQs"
+  },
+  {
+    title: "Report Problem",
+    url: "/settings/feedback",
+    icon: MessageCircle,
+    requiredTier: "Free",
+    description: "Send feedback or report issues"
+  },
   { 
     title: "Legal & Terms", 
     url: "/terms", 
@@ -280,35 +304,35 @@ export function AppSidebar() {
         <SidebarMenuButton 
           asChild={!locked}
           disabled={locked}
-          className={`relative px-3 py-2.5 ${locked ? "cursor-not-allowed opacity-50" : ""} ${
-            active ? "" : "hover:bg-sidebar-accent"
-          }`}
+          className={`relative ${locked ? "cursor-not-allowed opacity-50" : ""}`}
         >
           {locked ? (
-            <div className={`flex items-center w-full py-3 gap-3 px-4`}>
+            <div className="flex items-center w-full gap-3 px-3 py-2">
               <item.icon className="h-5 w-5 flex-shrink-0 text-sidebar-foreground/40" />
-                            <>
-                  <span className="flex-1 text-sm font-semibold text-sidebar-foreground/50">{item.title}</span>
-                  <Lock className="h-4 w-4 text-sidebar-foreground/40" />
+              {open && (
+                <>
+                  <span className="flex-1 text-sm font-medium text-sidebar-foreground/50">{item.title}</span>
+                  <Lock className="h-4 w-4 text-sidebar-foreground/40 flex-shrink-0" />
                 </>
-            
+              )}
             </div>
           ) : (
             <NavLink 
               to={item.url} 
-              className={`flex items-center w-full transition-colors py-3 ${
+              className={`flex items-center w-full transition-all duration-200 rounded-md ${
                 open 
-                  ? "gap-3 px-4" 
-                  : "justify-center px-2"
+                  ? "gap-3 px-3 py-2" 
+                  : "justify-center p-2"
               } ${
                 active 
-                  ? "bg-accent text-accent-foreground border-l-4 border-accent font-bold -ml-4" 
-                  : "text-sidebar-foreground border-l-4 border-transparent hover:border-sidebar-border font-semibold -ml-4"
-              }``}
-                            >
+                  ? "bg-accent text-accent-foreground font-semibold" 
+                  : "text-sidebar-foreground hover:bg-sidebar-accent/50 font-medium"
+              }`}
+            >
               <item.icon className="h-5 w-5 flex-shrink-0" />
-                <span className="flex-1 text-sm">{item.title}</span>
-                  </NavLink>
+              {open && <span className="flex-1 text-sm truncate">{item.title}</span>}
+            </NavLink>
+          )}
         </SidebarMenuButton>
       </SidebarMenuItem>
     );
@@ -356,79 +380,79 @@ export function AppSidebar() {
 
   return (
     <Sidebar
-      className={border-r-4 border-sidebar-border bg-sidebar transition-all duration-200 gap-3 px-4 w-64``}
-
+      className="border-r border-sidebar-border bg-sidebar transition-all duration-200 w-64 md:w-64"
       collapsible="icon"
-      {/* GDS-style header with branding */}
-      <div className=`border-b-4 border-sidebar-border ${open ? "p-4" : "p-2"}`}>
+    >
+      {/* Clean header with branding - Suno style */}
+      <div className={`border-b border-sidebar-border ${open ? "px-4 py-3" : "px-2 py-3"} flex items-center`}>
         {open ? (
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg overflow-hidden flex items-center justify-center">
+          <div className="flex items-center justify-between w-full">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 rounded-md overflow-hidden flex items-center justify-center flex-shrink-0">
                 <img 
                   src="/icons/dark_icon_32x32.png" 
                   alt="Aura Manager" 
-                  className="w-6 h-6 dark:hidden" 
+                  className="w-7 h-7 dark:hidden" 
                 />
                 <img 
                   src="/icons/light_icon_32x32.png" 
                   alt="Aura Manager" 
-                  className="w-6 h-6 hidden dark:block" 
+                  className="w-7 h-7 hidden dark:block" 
                 />
               </div>
-              <span className="font-bold tracking-tight text-lg bg-gradient-to-r from-accent to-accent-hover bg-clip-text text-transparent">Aura Manager</span>
+              <span className="font-semibold text-base text-sidebar-foreground truncate">Aura Manager</span>
             </div>
             <button
               type="button"
               onClick={() => document.querySelector<HTMLButtonElement>('[data-sidebar="trigger"]')?.click()}
-              className="p-2 hover:bg-sidebar-accent rounded transition-colors"
+              className="p-1.5 hover:bg-sidebar-accent rounded-md transition-colors flex-shrink-0 md:hidden"
               aria-label="Close sidebar"
             >
               <X className="h-5 w-5 text-sidebar-foreground" />
             </button>
           </div>
         ) : (
-          <div className="flex justify-center">
-            <div className="w-8 h-8 rounded-lg overflow-hidden flex items-center justify-center">
+          <div className="flex justify-center w-full">
+            <div className="w-8 h-8 rounded-md overflow-hidden flex items-center justify-center flex-shrink-0">
               <img 
                 src="/icons/dark_icon_32x32.png" 
                 alt="Aura Manager" 
-                className="w-6 h-6 dark:hidden" 
+                className="w-7 h-7 dark:hidden" 
               />
               <img 
                 src="/icons/light_icon_32x32.png" 
                 alt="Aura Manager" 
-                className="w-6 h-6 hidden dark:block" 
+                className="w-7 h-7 hidden dark:block" 
               />
             </div>
           </div>
         )}
       </div>
       
-      <SidebarContent className="py-4">
+      <SidebarContent className="py-4 px-2 overflow-y-auto">
         {/* Main Navigation */}
         <SidebarGroup>
           {open && (
-            <SidebarGroupLabel className="px-4 mb-2 text-sidebar-section-label font-bold text-[11px] uppercase tracking-widest">
-              Main Navigation
+            <SidebarGroupLabel className="px-3 mb-1 text-xs font-semibold text-sidebar-foreground/60 uppercase tracking-wide">
+              Navigation
             </SidebarGroupLabel>
           )}
           <SidebarGroupContent>
-            <SidebarMenu className="space-y-1">
+            <SidebarMenu className="space-y-0.5">
               {navItems.map(renderNavItem)}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
 
         {/* Settings */}
-        <SidebarGroup className="mt-6">
+        <SidebarGroup className="mt-8">
           {open && (
-            <SidebarGroupLabel className="px-4 mb-2 text-sidebar-section-label font-bold text-[11px] uppercase tracking-widest">
+            <SidebarGroupLabel className="px-3 mb-1 text-xs font-semibold text-sidebar-foreground/60 uppercase tracking-wide">
               Settings
             </SidebarGroupLabel>
           )}
           <SidebarGroupContent>
-            <SidebarMenu className="space-y-1">
+            <SidebarMenu className="space-y-0.5">
               {settingsItems.map(renderNavItem)}
             </SidebarMenu>
           </SidebarGroupContent>

@@ -40,13 +40,51 @@ For mobile bottom navigation we retained functional section labels. Add `<BrandL
 - Add animated variant for loading states (e.g., subtle pulse of gradient).
 - Export a monochrome fallback for print/export contexts.
 
+## ⚠️ IMPORTANT: Environment Variables Updated
+
+**BREAKING CHANGE (Nov 2025)**: The environment variable naming has been standardized.
+
+### Old (Deprecated):
+```
+VITE_SUPABASE_PUBLISHABLE_KEY
+```
+
+### New (Standard):
+```
+VITE_SUPABASE_ANON_KEY
+```
+
+**Action Required**:
+1. Update your `.env` file (use `.env.example` as template)
+2. Update Vercel environment variables to use `VITE_SUPABASE_ANON_KEY`
+3. The app supports both for backward compatibility, but update to the standard naming
+
+### Environment Setup
+
+Create a `.env` file in the AuraManager directory:
+
+```env
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_ANON_KEY=your-anon-key-here
+VITE_PUBLIC_BASE_URL=https://your-production-domain.com
+```
+
+See `.env.example` for complete configuration options.
+
 ## Connectivity Verification Summary
 
-- Supabase client points to env vars `VITE_SUPABASE_URL` and `VITE_SUPABASE_PUBLISHABLE_KEY` (project: cpylmxhrobrhqettudjg).
-- `vercel.json` present with SPA rewrites.
-- GitHub Actions workflows (`vercel-production.yml`, `vercel-preview.yml`) ready—ensure repository secrets: `VERCEL_TOKEN`, `VERCEL_ORG_ID`, `VERCEL_PROJECT_ID` are configured.
+- Supabase client uses standard env vars `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`
+- `vercel.json` present with SPA rewrites
+- GitHub Actions workflows ready—ensure repository secrets are configured:
+  - `VERCEL_TOKEN`
+  - `VERCEL_ORG_ID`
+  - `VERCEL_PROJECT_ID`
 
-If any OAuth providers appear misconfigured, re-run the in-app diagnostic panels under `/account`.
+### Troubleshooting
+
+- **Auth not working?** Check environment variables are set correctly
+- **OAuth issues?** Re-run diagnostic panels under `/account`
+- **Build errors?** See `DEBUG_GUIDE.md` for detailed troubleshooting
 
 # Welcome to your Lovable project
 

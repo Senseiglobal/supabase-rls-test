@@ -1,10 +1,10 @@
 // Vercel Serverless Function: /api/ai/reply
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import { Configuration, OpenAIApi } from 'openai';
+import OpenAI from 'openai';
 
-const openai = new OpenAIApi(new Configuration({
+const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
-}));
+});
 
 const TONE_MAP = {
   professional: 'Respond in a professional tone.',
@@ -24,9 +24,8 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
   }
 
   try {
-    const prompt = `${TONE_MAP[tone] || TONE_MAP.professional}\n${message}`;
-    const completion = await openai.createChatCompletion({
-      model: 'gpt-4',
+    const completion = await openai.chat.completions.create({
+      model: 'gpt-4o-mini',
       messages: [
         { role: 'system', content: TONE_MAP[tone] || TONE_MAP.professional },
         { role: 'user', content: message },
@@ -34,7 +33,7 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       max_tokens: 512,
       temperature: 0.7,
     });
-    const reply = completion.data.choices[0]?.message?.content || '';
+    const reply = completion.choices[0]?.message?.content || '';
     res.status(200).json({ reply, autoSend });
   } catch (error) {
     res.status(500).json({ error: error.message || 'AI reply failed' });

@@ -1,6 +1,76 @@
-# Supabase RLS Test Suite
+# Aura Manager - Artist Management Platform
 
-This repository contains small Deno scripts to validate Supabase Row-Level Security (RLS) behavior for a sample schema (artists, songs, insights).
+This repository contains the Aura Manager application, an AI-powered artist management platform built with React, TypeScript, Supabase, and Vite.
+
+## 🚀 Quick Start
+
+### AuraManager (Main Application)
+```bash
+cd AuraManager
+cp .env.example .env
+# Edit .env with your Supabase credentials
+npm install
+npm run dev
+```
+
+Visit http://localhost:8080
+
+### Environment Variables Required
+```env
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_ANON_KEY=your-anon-key-here
+```
+
+See `AuraManager/.env.example` for complete configuration.
+
+---
+
+## 📋 Recent Changes (November 2025)
+
+### ✅ Critical Bug Fixes
+1. **Environment Variables Standardized**: Changed from `VITE_SUPABASE_PUBLISHABLE_KEY` to standard `VITE_SUPABASE_ANON_KEY` (backward compatible)
+2. **Configuration Files**: Created `.env.example` with proper variable names
+3. **Documentation**: Added comprehensive debugging and cleanup guides
+
+### 📚 New Documentation
+- `CLEANUP_GUIDE.md` - Repository cleanup recommendations
+- `AuraManager/DEBUG_GUIDE.md` - Debugging and improvement guide
+- `AuraManager/.env.example` - Environment configuration template
+
+### ⚠️ Action Required
+If you're deploying or developing:
+1. Update environment variables to use `VITE_SUPABASE_ANON_KEY`
+2. Review `CLEANUP_GUIDE.md` for recommended repository cleanup
+3. Follow `AuraManager/DEBUG_GUIDE.md` for testing checklist
+
+---
+
+## 📁 Repository Structure
+
+```
+supabase-rls-test/
+├── AuraManager/              # Main React application ⭐
+│   ├── src/                  # Application source code
+│   ├── public/               # Static assets
+│   ├── api/                  # API functions
+│   ├── supabase/             # Supabase migrations
+│   ├── .env.example          # Environment template
+│   ├── DEBUG_GUIDE.md        # Debugging guide
+│   └── README.md             # App-specific docs
+├── frontend-legacy/          # Legacy frontend (consider removing)
+├── frontend-new/             # Alternative frontend (consider removing)
+├── frontend-new-merged/      # Merged frontend (consider removing)
+├── docs/                     # Documentation (see CLEANUP_GUIDE.md)
+├── tests/                    # RLS test scripts
+├── CLEANUP_GUIDE.md          # Repository cleanup recommendations
+└── README.md                 # This file
+```
+
+## 🧪 Testing
+
+### Supabase RLS Test Suite
+
+This repository includes Deno scripts to validate Supabase Row-Level Security (RLS) behavior for a sample schema (artists, songs, insights).
 
 Files
 - `rls_test.ts` — simple script that signs up a user and runs basic CRUD operations.

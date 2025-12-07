@@ -1,5 +1,13 @@
 {
-  "devDependencies": {
-    "@vitejs/plugin-react-swc": "^4.2.2"
-  }
+  "name": "aura-manager-workspace",
+  "private": true,
+  "scripts": {
+    "build": "cd AuraManager && npm run build",
+    "dev": "cd AuraManager && npm run dev",
+    "preview": "cd AuraManager && npm run preview",
+    "lint": "cd AuraManager && npm run lint"
+  },
+  "workspaces": [
+    "AuraManager"
+  ]
 }

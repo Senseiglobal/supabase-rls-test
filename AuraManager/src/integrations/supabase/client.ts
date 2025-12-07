@@ -3,26 +3,27 @@ import { createClient } from '@supabase/supabase-js';
 import type { Database } from './types';
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_PUBLISHABLE_KEY = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+// Support both VITE_SUPABASE_ANON_KEY (standard) and VITE_SUPABASE_PUBLISHABLE_KEY (legacy)
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
 
 // Validate environment variables
-if (!SUPABASE_URL || !SUPABASE_PUBLISHABLE_KEY) {
-    console.error('[Supabase Client] Missing environment variables:', {
-          VITE_SUPABASE_URL: SUPABASE_URL ? 'SET' : 'MISSING',
-              VITE_SUPABASE_PUBLISHABLE_KEY: SUPABASE_PUBLISHABLE_KEY ? 'SET' : 'MISSING'
-                });
-                  throw new Error('Supabase environment variables are not properly configured. Please check your .env file and ensure VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY are set.');
-                  }
+if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+  console.error('[Supabase Client] Missing environment variables:', {
+    VITE_SUPABASE_URL: SUPABASE_URL ? 'SET' : 'MISSING',
+    VITE_SUPABASE_ANON_KEY: SUPABASE_ANON_KEY ? 'SET' : 'MISSING'
+  });
+  throw new Error('Supabase environment variables are not properly configured. Please check your .env file and ensure VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are set.');
+}
 // Optional: public base URL for stable OAuth redirects (production domain)
 export const PUBLIC_BASE_URL = import.meta.env.VITE_PUBLIC_BASE_URL;
 
 // Import the supabase client like this:
 // import { supabase } from "@/integrations/supabase/client";
 
-export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_PUBLISHABLE_KEY, {
+export const supabase = createClient<Database>(SUPABASE_URL, SUPABASE_ANON_KEY, {
   auth: {
-// Use a safe storage that works in both browser and SSR
-        storage: typeof window !== 'undefined' ? window.localStorage : undefined,
+    // Use a safe storage that works in both browser and SSR
+    storage: typeof window !== 'undefined' ? window.localStorage : undefined,
     persistSession: true,
     autoRefreshToken: true,
   }

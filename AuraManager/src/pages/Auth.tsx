@@ -22,7 +22,7 @@ const Auth = () => {
   // Startup environment validation
   useEffect(() => {
     const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-    const supabaseKey = import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
+    const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY || import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY;
     const publicBase = import.meta.env.VITE_PUBLIC_BASE_URL;
     
     console.log('[Auth] 🔍 Environment check:', {
@@ -37,7 +37,7 @@ const Auth = () => {
     if (!supabaseUrl || !supabaseKey) {
       console.error('[Auth] ❌ CRITICAL: Missing Supabase environment variables. Auth will fail.');
       toast.error('Configuration error: Missing required environment variables', {
-        description: 'Please ensure VITE_SUPABASE_URL and VITE_SUPABASE_PUBLISHABLE_KEY are set in Vercel.',
+        description: 'Please ensure VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are set in Vercel.',
       });
     }
   }, []);
