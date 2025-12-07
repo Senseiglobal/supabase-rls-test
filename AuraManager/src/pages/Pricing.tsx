@@ -133,7 +133,7 @@ const Pricing = () => {
           <p className="text-foreground/70 mb-6 max-w-2xl mx-auto">
             Custom solutions for labels, agencies, and large organizations managing multiple artists
           </p>
-          <Button variant="outline" size="lg">
+          <Button variant="outline" size="lg" onClick={() => console.log("Contact sales team")}>
             Contact Sales Team
           </Button>
         </Card>

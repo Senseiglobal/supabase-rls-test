@@ -109,7 +109,7 @@ const Help = () => {
           <p className="text-foreground/70 mb-6">
             Our support team is here 24/7 to assist you
           </p>
-          <Button size="lg">
+          <Button size="lg" onClick={() => console.log("Contact support")}>
             Contact Support
           </Button>
         </Card>

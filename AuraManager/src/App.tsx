@@ -14,6 +14,7 @@ import { BottomNav } from "@/components/BottomNav";
 import { NotificationCenter } from "@/components/NotificationCenter";
 import { UserMenu } from "@/components/UserMenu";
 import { Loading } from "@/components/Loading";
+import { OnboardingModal } from "@/components/OnboardingModal";
 import Index from "./pages/Index";
 import Auth from "./pages/Auth";
 import Onboarding from "./pages/Onboarding";
@@ -44,6 +45,7 @@ const App = () => {
   const [session, setSession] = useState<Session | null>(null);
   const [loading, setLoading] = useState(true);
   const [isNewUser, setIsNewUser] = useState<boolean | null>(null);
+  const [showOnboarding, setShowOnboarding] = useState(false);
 
   useEffect(() => {
     const checkUserStatus = async () => {
@@ -51,7 +53,11 @@ const App = () => {
       setSession(session);
       
       if (session) {
-        // Simplified check - assume returning user for now
+        // Check if user has already seen onboarding
+        const hasSeenOnboarding = localStorage.getItem(`onboarded_${session.user.id}`);
+        if (!hasSeenOnboarding) {
+          setShowOnboarding(true);
+        }
         setIsNewUser(false);
       }
       
@@ -74,6 +80,20 @@ const App = () => {
 
     return () => subscription.unsubscribe();
   }, []);
+
+  const handleOnboardingSkip = () => {
+    if (session) {
+      localStorage.setItem(`onboarded_${session.user.id}`, "true");
+    }
+    setShowOnboarding(false);
+  };
+
+  const handleOnboardingContinue = () => {
+    if (session) {
+      localStorage.setItem(`onboarded_${session.user.id}`, "true");
+    }
+    setShowOnboarding(false);
+  };
 
   if (loading) {
     return (
@@ -128,6 +148,14 @@ const App = () => {
                     <SidebarProvider>
                       <div className="flex min-h-screen w-full">
                         <AppSidebar />
+                        <div className="flex-1 flex flex-col min-w-0">
+                          {/* Onboarding Modal for first-time users */}
+                          {showOnboarding && (
+                            <OnboardingModal 
+                              onSkip={handleOnboardingSkip} 
+                              onContinue={handleOnboardingContinue}
+                            />
+                          )}
                         <div className="flex-1 flex flex-col min-w-0">
                           {/* Sidebar toggle bar - Consistent padding */}
                           <div className="sticky top-0 z-40 flex h-14 md:h-16 items-center gap-3 md:gap-4 border-b border-border bg-background px-4 md:px-6 lg:px-8">

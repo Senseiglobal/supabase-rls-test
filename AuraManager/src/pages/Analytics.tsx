@@ -3,6 +3,7 @@ import { Footer } from "@/components/Footer";
 import { Card } from "@/components/ui/card";
 import { Music, TrendingUp, Sparkles, Calendar, Lock, Crown } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 import { BarChart, Bar, PieChart, Pie, Cell, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import { Badge } from "@/components/ui/badge";
@@ -30,6 +31,7 @@ const COLORS = ['hsl(var(--accent))', 'hsl(var(--sedimentary-base))', '#8884d8',
 type TierName = "Free" | "Creator" | "Pro";
 
 const Analytics = () => {
+  const navigate = useNavigate();
   const [uploads, setUploads] = useState<Upload[]>([]);
   const [loading, setLoading] = useState(true);
   const [userTier, setUserTier] = useState<TierName>("Free");
@@ -285,7 +287,7 @@ const Analytics = () => {
                         <Lock className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                         <h3 className="text-lg font-semibold mb-2">Pro Feature</h3>
                         <p className="text-sm text-muted-foreground mb-4">Upgrade to Pro to unlock detailed mood analysis</p>
-                        <Button size="sm" className="bg-accent hover:bg-accent/90">
+                        <Button size="sm" className="bg-accent hover:bg-accent/90" onClick={() => navigate("/pricing")}>
                           Upgrade to Pro
                         </Button>
                       </div>
@@ -331,7 +333,7 @@ const Analytics = () => {
                         <Lock className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
                         <h3 className="text-lg font-semibold mb-2">Pro Feature</h3>
                         <p className="text-sm text-muted-foreground mb-4">Upgrade to Pro to unlock energy level analysis</p>
-                        <Button size="sm" className="bg-accent hover:bg-accent/90">
+                        <Button size="sm" className="bg-accent hover:bg-accent/90" onClick={() => navigate("/pricing")}>
                           Upgrade to Pro
                         </Button>
                       </div>

@@ -157,6 +157,7 @@ export function AppSidebar() {
   const [userTier, setUserTier] = useState<TierName>("Free");
   const [isSpotifyConnected, setIsSpotifyConnected] = useState(false);
   const [spotifyConnectionLoading, setSpotifyConnectionLoading] = useState(false);
+  const [settingsExpanded, setSettingsExpanded] = useState(false);
   
   // Always show labels on all screen sizes - no icon-only mode
   const showLabels = true;
@@ -310,26 +311,26 @@ export function AppSidebar() {
           className={`relative ${locked ? "cursor-not-allowed opacity-50" : ""}`}
         >
           {locked ? (
-            <div className="flex items-center w-full gap-2 md:gap-3 px-3 py-3">
-              <item.icon className="hidden md:block h-5 w-5 flex-shrink-0 text-sidebar-foreground/40" />
+            <div className="flex items-start w-full gap-2 md:gap-3 px-3 py-3">
+              <item.icon className="hidden md:block h-5 w-5 flex-shrink-0 text-sidebar-foreground/40 mt-0.5" />
               {showLabels && (
                 <>
-                  <span className="text-left flex-1 text-xs md:text-sm font-medium text-sidebar-foreground/50 whitespace-nowrap">{item.title}</span>
-                  <Lock className="hidden md:block h-4 w-4 text-sidebar-foreground/40 flex-shrink-0" />
+                  <span className="text-left flex-1 text-xs md:text-sm font-medium text-sidebar-foreground/50 break-words leading-tight">{item.title}</span>
+                  <Lock className="hidden md:block h-4 w-4 text-sidebar-foreground/40 flex-shrink-0 mt-0.5" />
                 </>
               )}
             </div>
           ) : (
             <NavLink 
               to={item.url} 
-              className={`flex items-center w-full transition-all duration-200 rounded-md gap-2 md:gap-3 px-3 py-3 ${
+              className={`flex items-start w-full transition-all duration-200 rounded-md gap-2 md:gap-3 px-3 py-3 ${
                 active 
                   ? "bg-accent text-accent-foreground font-semibold" 
                   : "text-sidebar-foreground hover:bg-sidebar-accent/50 font-medium"
               }`}
             >
-              <item.icon className="hidden md:block h-5 w-5 flex-shrink-0" />
-              <span className="text-left flex-1 text-xs md:text-sm font-medium whitespace-nowrap">{item.title}</span>
+              <item.icon className="hidden md:block h-5 w-5 flex-shrink-0 mt-0.5" />
+              <span className="text-left flex-1 text-xs md:text-sm font-medium break-words leading-tight">{item.title}</span>
             </NavLink>
           )}
         </SidebarMenuButton>
@@ -426,16 +427,33 @@ export function AppSidebar() {
 
         {/* Settings */}
         <SidebarGroup className="mt-10">
-          {showLabels && (
-            <SidebarGroupLabel className="px-3 mb-3 text-xs font-semibold text-sidebar-foreground/60 uppercase tracking-wide">
-              Settings
-            </SidebarGroupLabel>
+          <button
+            onClick={() => setSettingsExpanded(!settingsExpanded)}
+            className="w-full flex items-center justify-between px-3 py-2 hover:bg-sidebar-accent/30 rounded-md transition-colors"
+          >
+            {showLabels && (
+              <SidebarGroupLabel className="px-0 mb-0 text-xs font-semibold text-sidebar-foreground/60 uppercase tracking-wide flex-1 text-left">
+                Settings
+              </SidebarGroupLabel>
+            )}
+            <svg
+              className={`w-4 h-4 text-sidebar-foreground/60 transition-transform ${
+                settingsExpanded ? 'rotate-180' : ''
+              }`}
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+            </svg>
+          </button>
+          {settingsExpanded && (
+            <SidebarGroupContent>
+              <SidebarMenu className="space-y-1">
+                {settingsItems.map(renderNavItem)}
+              </SidebarMenu>
+            </SidebarGroupContent>
           )}
-          <SidebarGroupContent>
-            <SidebarMenu className="space-y-1">
-              {settingsItems.map(renderNavItem)}
-            </SidebarMenu>
-          </SidebarGroupContent>
         </SidebarGroup>
 
         {/* Spotify Integration - Always visible */}

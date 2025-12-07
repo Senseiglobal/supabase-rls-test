@@ -3,8 +3,10 @@ import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Download, TrendingUp, FileText, Calendar } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 const Reports = () => {
+  const navigate = useNavigate();
   // DEMO DATA - Replace with Supabase-generated reports later
   const reports = [
     { 
@@ -41,7 +43,7 @@ const Reports = () => {
               <h3 className="text-xl font-semibold mb-2 text-foreground">Generate Custom Report</h3>
               <p className="text-foreground/70">Create a personalized report with AI-powered insights</p>
             </div>
-            <Button>
+            <Button onClick={() => console.log("Create new report")}>
               <FileText className="mr-2 h-4 w-4" />
               Create Report
             </Button>
@@ -73,7 +75,10 @@ const Reports = () => {
                       </div>
                     </div>
                   </div>
-                  <Button variant="outline">
+                  <Button 
+                    variant="outline"
+                    onClick={() => console.log("Download report:", report.title)}
+                  >
                     <Download className="mr-2 h-4 w-4" />
                     Download
                   </Button>

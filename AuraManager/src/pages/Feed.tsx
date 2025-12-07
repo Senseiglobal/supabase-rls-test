@@ -3,8 +3,11 @@ import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { TrendingUp, Music, Radio, Heart, Share2, Filter, Play } from "lucide-react";
 import { Card } from "@/components/ui/card";
+import { useState } from "react";
 
 const Feed = () => {
+  const [filter, setFilter] = useState<"all" | "genre" | "recommended" | "releases">("all");
+
   // DEMO DATA - Replace with Supabase data later
   const trendingTracks = [
     { id: 1, title: "Midnight Dreams", artist: "Luna Eclipse", plays: "2.4M", trend: "+15%" },
@@ -29,13 +32,35 @@ const Feed = () => {
 
         {/* Filters */}
         <div className="flex gap-3 mb-8 overflow-x-auto pb-2">
-          <Button variant="default" size="sm">
+          <Button 
+            variant={filter === "all" ? "default" : "outline"} 
+            size="sm"
+            onClick={() => setFilter("all")}
+          >
             <Filter className="mr-2 h-4 w-4" />
             All Trends
           </Button>
-          <Button variant="outline" size="sm">Your Genre</Button>
-          <Button variant="outline" size="sm">Recommended</Button>
-          <Button variant="outline" size="sm">New Releases</Button>
+          <Button 
+            variant={filter === "genre" ? "default" : "outline"} 
+            size="sm"
+            onClick={() => setFilter("genre")}
+          >
+            Your Genre
+          </Button>
+          <Button 
+            variant={filter === "recommended" ? "default" : "outline"} 
+            size="sm"
+            onClick={() => setFilter("recommended")}
+          >
+            Recommended
+          </Button>
+          <Button 
+            variant={filter === "releases" ? "default" : "outline"} 
+            size="sm"
+            onClick={() => setFilter("releases")}
+          >
+            New Releases
+          </Button>
         </div>
 
         {/* AI Recommendations */}
@@ -66,7 +91,13 @@ const Feed = () => {
               <Card key={track.id} className="p-6 card-urban card-hover">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-4">
-                    <Button variant="ghost" size="icon" className="hover-scale">
+                    <Button 
+                      variant="ghost" 
+                      size="icon" 
+                      className="hover-scale"
+                      onClick={() => console.log("Play track:", track.title)}
+                      aria-label="Play track"
+                    >
                       <Play className="h-5 w-5" />
                     </Button>
                     <div className="w-16 h-16 rounded-lg bg-gradient-to-br from-accent to-sedimentary-base" />
@@ -84,10 +115,22 @@ const Feed = () => {
                       <span className="text-sm text-success">{track.trend}</span>
                     </div>
                     <div className="flex gap-2">
-                      <Button variant="ghost" size="icon" className="hover-scale">
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="hover-scale"
+                        onClick={() => console.log("Like track:", track.title)}
+                        aria-label="Like track"
+                      >
                         <Heart className="h-5 w-5" />
                       </Button>
-                      <Button variant="ghost" size="icon" className="hover-scale">
+                      <Button 
+                        variant="ghost" 
+                        size="icon" 
+                        className="hover-scale"
+                        onClick={() => console.log("Share track:", track.title)}
+                        aria-label="Share track"
+                      >
                         <Share2 className="h-5 w-5" />
                       </Button>
                     </div>

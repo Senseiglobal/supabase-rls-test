@@ -56,7 +56,10 @@ const Chat = () => {
         {/* Sidebar - Hidden on mobile */}
         <div className="hidden lg:flex w-80 border-r flex-col">
           <div className="p-4 border-b space-y-4">
-            <Button className="w-full bg-gradient-to-r from-primary to-success hover:opacity-90">
+            <Button 
+              className="w-full bg-gradient-to-r from-primary to-success hover:opacity-90"
+              onClick={startNewConversation}
+            >
               <Plus className="mr-2 h-4 w-4" />
               New Conversation
             </Button>
@@ -138,7 +141,12 @@ const Chat = () => {
                 <p className="text-xs text-muted-foreground">Powered by Google Gemini • {personality} mode</p>
               </div>
             </div>
-            <Button variant="outline" size="sm" className="lg:hidden">
+            <Button 
+              variant="outline" 
+              size="sm" 
+              className="lg:hidden"
+              onClick={() => console.log("Show conversation history")}
+            >
               History
             </Button>
           </div>
