@@ -310,25 +310,25 @@ export function AppSidebar() {
           className={`relative ${locked ? "cursor-not-allowed opacity-50" : ""}`}
         >
           {locked ? (
-            <div className="flex items-center w-full gap-3 px-3 py-2.5">
-              <item.icon className="h-5 w-5 md:h-5 md:w-5 flex-shrink-0 text-sidebar-foreground/40" />
+            <div className="flex items-center w-full gap-2 md:gap-3 px-3 py-2.5">
+              <item.icon className="hidden md:block h-5 w-5 flex-shrink-0 text-sidebar-foreground/40" />
               {showLabels && (
                 <>
                   <span className="flex-1 text-xs md:text-sm font-medium text-sidebar-foreground/50 whitespace-nowrap">{item.title}</span>
-                  <Lock className="h-3.5 w-3.5 md:h-4 md:w-4 text-sidebar-foreground/40 flex-shrink-0" />
+                  <Lock className="hidden md:block h-4 w-4 text-sidebar-foreground/40 flex-shrink-0" />
                 </>
               )}
             </div>
           ) : (
             <NavLink 
               to={item.url} 
-              className={`flex items-center w-full transition-all duration-200 rounded-md gap-3 px-3 py-2.5 ${
+              className={`flex items-center w-full transition-all duration-200 rounded-md gap-2 md:gap-3 px-3 py-2.5 ${
                 active 
                   ? "bg-accent text-accent-foreground font-semibold" 
                   : "text-sidebar-foreground hover:bg-sidebar-accent/50 font-medium"
               }`}
             >
-              <item.icon className="h-5 w-5 md:h-5 md:w-5 flex-shrink-0" />
+              <item.icon className="hidden md:block h-5 w-5 flex-shrink-0" />
               <span className="flex-1 text-xs md:text-sm font-medium whitespace-nowrap">{item.title}</span>
             </NavLink>
           )}
@@ -383,9 +383,9 @@ export function AppSidebar() {
       collapsible="icon"
     >
       {/* Clean header with branding - Suno style */}
-      <div className="border-b border-sidebar-border px-4 py-3 flex items-center justify-between w-full">
-        <div className="flex items-center gap-3 flex-1 min-w-0">
-          <div className="w-7 h-7 md:w-8 md:h-8 rounded-md overflow-hidden flex items-center justify-center flex-shrink-0">
+      <div className="border-b border-sidebar-border px-3 md:px-4 py-3 flex items-center justify-between w-full">
+        <div className="flex items-center gap-2 md:gap-3 flex-1 min-w-0">
+          <div className="hidden md:flex w-7 h-7 md:w-8 md:h-8 rounded-md overflow-hidden items-center justify-center flex-shrink-0">
             <img 
               src="/icons/dark_icon_32x32.png" 
               alt="Aura Manager" 
@@ -397,7 +397,7 @@ export function AppSidebar() {
               className="w-6 h-6 md:w-7 md:h-7 hidden dark:block" 
             />
           </div>
-          <span className="font-semibold text-sm md:text-base text-sidebar-foreground truncate">Aura Manager</span>
+          <span className="font-semibold text-xs md:text-base text-sidebar-foreground truncate">Aura Manager</span>
         </div>
         <button
           type="button"
@@ -442,7 +442,7 @@ export function AppSidebar() {
         <div className="mt-6 px-4">
             <button 
               type="button"
-              className={`w-full flex items-center gap-3 p-3 rounded-lg transition-all duration-200 hover:shadow-lg ${
+              className={`w-full flex items-center gap-2 md:gap-3 p-3 rounded-lg transition-all duration-200 hover:shadow-lg ${
                 isSpotifyConnected 
                   ? 'bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white'
                   : 'bg-gradient-to-r from-accent to-accent-hover hover:from-accent-hover hover:to-accent text-black'
@@ -451,8 +451,8 @@ export function AppSidebar() {
               disabled={spotifyConnectionLoading}
             >
               {spotifyConnectionLoading ? (
-                <div className="w-5 h-5 md:w-5 md:h-5 relative">
-                  <div className="w-5 h-5 md:w-5 md:h-5 animate-[fadeInOut_2s_ease-in-out_infinite]">
+                <div className="hidden md:flex w-5 h-5 relative flex-shrink-0">
+                  <div className="w-5 h-5 animate-[fadeInOut_2s_ease-in-out_infinite]">
                     <img 
                       src="/icons/dark_icon_32x32.png" 
                       alt="Loading" 
@@ -461,7 +461,7 @@ export function AppSidebar() {
                   </div>
                 </div>
               ) : (
-                <Music className="h-5 w-5 md:h-5 md:w-5" />
+                <Music className="hidden md:block h-5 w-5 flex-shrink-0" />
               )}
               <div className="flex-1 text-left">
                 <p className="text-xs md:text-sm font-semibold">
@@ -472,7 +472,7 @@ export function AppSidebar() {
                 </p>
               </div>
               {isSpotifyConnected && (
-                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse flex-shrink-0" />
               )}
             </button>
         </div>
@@ -481,13 +481,13 @@ export function AppSidebar() {
         <div className="mt-auto pt-6 px-4">
           <div className="border-l-4 border-accent pl-3 py-2 bg-sidebar-accent">
             <div className="flex items-center gap-2">
-              <Crown className={`h-5 w-5 md:h-5 md:w-5 ${
+              <Crown className={`hidden md:block h-5 w-5 ${
                   userTier === "Pro" ? "text-accent" : 
                   userTier === "Creator" ? "text-sedimentary-base" : 
                   "text-sidebar-foreground/60"
                 }`} />
                 <div className="flex-1">
-                  <p className="text-sm md:text-base font-bold text-sidebar-foreground leading-tight">{userTier} Plan</p>
+                  <p className="text-xs md:text-sm font-bold text-sidebar-foreground leading-tight">{userTier} Plan</p>
                   <p className="text-xs text-sidebar-foreground/70 mt-0.5">
                     {userTier === "Free" ? "Limited features" : "Full access"}
                   </p>
