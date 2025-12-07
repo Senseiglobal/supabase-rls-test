@@ -2,7 +2,7 @@
   "buildCommand": "cd AuraManager && npm run build",
   "framework": "vite",
   "outputDirectory": "AuraManager/dist",
-  "installCommand": "cd AuraManager && npm ci",
+  "installCommand": "cd AuraManager && npm install --legacy-peer-deps",
   "rewrites": [
     { "source": "/(.*)", "destination": "/index.html" }
   ]
