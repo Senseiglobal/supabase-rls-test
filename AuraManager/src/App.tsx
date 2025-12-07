@@ -156,7 +156,6 @@ const App = () => {
                               onContinue={handleOnboardingContinue}
                             />
                           )}
-                        <div className="flex-1 flex flex-col min-w-0">
                           {/* Sidebar toggle bar - Consistent padding */}
                           <div className="sticky top-0 z-40 flex h-14 md:h-16 items-center gap-3 md:gap-4 border-b border-border bg-background px-4 md:px-6 lg:px-8">
                             <SidebarTrigger className="hover:bg-accent/10" />
