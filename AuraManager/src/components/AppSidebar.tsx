@@ -311,26 +311,40 @@ export function AppSidebar() {
           className={`relative ${locked ? "cursor-not-allowed opacity-50" : ""}`}
         >
           {locked ? (
-            <div className="flex items-start w-full gap-2 md:gap-3 px-3 py-3">
-              <item.icon className="hidden md:block h-5 w-5 flex-shrink-0 text-sidebar-foreground/40 mt-0.5" />
-              {showLabels && (
-                <>
-                  <span className="text-left flex-1 text-xs md:text-sm font-medium text-sidebar-foreground/50 break-words leading-tight">{item.title}</span>
-                  <Lock className="hidden md:block h-4 w-4 text-sidebar-foreground/40 flex-shrink-0 mt-0.5" />
-                </>
-              )}
+            <div className="block lg:flex lg:items-center w-full lg:gap-3 py-3 px-4">
+              {/* Icon - Hidden on mobile, visible on desktop */}
+              <span className="hidden lg:block nav-item-icon">
+                <item.icon className="h-5 w-5 flex-shrink-0 text-sidebar-foreground/40" />
+              </span>
+              
+              {/* Text Label - Always visible, evenly spaced */}
+              <span className="nav-item-text block text-left flex-1 text-sm font-medium text-sidebar-foreground/50 break-words leading-tight">
+                {item.title}
+              </span>
+              
+              {/* Lock icon - Hidden on mobile, visible on desktop */}
+              <span className="hidden lg:block">
+                <Lock className="h-4 w-4 text-sidebar-foreground/40 flex-shrink-0" />
+              </span>
             </div>
           ) : (
             <NavLink 
               to={item.url} 
-              className={`flex items-start w-full transition-all duration-200 rounded-md gap-2 md:gap-3 px-3 py-3 ${
+              className={`block lg:flex lg:items-center w-full transition-all duration-200 rounded-md lg:gap-3 py-3 px-4 ${
                 active 
                   ? "bg-accent text-accent-foreground font-semibold" 
                   : "text-sidebar-foreground hover:bg-sidebar-accent/50 font-medium"
               }`}
             >
-              <item.icon className="hidden md:block h-5 w-5 flex-shrink-0 mt-0.5" />
-              <span className="text-left flex-1 text-xs md:text-sm font-medium break-words leading-tight">{item.title}</span>
+              {/* Icon - Hidden on mobile, visible on desktop */}
+              <span className="hidden lg:block nav-item-icon">
+                <item.icon className="h-5 w-5 flex-shrink-0" />
+              </span>
+              
+              {/* Text Label - Always visible, evenly spaced */}
+              <span className="nav-item-text block text-left flex-1 text-sm font-medium break-words leading-tight">
+                {item.title}
+              </span>
             </NavLink>
           )}
         </SidebarMenuButton>
@@ -383,22 +397,25 @@ export function AppSidebar() {
       className="border-r border-sidebar-border bg-sidebar transition-all duration-200 w-64 md:w-64"
       collapsible="icon"
     >
-      {/* Clean header with branding - Suno style */}
-      <div className="border-b border-sidebar-border px-3 md:px-4 py-3 flex items-center justify-between w-full">
-        <div className="flex items-center gap-2 md:gap-3 flex-1 min-w-0">
-          <div className="hidden md:flex w-7 h-7 md:w-8 md:h-8 rounded-md overflow-hidden items-center justify-center flex-shrink-0">
+      {/* Clean header with branding - Responsive: Text only on mobile, Icon+Text on desktop */}
+      <div className="border-b border-sidebar-border px-4 py-3 flex items-center justify-between w-full">
+        <div className="block lg:flex lg:items-center lg:gap-3 flex-1 min-w-0">
+          {/* Logo Icon - Hidden on mobile, visible on desktop */}
+          <span className="hidden lg:flex w-8 h-8 rounded-md overflow-hidden items-center justify-center flex-shrink-0">
             <img 
               src="/icons/dark_icon_32x32.png" 
               alt="Aura Manager" 
-              className="w-6 h-6 md:w-7 md:h-7 dark:hidden" 
+              className="w-7 h-7 dark:hidden" 
             />
             <img 
               src="/icons/light_icon_32x32.png" 
               alt="Aura Manager" 
-              className="w-6 h-6 md:w-7 md:h-7 hidden dark:block" 
+              className="w-7 h-7 hidden dark:block" 
             />
-          </div>
-          <span className="font-semibold text-xs md:text-base text-sidebar-foreground truncate">Aura Manager</span>
+          </span>
+          
+          {/* Brand Text - Always visible */}
+          <span className="font-semibold text-base text-sidebar-foreground">Aura Manager</span>
         </div>
         <button
           type="button"
@@ -456,11 +473,11 @@ export function AppSidebar() {
           )}
         </SidebarGroup>
 
-        {/* Spotify Integration - Always visible */}
+        {/* Spotify Integration - Responsive: Text only on mobile, Icon+Text on desktop */}
         <div className="mt-6 px-4">
             <button 
               type="button"
-              className={`w-full flex items-center gap-2 md:gap-3 p-3 rounded-lg transition-all duration-200 hover:shadow-lg ${
+              className={`w-full block lg:flex lg:items-center lg:gap-3 p-3 rounded-lg transition-all duration-200 hover:shadow-lg ${
                 isSpotifyConnected 
                   ? 'bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white'
                   : 'bg-gradient-to-r from-accent to-accent-hover hover:from-accent-hover hover:to-accent text-black'
@@ -468,8 +485,9 @@ export function AppSidebar() {
               onClick={handleSpotifyConnect}
               disabled={spotifyConnectionLoading}
             >
+              {/* Icon - Hidden on mobile, visible on desktop */}
               {spotifyConnectionLoading ? (
-                <div className="hidden md:flex w-5 h-5 relative flex-shrink-0">
+                <span className="hidden lg:flex w-5 h-5 relative flex-shrink-0">
                   <div className="w-5 h-5 animate-[fadeInOut_2s_ease-in-out_infinite]">
                     <img 
                       src="/icons/dark_icon_32x32.png" 
@@ -477,42 +495,53 @@ export function AppSidebar() {
                       className="w-full h-full" 
                     />
                   </div>
-                </div>
+                </span>
               ) : (
-                <Music className="hidden md:block h-5 w-5 flex-shrink-0" />
+                <span className="hidden lg:block">
+                  <Music className="h-5 w-5 flex-shrink-0" />
+                </span>
               )}
+              
+              {/* Text - Always visible */}
               <div className="flex-1 text-left">
-                <p className="text-xs md:text-sm font-semibold">
+                <p className="text-sm font-semibold">
                   {isSpotifyConnected ? 'Spotify Connected' : 'Connect Spotify'}
                 </p>
                 <p className="text-xs opacity-90">
                   {isSpotifyConnected ? 'Music data synced' : 'Sync your music data'}
                 </p>
               </div>
+              
+              {/* Status indicator - Always visible */}
               {isSpotifyConnected && (
-                <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse flex-shrink-0" />
+                <div className="hidden lg:block w-2 h-2 bg-green-400 rounded-full animate-pulse flex-shrink-0" />
               )}
             </button>
         </div>
 
-        {/* Tier Badge */}
+        {/* Tier Badge - Responsive: Text only on mobile, Icon+Text on desktop */}
         <div className="mt-auto pt-6 px-4">
           <div className="border-l-4 border-accent pl-3 py-2 bg-sidebar-accent">
-            <div className="flex items-center gap-2">
-              <Crown className={`hidden md:block h-5 w-5 ${
+            <div className="block lg:flex lg:items-center lg:gap-3">
+              {/* Icon - Hidden on mobile, visible on desktop */}
+              <span className="hidden lg:block">
+                <Crown className={`h-5 w-5 ${
                   userTier === "Pro" ? "text-accent" : 
                   userTier === "Creator" ? "text-sedimentary-base" : 
                   "text-sidebar-foreground/60"
                 }`} />
-                <div className="flex-1">
-                  <p className="text-xs md:text-sm font-bold text-sidebar-foreground leading-tight">{userTier} Plan</p>
-                  <p className="text-xs text-sidebar-foreground/70 mt-0.5">
-                    {userTier === "Free" ? "Limited features" : "Full access"}
-                  </p>
-                </div>
+              </span>
+              
+              {/* Text - Always visible */}
+              <div className="flex-1">
+                <p className="text-sm font-bold text-sidebar-foreground leading-tight">{userTier} Plan</p>
+                <p className="text-xs text-sidebar-foreground/70 mt-0.5">
+                  {userTier === "Free" ? "Limited features" : "Full access"}
+                </p>
               </div>
             </div>
           </div>
+        </div>
         
       </SidebarContent>
     </Sidebar>
