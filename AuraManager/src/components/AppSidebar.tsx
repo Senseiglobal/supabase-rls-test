@@ -151,12 +151,15 @@ const settingsItems: NavItem[] = [
 ];
 
 export function AppSidebar() {
-  const { open } = useSidebar();
+  const { open, isMobile } = useSidebar();
   const location = useLocation();
   const currentPath = location.pathname;
   const [userTier, setUserTier] = useState<TierName>("Free");
   const [isSpotifyConnected, setIsSpotifyConnected] = useState(false);
   const [spotifyConnectionLoading, setSpotifyConnectionLoading] = useState(false);
+  
+  // On mobile, always show text labels even if sidebar is "closed"
+  const showLabels = open || isMobile;
 
   useEffect(() => {
     fetchUserTier();
@@ -307,11 +310,11 @@ export function AppSidebar() {
           className={`relative ${locked ? "cursor-not-allowed opacity-50" : ""}`}
         >
           {locked ? (
-            <div className="flex items-center w-full gap-3 px-3 py-2">
+            <div className="flex items-center w-full gap-3 px-3 py-2.5">
               <item.icon className="h-5 w-5 flex-shrink-0 text-sidebar-foreground/40" />
-              {open && (
+              {showLabels && (
                 <>
-                  <span className="flex-1 text-sm font-medium text-sidebar-foreground/50">{item.title}</span>
+                  <span className="flex-1 text-sm font-medium text-sidebar-foreground/50 whitespace-nowrap">{item.title}</span>
                   <Lock className="h-4 w-4 text-sidebar-foreground/40 flex-shrink-0" />
                 </>
               )}
@@ -320,8 +323,8 @@ export function AppSidebar() {
             <NavLink 
               to={item.url} 
               className={`flex items-center w-full transition-all duration-200 rounded-md ${
-                open 
-                  ? "gap-3 px-3 py-2" 
+                showLabels
+                  ? "gap-3 px-3 py-2.5" 
                   : "justify-center p-2"
               } ${
                 active 
@@ -330,7 +333,7 @@ export function AppSidebar() {
               }`}
             >
               <item.icon className="h-5 w-5 flex-shrink-0" />
-              {open && <span className="flex-1 text-sm truncate">{item.title}</span>}
+              {showLabels && <span className="flex-1 text-sm font-medium whitespace-nowrap">{item.title}</span>}
             </NavLink>
           )}
         </SidebarMenuButton>
@@ -384,8 +387,8 @@ export function AppSidebar() {
       collapsible="icon"
     >
       {/* Clean header with branding - Suno style */}
-      <div className={`border-b border-sidebar-border ${open ? "px-4 py-3" : "px-2 py-3"} flex items-center`}>
-        {open ? (
+      <div className={`border-b border-sidebar-border ${showLabels ? "px-4 py-3" : "px-2 py-3"} flex items-center`}>
+        {showLabels ? (
           <div className="flex items-center justify-between w-full">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 rounded-md overflow-hidden flex items-center justify-center flex-shrink-0">
@@ -432,8 +435,8 @@ export function AppSidebar() {
       <SidebarContent className="py-4 px-2 overflow-y-auto">
         {/* Main Navigation */}
         <SidebarGroup>
-          {open && (
-            <SidebarGroupLabel className="px-3 mb-1 text-xs font-semibold text-sidebar-foreground/60 uppercase tracking-wide">
+          {showLabels && (
+            <SidebarGroupLabel className="px-3 mb-2 text-xs font-semibold text-sidebar-foreground/60 uppercase tracking-wide">
               Navigation
             </SidebarGroupLabel>
           )}
@@ -446,8 +449,8 @@ export function AppSidebar() {
 
         {/* Settings */}
         <SidebarGroup className="mt-8">
-          {open && (
-            <SidebarGroupLabel className="px-3 mb-1 text-xs font-semibold text-sidebar-foreground/60 uppercase tracking-wide">
+          {showLabels && (
+            <SidebarGroupLabel className="px-3 mb-2 text-xs font-semibold text-sidebar-foreground/60 uppercase tracking-wide">
               Settings
             </SidebarGroupLabel>
           )}
@@ -458,9 +461,9 @@ export function AppSidebar() {
           </SidebarGroupContent>
         </SidebarGroup>
 
-        {/* Spotify Integration - Desktop Only */}
-        {open && (
-          <div className="hidden md:block mt-6 px-4">
+        {/* Spotify Integration - Show on mobile and desktop when expanded */}
+        {showLabels && (
+          <div className="mt-6 px-4">
             <button 
               type="button"
               className={`w-full flex items-center gap-3 p-3 rounded-lg transition-all duration-200 hover:shadow-lg ${
@@ -500,7 +503,7 @@ export function AppSidebar() {
         )}
 
         {/* Tier Badge */}
-        {open && (
+        {showLabels && (
           <div className="mt-auto pt-6 px-4">
             <div className="border-l-4 border-accent pl-3 py-2 bg-sidebar-accent">
               <div className="flex items-center gap-2">
