@@ -201,8 +201,6 @@ const App = () => {
                             </Routes>
                           </main>
                           
-                          {/* FAB removed to keep mobile navigation clean */}
-                          
                           {/* Mobile bottom navigation */}
                           <BottomNav />
                         </div>
