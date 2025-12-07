@@ -311,37 +311,27 @@ export function AppSidebar() {
           className={`relative ${locked ? "cursor-not-allowed opacity-50" : ""}`}
         >
           {locked ? (
-            <div className="flex items-center w-full gap-4 py-3 px-4">
-              {/* Icon - Hidden on mobile, visible on desktop */}
-              <span className="hidden lg:inline-flex items-center justify-center flex-shrink-0 w-5 nav-item-icon">
-                <item.icon className="h-5 w-5 flex-shrink-0 text-sidebar-foreground/40" />
-              </span>
-              
-              {/* Text Label - Always visible, evenly spaced */}
+            <div className="flex items-center w-full py-3 px-4">
+              {/* Text Label - Always visible */}
               <span className="nav-item-text text-left flex-1 text-sm font-medium text-sidebar-foreground/50 break-words leading-tight">
                 {item.title}
               </span>
               
-              {/* Lock icon - Hidden on mobile, visible on desktop */}
-              <span className="hidden lg:inline-flex">
+              {/* Lock icon */}
+              <span className="inline-flex">
                 <Lock className="h-4 w-4 text-sidebar-foreground/40 flex-shrink-0" />
               </span>
             </div>
           ) : (
             <NavLink 
               to={item.url} 
-              className={`flex items-center w-full transition-all duration-200 rounded-md gap-4 py-3 px-4 ${
+              className={`flex items-center w-full transition-all duration-200 rounded-md py-3 px-4 ${
                 active 
                   ? "bg-accent text-accent-foreground font-semibold" 
                   : "text-sidebar-foreground hover:bg-sidebar-accent/50 font-medium"
               }`}
             >
-              {/* Icon - Hidden on mobile, visible on desktop */}
-              <span className="hidden lg:inline-flex items-center justify-center flex-shrink-0 w-5 nav-item-icon">
-                <item.icon className="h-5 w-5 flex-shrink-0" />
-              </span>
-              
-              {/* Text Label - Always visible, evenly spaced */}
+              {/* Text Label - Always visible */}
               <span className="nav-item-text text-left flex-1 text-sm font-medium break-words leading-tight">
                 {item.title}
               </span>
@@ -399,21 +389,7 @@ export function AppSidebar() {
     >
       {/* Clean header with branding - Responsive: Text only on mobile, Icon+Text on desktop */}
       <div className="border-b border-sidebar-border px-4 py-3 flex items-center justify-between w-full">
-        <div className="flex items-center gap-4 flex-1 min-w-0">
-          {/* Logo Icon - Hidden on mobile, visible on desktop */}
-          <span className="hidden lg:flex w-8 h-8 rounded-md overflow-hidden items-center justify-center flex-shrink-0">
-            <img 
-              src="/icons/dark_icon_32x32.png" 
-              alt="Aura Manager" 
-              className="w-7 h-7 dark:hidden" 
-            />
-            <img 
-              src="/icons/light_icon_32x32.png" 
-              alt="Aura Manager" 
-              className="w-7 h-7 hidden dark:block" 
-            />
-          </span>
-          
+        <div className="flex items-center flex-1 min-w-0">
           {/* Brand Text - Always visible */}
           <span className="font-semibold text-base text-sidebar-foreground">Aura Manager</span>
         </div>
@@ -485,23 +461,6 @@ export function AppSidebar() {
               onClick={handleSpotifyConnect}
               disabled={spotifyConnectionLoading}
             >
-              {/* Icon - Hidden on mobile, visible on desktop */}
-              {spotifyConnectionLoading ? (
-                <span className="hidden lg:flex w-5 h-5 items-center justify-center flex-shrink-0">
-                  <div className="w-5 h-5 animate-[fadeInOut_2s_ease-in-out_infinite]">
-                    <img 
-                      src="/icons/dark_icon_32x32.png" 
-                      alt="Loading" 
-                      className="w-full h-full" 
-                    />
-                  </div>
-                </span>
-              ) : (
-                <span className="hidden lg:inline-flex items-center justify-center flex-shrink-0 w-5">
-                  <Music className="h-5 w-5 flex-shrink-0" />
-                </span>
-              )}
-              
               {/* Text - Always visible */}
               <div className="flex-1 text-left">
                 <p className="text-sm font-semibold">
@@ -511,27 +470,13 @@ export function AppSidebar() {
                   {isSpotifyConnected ? 'Music data synced' : 'Sync your music data'}
                 </p>
               </div>
-              
-              {/* Status indicator - Always visible */}
-              {isSpotifyConnected && (
-                <div className="hidden lg:block w-2 h-2 bg-green-400 rounded-full animate-pulse flex-shrink-0" />
-              )}
             </button>
         </div>
 
         {/* Tier Badge - Responsive: Text only on mobile, Icon+Text on desktop */}
         <div className="mt-auto pt-6 px-4">
           <div className="border-l-4 border-accent pl-3 py-2 bg-sidebar-accent">
-            <div className="flex items-center gap-4">
-              {/* Icon - Hidden on mobile, visible on desktop */}
-              <span className="hidden lg:inline-flex items-center justify-center flex-shrink-0 w-5">
-                <Crown className={`h-5 w-5 flex-shrink-0 ${
-                  userTier === "Pro" ? "text-accent" : 
-                  userTier === "Creator" ? "text-sedimentary-base" : 
-                  "text-sidebar-foreground/60"
-                }`} />
-              </span>
-              
+            <div className="flex items-center">
               {/* Text - Always visible */}
               <div className="flex-1">
                 <p className="text-sm font-bold text-sidebar-foreground leading-tight">{userTier} Plan</p>
