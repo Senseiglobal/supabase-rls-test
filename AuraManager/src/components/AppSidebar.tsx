@@ -318,7 +318,7 @@ export function AppSidebar() {
               </span>
               
               {/* Text Label - Always visible, evenly spaced */}
-              <span className="nav-item-text block text-left flex-1 text-sm font-medium text-sidebar-foreground/50 break-words leading-tight">
+              <span className="nav-item-text text-left flex-1 text-sm font-medium text-sidebar-foreground/50 break-words leading-tight">
                 {item.title}
               </span>
               
@@ -342,7 +342,7 @@ export function AppSidebar() {
               </span>
               
               {/* Text Label - Always visible, evenly spaced */}
-              <span className="nav-item-text block text-left flex-1 text-sm font-medium break-words leading-tight">
+              <span className="nav-item-text text-left flex-1 text-sm font-medium break-words leading-tight">
                 {item.title}
               </span>
             </NavLink>
@@ -399,7 +399,7 @@ export function AppSidebar() {
     >
       {/* Clean header with branding - Responsive: Text only on mobile, Icon+Text on desktop */}
       <div className="border-b border-sidebar-border px-4 py-3 flex items-center justify-between w-full">
-        <div className="block lg:flex lg:items-center lg:gap-3 flex-1 min-w-0">
+        <div className="flex items-center gap-3 lg:gap-3 flex-1 min-w-0">
           {/* Logo Icon - Hidden on mobile, visible on desktop */}
           <span className="hidden lg:flex w-8 h-8 rounded-md overflow-hidden items-center justify-center flex-shrink-0">
             <img 
@@ -477,7 +477,7 @@ export function AppSidebar() {
         <div className="mt-6 px-4">
             <button 
               type="button"
-              className={`w-full block lg:flex lg:items-center lg:gap-3 p-3 rounded-lg transition-all duration-200 hover:shadow-lg ${
+              className={`w-full flex items-center gap-3 lg:gap-3 p-3 rounded-lg transition-all duration-200 hover:shadow-lg ${
                 isSpotifyConnected 
                   ? 'bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 text-white'
                   : 'bg-gradient-to-r from-accent to-accent-hover hover:from-accent-hover hover:to-accent text-black'
@@ -522,7 +522,7 @@ export function AppSidebar() {
         {/* Tier Badge - Responsive: Text only on mobile, Icon+Text on desktop */}
         <div className="mt-auto pt-6 px-4">
           <div className="border-l-4 border-accent pl-3 py-2 bg-sidebar-accent">
-            <div className="block lg:flex lg:items-center lg:gap-3">
+            <div className="flex items-center gap-3 lg:gap-3">
               {/* Icon - Hidden on mobile, visible on desktop */}
               <span className="hidden lg:block">
                 <Crown className={`h-5 w-5 ${
