@@ -310,11 +310,11 @@ export function AppSidebar() {
           className={`relative ${locked ? "cursor-not-allowed opacity-50" : ""}`}
         >
           {locked ? (
-            <div className="flex items-center w-full gap-2 md:gap-3 px-3 py-2.5">
+            <div className="flex items-center w-full gap-2 md:gap-3 px-3 py-3">
               <item.icon className="hidden md:block h-5 w-5 flex-shrink-0 text-sidebar-foreground/40" />
               {showLabels && (
                 <>
-                  <span className="flex-1 text-xs md:text-sm font-medium text-sidebar-foreground/50 whitespace-nowrap">{item.title}</span>
+                  <span className="text-left flex-1 text-xs md:text-sm font-medium text-sidebar-foreground/50 whitespace-nowrap">{item.title}</span>
                   <Lock className="hidden md:block h-4 w-4 text-sidebar-foreground/40 flex-shrink-0" />
                 </>
               )}
@@ -322,14 +322,14 @@ export function AppSidebar() {
           ) : (
             <NavLink 
               to={item.url} 
-              className={`flex items-center w-full transition-all duration-200 rounded-md gap-2 md:gap-3 px-3 py-2.5 ${
+              className={`flex items-center w-full transition-all duration-200 rounded-md gap-2 md:gap-3 px-3 py-3 ${
                 active 
                   ? "bg-accent text-accent-foreground font-semibold" 
                   : "text-sidebar-foreground hover:bg-sidebar-accent/50 font-medium"
               }`}
             >
               <item.icon className="hidden md:block h-5 w-5 flex-shrink-0" />
-              <span className="flex-1 text-xs md:text-sm font-medium whitespace-nowrap">{item.title}</span>
+              <span className="text-left flex-1 text-xs md:text-sm font-medium whitespace-nowrap">{item.title}</span>
             </NavLink>
           )}
         </SidebarMenuButton>
@@ -409,30 +409,30 @@ export function AppSidebar() {
         </button>
       </div>
       
-      <SidebarContent className="py-4 px-2 overflow-y-auto">
+      <SidebarContent className="py-6 px-2 overflow-y-auto">
         {/* Main Navigation */}
         <SidebarGroup>
           {showLabels && (
-            <SidebarGroupLabel className="px-3 mb-2 text-xs font-semibold text-sidebar-foreground/60 uppercase tracking-wide">
+            <SidebarGroupLabel className="px-3 mb-3 text-xs font-semibold text-sidebar-foreground/60 uppercase tracking-wide">
               Navigation
             </SidebarGroupLabel>
           )}
           <SidebarGroupContent>
-            <SidebarMenu className="space-y-0.5">
+            <SidebarMenu className="space-y-1">
               {navItems.map(renderNavItem)}
             </SidebarMenu>
           </SidebarGroupContent>
         </SidebarGroup>
 
         {/* Settings */}
-        <SidebarGroup className="mt-8">
+        <SidebarGroup className="mt-10">
           {showLabels && (
-            <SidebarGroupLabel className="px-3 mb-2 text-xs font-semibold text-sidebar-foreground/60 uppercase tracking-wide">
+            <SidebarGroupLabel className="px-3 mb-3 text-xs font-semibold text-sidebar-foreground/60 uppercase tracking-wide">
               Settings
             </SidebarGroupLabel>
           )}
           <SidebarGroupContent>
-            <SidebarMenu className="space-y-0.5">
+            <SidebarMenu className="space-y-1">
               {settingsItems.map(renderNavItem)}
             </SidebarMenu>
           </SidebarGroupContent>
