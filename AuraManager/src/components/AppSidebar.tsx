@@ -311,9 +311,9 @@ export function AppSidebar() {
           className={`relative ${locked ? "cursor-not-allowed opacity-50" : ""}`}
         >
           {locked ? (
-            <div className="block lg:flex lg:items-center w-full lg:gap-3 py-3 px-4">
+            <div className="flex items-center w-full gap-3 py-3 px-4">
               {/* Icon - Hidden on mobile, visible on desktop */}
-              <span className="hidden lg:block nav-item-icon">
+              <span className="hidden lg:inline-flex nav-item-icon">
                 <item.icon className="h-5 w-5 flex-shrink-0 text-sidebar-foreground/40" />
               </span>
               
@@ -323,21 +323,21 @@ export function AppSidebar() {
               </span>
               
               {/* Lock icon - Hidden on mobile, visible on desktop */}
-              <span className="hidden lg:block">
+              <span className="hidden lg:inline-flex">
                 <Lock className="h-4 w-4 text-sidebar-foreground/40 flex-shrink-0" />
               </span>
             </div>
           ) : (
             <NavLink 
               to={item.url} 
-              className={`block lg:flex lg:items-center w-full transition-all duration-200 rounded-md lg:gap-3 py-3 px-4 ${
+              className={`flex items-center w-full transition-all duration-200 rounded-md gap-3 py-3 px-4 ${
                 active 
                   ? "bg-accent text-accent-foreground font-semibold" 
                   : "text-sidebar-foreground hover:bg-sidebar-accent/50 font-medium"
               }`}
             >
               {/* Icon - Hidden on mobile, visible on desktop */}
-              <span className="hidden lg:block nav-item-icon">
+              <span className="hidden lg:inline-flex nav-item-icon">
                 <item.icon className="h-5 w-5 flex-shrink-0" />
               </span>
               
