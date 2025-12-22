@@ -4,6 +4,7 @@
   "framework": "vite",
   "outputDirectory": "dist",
   "installCommand": "npm install --legacy-peer-deps",
+  "nodeVersion": "24.x",
   "functions": {
     "api/**/*.ts": {
       "runtime": "@vercel/node@3.0.0"
