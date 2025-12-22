@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { CreditCard, Plus, Trash2, FileText, Download } from "lucide-react";
+import { CreditCard, Plus, Trash2, FileText, Download, CheckCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -17,6 +17,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
+import { useNotification, NotificationContainer } from "@/components/NotificationToast";
 
 interface PaymentMethod {
   id: string;
@@ -37,6 +38,9 @@ interface Invoice {
 
 const Billing = () => {
   const { toast } = useToast();
+  const { notifications, removeNotification, success, error, info } = useNotification();
+  const [paypalConnected, setPaypalConnected] = useState(false);
+  
   // DEMO DATA - Replace with Supabase data later
   const [paymentMethods, setPaymentMethods] = useState<PaymentMethod[]>([
     {
@@ -93,6 +97,34 @@ const Billing = () => {
     });
   };
 
+  const handleConnectPayPal = async () => {
+    try {
+      info("Connecting PayPal", "Redirecting you to PayPal to authorize access...", 0);
+      
+      // In a real implementation, you would:
+      // 1. Get PayPal authorization URL from your backend
+      // 2. Redirect user to PayPal
+      // 3. Handle the callback and store the auth token
+      
+      // For now, we'll simulate the connection
+      setTimeout(() => {
+        removeNotification(info.id || "");
+        setPaypalConnected(true);
+        success(
+          "PayPal Connected!",
+          "Your PayPal account has been successfully connected to Aura Manager.",
+          4000
+        );
+      }, 2000);
+    } catch (err) {
+      error(
+        "Connection Failed",
+        err instanceof Error ? err.message : "Failed to connect PayPal account",
+        5000
+      );
+    }
+  };
+
   const getStatusColor = (status: string) => {
     switch (status) {
       case 'paid':
@@ -107,7 +139,9 @@ const Billing = () => {
   };
 
   return (
-    <div className="min-h-screen w-full">
+    <>
+      <NotificationContainer notifications={notifications} onRemove={removeNotification} />
+      <div className="min-h-screen w-full">
       <div className="w-full px-4 py-6 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="space-y-8">
           {/* Header */}
@@ -231,28 +265,52 @@ const Billing = () => {
                 ))}
                 
                 {/* PayPal Option */}
-                <div className="mt-4 p-4 border-2 border-dashed rounded-lg hover:border-accent/50 transition-colors">
+                <div className={`mt-4 p-4 rounded-lg transition-all ${
+                  paypalConnected 
+                    ? "border-2 border-green-200 bg-green-50 dark:bg-green-950/30" 
+                    : "border-2 border-dashed hover:border-accent/50"
+                }`}>
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                      <div className="p-2 bg-blue-50 dark:bg-blue-950/30 rounded-lg">
-                        <svg className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
-                          <path fill="#00457C" d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944 3.72a.768.768 0 0 1 .759-.632h8.548c2.276 0 4.139.557 5.39 1.611 1.108.934 1.609 2.157 1.609 3.718 0 2.407-1.023 4.168-3.125 5.378-1.21.697-2.85 1.048-4.875 1.048H9.43a.768.768 0 0 0-.759.632l-1.595 6.862Z"/>
-                          <path fill="#0079C1" d="M19.088 7.917c0 2.407-1.023 4.168-3.125 5.378-1.21.697-2.85 1.048-4.875 1.048H9.43a.768.768 0 0 0-.759.632l-1.595 6.862h3.923a.67.67 0 0 0 .662-.564l.027-.145.528-3.348.034-.184a.67.67 0 0 1 .662-.564h.417c3.786 0 6.75-1.538 7.616-5.987.361-1.855.174-3.403-.785-4.492a3.719 3.719 0 0 0-1.072-.884Z"/>
-                        </svg>
+                      <div className={`p-2 rounded-lg ${
+                        paypalConnected 
+                          ? "bg-green-100 dark:bg-green-900/50" 
+                          : "bg-blue-50 dark:bg-blue-950/30"
+                      }`}>
+                        {paypalConnected ? (
+                          <CheckCircle className="h-6 w-6 text-green-600 dark:text-green-400" />
+                        ) : (
+                          <svg className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
+                            <path fill="#00457C" d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944 3.72a.768.768 0 0 1 .759-.632h8.548c2.276 0 4.139.557 5.39 1.611 1.108.934 1.609 2.157 1.609 3.718 0 2.407-1.023 4.168-3.125 5.378-1.21.697-2.85 1.048-4.875 1.048H9.43a.768.768 0 0 0-.759.632l-1.595 6.862Z"/>
+                            <path fill="#0079C1" d="M19.088 7.917c0 2.407-1.023 4.168-3.125 5.378-1.21.697-2.85 1.048-4.875 1.048H9.43a.768.768 0 0 0-.759.632l-1.595 6.862h3.923a.67.67 0 0 0 .662-.564l.027-.145.528-3.348.034-.184a.67.67 0 0 1 .662-.564h.417c3.786 0 6.75-1.538 7.616-5.987.361-1.855.174-3.403-.785-4.492a3.719 3.719 0 0 0-1.072-.884Z"/>
+                          </svg>
+                        )}
                       </div>
                       <div>
                         <p className="font-medium">PayPal</p>
-                        <p className="text-sm text-muted-foreground">Connect your PayPal account</p>
+                        <p className="text-sm text-muted-foreground">
+                          {paypalConnected ? "Connected" : "Connect your PayPal account"}
+                        </p>
                       </div>
                     </div>
                     <Button 
-                      variant="outline" 
+                      variant={paypalConnected ? "outline" : "default"}
                       size="sm"
-                      title="Connect your PayPal account"
-                      onClick={() => window.open('https://www.paypal.com/signin', '_blank')}
+                      title={paypalConnected ? "PayPal is connected" : "Connect your PayPal account"}
+                      onClick={handleConnectPayPal}
+                      disabled={paypalConnected}
                     >
-                      <Plus className="h-4 w-4 mr-2" />
-                      Connect
+                      {paypalConnected ? (
+                        <>
+                          <CheckCircle className="h-4 w-4 mr-2" />
+                          Connected
+                        </>
+                      ) : (
+                        <>
+                          <Plus className="h-4 w-4 mr-2" />
+                          Connect
+                        </>
+                      )}
                     </Button>
                   </div>
                 </div>
@@ -307,7 +365,8 @@ const Billing = () => {
           </Card>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 
